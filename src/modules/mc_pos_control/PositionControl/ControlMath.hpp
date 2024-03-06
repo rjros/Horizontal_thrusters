@@ -32,26 +32,47 @@
  ****************************************************************************/
 
 /**
- * @file ControlMath.hpp
- *
- * Simple functions for vector manipulation that do not fit into matrix lib.
- * These functions are specific for controls.
+ * @file ControlMath.cpp
+ * Modifications of the control math for planar flight
+ * @author Ricardo Rosales Martinez
  */
+
 
 #pragma once
 
 #include <matrix/matrix/math.hpp>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+#include <uORB/topics/planar_attitude_status.h>
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
+
 
 namespace ControlMath
 {
+
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 /**
- * Converts thrust vector and yaw set-point to a desired attitude.
+ * Converts thrust vector and yaw set-point to a desired attitude. Modified to include the omnidirectional control
  * @param thr_sp desired 3D thrust vector
  * @param yaw_sp the desired yaw
  * @param att_sp attitude setpoint to fill
+ * @param omni_att_mode attitude mode for omnidirectional vehicles
  */
-void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, vehicle_attitude_setpoint_s &att_sp);
+void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp,
+		      const int planar_att_mode, vehicle_attitude_setpoint_s &att_sp,
+		      planar_attitude_status_s & planar_status, bool planar_flag);
+
+/**
+ * Converts inertial thrust vector and yaw set-point to a planar attitude and body thrust vector for vehicles with horizontal thrusters
+ * @param thr_sp a 3D vector
+ * @param yaw_sp the desired yaw
+ * @param att current attitude of the robot
+ * @param att_sp attitude setpoint to fill
+ */
+void thrustToPlanarAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp,
+			      vehicle_attitude_setpoint_s &att_sp);
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 /**
  * Limits the tilt angle between two unit vectors

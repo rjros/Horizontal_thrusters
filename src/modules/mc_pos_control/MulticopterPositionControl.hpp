@@ -32,8 +32,12 @@
  ****************************************************************************/
 
 /**
+ * @file MulticopterPositionControl.hpp
  * Multicopter position controller.
+ * Modifications of the position controller for planar flight
+ * @author Ricardo Rosales Martinez
  */
+
 
 #pragma once
 
@@ -64,6 +68,14 @@
 #include <uORB/topics/vehicle_land_detected.h>
 #include <uORB/topics/vehicle_local_position.h>
 #include <uORB/topics/vehicle_local_position_setpoint.h>
+
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+#include <uORB/topics/planar_attitude_status.h>
+#include <uORB/topics/vehicle_attitude.h>
+#include <uORB/topics/vehicle_status.h>
+#include <uORB/topics/manual_control_setpoint.h>
+#include <uORB/topics/manual_control_switches.h>
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
 using namespace time_literals;
 
@@ -96,6 +108,8 @@ private:
 	uORB::Publication<vehicle_attitude_setpoint_s>	     _vehicle_attitude_setpoint_pub{ORB_ID(vehicle_attitude_setpoint)};
 	uORB::Publication<vehicle_local_position_setpoint_s> _local_pos_sp_pub{ORB_ID(vehicle_local_position_setpoint)};	/**< vehicle local position setpoint publication */
 
+	uORB::Publication<planar_attitude_status_s>	_planar_attitude_status_pub{ORB_ID(planar_attitude_status)}; //planar flight status
+
 	uORB::SubscriptionCallbackWorkItem _local_pos_sub{this, ORB_ID(vehicle_local_position)};	/**< vehicle local position */
 
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
@@ -105,6 +119,20 @@ private:
 	uORB::Subscription _vehicle_constraints_sub{ORB_ID(vehicle_constraints)};
 	uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
+
+
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	uORB::Subscription manual_control_switches_sub{ORB_ID(manual_control_switches)};
+	uORB::Subscription manual_control_set_sub{ORB_ID(manual_control_setpoint)};
+
+	manual_control_switches_s switches{};
+	manual_control_setpoint_s stick_setpoints{};
+	//Stick values from the controller
+	float stick_roll{0};
+	float stick_pitch{0};
+	//Values from setpoints
+	bool planar_flight =false;
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 	hrt_abstime _time_stamp_last_loop{0};		/**< time stamp of last loop iteration */
 	hrt_abstime _time_position_control_enabled{0};
@@ -175,7 +203,27 @@ private:
 		(ParamFloat<px4::params::MPC_MAN_Y_TAU>)    _param_mpc_man_y_tau,
 
 		(ParamFloat<px4::params::MPC_XY_VEL_ALL>)   _param_mpc_xy_vel_all,
-		(ParamFloat<px4::params::MPC_Z_VEL_ALL>)    _param_mpc_z_vel_all
+		(ParamFloat<px4::params::MPC_Z_VEL_ALL>)    _param_mpc_z_vel_all,
+
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		(ParamFloat<px4::params::MPC_PXY_P>) _param_mpc_pxy_pos_p_vel,
+		(ParamFloat<px4::params::MPC_PXY_I>) _param_mpc_pxy_pos_i_vel,
+		(ParamFloat<px4::params::MPC_PXY_D>) _param_mpc_pxy_pos_d_vel,
+		(ParamFloat<px4::params::MPC_PXY_VEL_P_A>) _param_mpc_pxy_vel_p_acc,
+		(ParamFloat<px4::params::MPC_PXY_VEL_I_A>) _param_mpc_pxy_vel_i_acc,
+		(ParamFloat<px4::params::MPC_PXY_VEL_D_A>) _param_mpc_pxy_vel_d_acc,
+		//Planar Parameters
+		(ParamFloat<px4::params::MPC_PTH_MIN>)      _param_mpc_planar_thr_min,
+		(ParamFloat<px4::params::MPC_PTH_MAX>)      _param_mpc_planar_thr_max,
+		(ParamFloat<px4::params::PLANAR_TH>)        _param_planar_threshold,
+		//Planar Parameters
+		(ParamInt<px4::params::PLANAR_ATT_MODE>) _param_planar_att_mode,
+		//Control mode with RC
+		(ParamInt<px4::params::RC_SIM>) _param_rc_sim_mode,
+		//Control mode with RC
+		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
 	);
 
 	control::BlockDerivative _vel_x_deriv; /**< velocity derivative in x */

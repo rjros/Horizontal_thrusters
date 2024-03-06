@@ -32,9 +32,12 @@
  ****************************************************************************/
 
 /**
- * @file PositionControl.hpp
+ * @file ControlMath.hpp
  *
- * A cascaded position controller for position/velocity control only.
+ * Simple functions for vector manipulation that do not fit into matrix lib.
+ * These functions are specific for controls.
+ * Modifications of the control math for planar flight
+ * @author Ricardo Rosales Martinez
  */
 
 #pragma once
@@ -44,6 +47,9 @@
 #include <uORB/topics/trajectory_setpoint.h>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
 #include <uORB/topics/vehicle_local_position_setpoint.h>
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
+#include <uORB/topics/planar_attitude_status.h>
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 
 struct PositionControlStates {
 	matrix::Vector3f position;
@@ -108,6 +114,33 @@ public:
 	 */
 	void setThrustLimits(const float min, const float max);
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	/**
+	 * Set the minimum and maximum collective normalized thrust [0,1] that can be output by the controller
+	 * @param min minimum thrust e.g. 0.1 or 0
+	 * @param max maximum thrust e.g. 0.9 or 1
+	 * @param planar_threshold Euclidiean distance (xy) to setpoint to change to normal flight
+	 *
+	 */
+	void setPlanarThrustLimits(const float min, const float max, const float planar_threshold);
+
+	/**
+	 * Set the velocity control gains
+	 * @param P 3D vector of proportional gains for x,y,z axis
+	 * @param I 3D vector of integral gains
+	 * @param D 3D vector of derivative gains
+	 */
+	void setPlanarPositionGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+
+	/**
+	 * Set the velocity control gains
+	 * @param P 3D vector of proportional gains for x,y,z axis
+	 * @param I 3D vector of integral gains
+	 * @param D 3D vector of derivative gains
+	 */
+	void setPlanarVelocityGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+
 	/**
 	 * Set margin that is kept for horizontal control when prioritizing vertical thrust
 	 * @param margin of normalized thrust that is kept for horizontal control e.g. 0.3
@@ -146,6 +179,7 @@ public:
 	 */
 	void setInputSetpoint(const trajectory_setpoint_s &setpoint);
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 	/**
 	 * Apply P-position and PID-velocity controller that updates the member
 	 * thrust, yaw- and yawspeed-setpoints.
@@ -155,7 +189,9 @@ public:
 	 * @param dt time in seconds since last iteration
 	 * @return true if update succeeded and output setpoint is executable, false if not
 	 */
-	bool update(const float dt);
+	bool update(const float dt,const int att_mode,bool planar_flight);
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
 
 	/**
 	 * Set the integral term in xy to 0.
@@ -177,7 +213,7 @@ public:
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.
 	 * @param attitude_setpoint reference to struct to fill up
 	 */
-	void getAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_setpoint) const;
+	void getAttitudeSetpoint(const int planar_att_mode,vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status) const;
 
 	/**
 	 * All setpoints are set to NAN (uncontrolled). Timestampt zero.
@@ -195,11 +231,29 @@ private:
 	void _velocityControl(const float dt); ///< Velocity PID control
 	void _accelerationControl(); ///< Acceleration setpoint processing
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	// For the planar control of the system
+	void _planar_positionControl(const float dt,const float yaw_sp);// planar proportional position control
+	void _planar_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
+	void _planar_accelerationControl(const float yaw_sp);// separates thrust values if omni condition is on
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
 	// Gains
 	matrix::Vector3f _gain_pos_p; ///< Position control proportional gain
 	matrix::Vector3f _gain_vel_p; ///< Velocity control proportional gain
 	matrix::Vector3f _gain_vel_i; ///< Velocity control integral gain
 	matrix::Vector3f _gain_vel_d; ///< Velocity control derivative gain
+
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	matrix::Vector3f _gain_planar_pos_p;///< Position control proportional gain
+	matrix::Vector3f _gain_planar_pos_i;///< Position control proportional gain
+	matrix::Vector3f _gain_planar_pos_d;///< Position control proportional gain
+
+
+	matrix::Vector3f _gain_planar_vel_p; ///< Velocity control proportional gain
+	matrix::Vector3f _gain_planar_vel_i; ///< Velocity control integral gain
+	matrix::Vector3f _gain_planar_vel_d; ///< Velocity control derivative gain
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 	// Limits
 	float _lim_vel_horizontal{}; ///< Horizontal velocity limit with feed forward and position control
@@ -210,11 +264,19 @@ private:
 	float _lim_thr_xy_margin{}; ///< Margin to keep for horizontal control when saturating prioritized vertical thrust
 	float _lim_tilt{}; ///< Maximum tilt from level the output attitude is allowed to have
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
+	float _lim_planar_thr_min{}; ///< Minimum collective thrust allowed as output [-1,0] e.g. -0.9
+	float _lim_planar_thr_max{}; ///< Maximum collective thrust allowed as output [-1,0] e.g. -0.1
+	float _planar_threshold{0}; // Euclidiean distance (xy) to setpoint to change when close to sp
+
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
 	float _hover_thrust{}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
 
 	// States
 	matrix::Vector3f _pos; /**< current position */
 	matrix::Vector3f _vel; /**< current velocity */
+	matrix::Vector3f _pos_int; /**< current velocity */
 	matrix::Vector3f _vel_dot; /**< velocity derivative (replacement for acceleration estimate) */
 	matrix::Vector3f _vel_int; /**< integral term of the velocity controller */
 	float _yaw{}; /**< current heading */
@@ -226,4 +288,9 @@ private:
 	matrix::Vector3f _thr_sp; /**< desired thrust */
 	float _yaw_sp{}; /**< desired heading */
 	float _yawspeed_sp{}; /** desired yaw-speed */
+
+
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
+	bool planar_flag=false;
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 };

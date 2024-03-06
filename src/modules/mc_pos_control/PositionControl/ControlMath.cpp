@@ -33,6 +33,8 @@
 
 /**
  * @file ControlMath.cpp
+ * Modifications of the control math for planar flight
+ * @author Ricardo Rosales Martinez
  */
 
 #include "ControlMath.hpp"
@@ -44,11 +46,76 @@ using namespace matrix;
 
 namespace ControlMath
 {
-void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, vehicle_attitude_setpoint_s &att_sp)
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const int planar_att_mode,
+		      vehicle_attitude_setpoint_s &att_sp, planar_attitude_status_s &planar_status, bool planar_flag)
 {
-	bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
-	att_sp.thrust_body[2] = -thr_sp.length();
+
+	switch (planar_att_mode) {
+
+	case 1:
+		if (planar_flag){
+		thrustToPlanarAttitude(thr_sp, yaw_sp,att_sp);
+		}
+		else
+		{
+		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
+		att_sp.thrust_body[2] = -thr_sp.length();
+		}
+		break;
+
+	case 3:
+
+		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
+		att_sp.thrust_body[2] = -thr_sp.length();
+
+		break;
+
+	default: //Altitude is calculated from the desired thrust direction
+		thrustToPlanarAttitude(thr_sp, yaw_sp, att_sp);
+
+
+	}
+
 }
+
+void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,
+			      vehicle_attitude_setpoint_s &att_sp)
+	{
+
+	//Ignores the commannd and relies on the acceleration or addition based
+	// set Z axis to upward direction
+	Vector3f body_z = Vector3f(0.f, 0.f, 1.f);
+
+	// desired body_x and body_y axis
+	Vector3f body_x = Vector3f(cos(yaw_sp), sin(yaw_sp), 0.0f);
+	Vector3f body_y = Vector3f(-sinf(yaw_sp), cosf(yaw_sp), 0.0f);
+
+	Dcmf R_sp;
+
+
+	// fill rotation matrix
+	for (int i = 0; i < 3; i++) {
+		R_sp(i, 0) = body_x(i);
+		R_sp(i, 1) = body_y(i);
+		R_sp(i, 2) = body_z(i);
+	}
+
+
+
+	// set the euler angles, for logging only, must not be used for control
+	att_sp.roll_body = 0;
+	att_sp.pitch_body = 0;
+	att_sp.yaw_body = yaw_sp;
+
+
+	att_sp.thrust_body[0] = thr_sp.dot(body_x);// values tend to be very small
+	att_sp.thrust_body[1] = thr_sp.dot(body_y);
+	att_sp.thrust_body[2] = thr_sp.dot(body_z);
+	}
+
+//// CUSTOM END Converts thrust to planar attitude  ////
+
 
 void limitTilt(Vector3f &body_unit, const Vector3f &world_unit, const float max_angle)
 {
