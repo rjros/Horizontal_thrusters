@@ -139,6 +139,7 @@ set(msg_files
 	OrbTestMedium.msg
 	ParameterUpdate.msg
 	Ping.msg
+	PlanarAttitudeStatus.msg ## CUSTOM
 	PositionControllerLandingStatus.msg
 	PositionControllerStatus.msg
 	PositionSetpoint.msg
