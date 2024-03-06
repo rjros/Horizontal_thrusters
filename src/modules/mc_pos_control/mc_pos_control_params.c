@@ -896,3 +896,172 @@ PARAM_DEFINE_FLOAT(MPC_XY_VEL_ALL, -10.0f);
  * @group Multicopter Position Control
  */
 PARAM_DEFINE_FLOAT(MPC_Z_VEL_ALL, -3.0f);
+
+///////////////////////////////////////////////////////////////////////////////////////
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+
+//###############################################################
+
+// MODE SELECTION
+
+/**
+ * Planar flight mode
+ *
+ * Specifies the type of attitude setpoint sent to the attitude controller.
+ * The parameter can be set to a normal attitude setpoint, where the tilt
+ * of the vehicle (roll and pitch) are calculated from the desired thrust
+ * vector. This should be the behavior for the non-omnidirectional vehicles,
+ * such as quadrotors and other multirotors with coplanar rotors.
+ * The "constant zero tilt" mode enforces zero roll and pitch and can only be
+ * used for omnidirectional vehicles. The min-tilt mode enforces zero tilt
+ * up to a maximum set acceleration (thrust) and tilts the vehicle as small
+ * as possible if the thrust vector is larger than the maximum. The "constant
+ * tilt" and "constant roll/pitch" modes enforce a given tilt or roll/pitch
+ * for the vehicle. The estimation modes estimate the optimal tilt or roll/pitch
+ * to counteract with the external force (e.g., wind).
+ *
+ * @min 0
+ * @max 2
+ * @value 3 Tilted attitude
+ * @value 1 Planar attitude
+ */
+PARAM_DEFINE_INT32(PLANAR_ATT_MODE, 0);
+
+/**
+ * Parameters that need an RC input.
+ * @min 0
+ * @max 1
+ * @value 0 Simulation
+ * @value 1 RC
+ */
+PARAM_DEFINE_INT32(RC_SIM, 1);
+
+
+//// GAINS FOR PLANAR CONTROLLER ////
+/**
+ * Proportional gain for horizontal position error
+ *
+ * Defined as corrective velocity in m/s per m position error
+ *
+ * @min 0
+ * @max 100
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_P, 1.0f);
+
+/**
+ * Integral gain for horizontal position error
+ *
+ * Defined as corrective velocity in m/s per m position error
+ *
+ * @min 0
+ * @max 100
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_I, 0.1f);
+/**
+ * Derivative gain for horizontal position error
+ *
+ * Defined as corrective velocity in m/s per m position error
+ *
+ * @min 0
+ * @max 100
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_D, 0.5f);
+
+
+/**
+ * Proportional gain for horizontal velocity error
+ *
+ * Defined as corrective acceleration in m/s^2 per m/s velocity error
+ *
+ * @min 0.0
+ * @max 100
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_VEL_P_A, 1.8f);
+
+
+
+/**
+ * Integral gain for horizontal velocity error
+ *
+ * Defined as correction acceleration in m/s^2 per m velocity integral
+ * Allows to eliminate steady state errors in disturbances like wind.
+ *
+ * @min 0
+ * @max 100
+ * @decimal 2
+ * @increment 0.02
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_VEL_I_A, 0.4f);
+
+
+/**
+ * Differential gain for horizontal velocity error
+ *
+ * Defined as corrective acceleration in m/s^2 per m/s^2 velocity derivative
+ *
+ * @min 0.0
+ * @max 100
+ * @decimal 2
+ * @increment 0.02
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PXY_VEL_D_A, 0.2f);
+
+//// GAINS FOR PLANAR CONTROLLER ////
+/**
+ * Minimum collective thrust for the planar modes in XY
+ *
+ *Tune according to type of actuator
+ *
+ * @unit norm
+ * @min 0
+ * @max 1
+ * @decimal 2
+ * @increment 0.05
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PTH_MIN, 0.12f);
+
+/**
+ * Maximum collective thrust for the planar modes in XY
+ *
+ *Tune according to type of actuator
+ *
+ * @unit norm
+ * @min 0
+ * @max 1
+ * @decimal 2
+ * @increment 0.05
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MPC_PTH_MAX, 1.0f);
+
+/**
+ * Threshold switching from planar to tilting mode to hold position.
+ *
+ * Defined as Euclidean (X,Y) distance to setpoint in [m] .
+ *
+ * @min 0.0
+ * @max 1
+ * @decimal 3
+ * @increment 0.001
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(PLANAR_TH, 0.10f);
+
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+///////////////////////////////////////////////////////////////////////////////////////
+
