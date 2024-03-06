@@ -37,7 +37,11 @@
  * @file rc_update.h
  *
  * @author Beat Kueng <beat-kueng@gmx.net>
+ *
+ * Modifications of the rc inputs for  planar flight
+ * @author Ricardo Rosales Martinez
  */
+
 
 #include <px4_platform_common/px4_config.h>
 #include <px4_platform_common/defines.h>
@@ -236,6 +240,11 @@ public:
 		(ParamFloat<px4::params::RC_GEAR_TH>) _param_rc_gear_th,
 		(ParamFloat<px4::params::RC_RETURN_TH>) _param_rc_return_th,
 		(ParamFloat<px4::params::RC_ENG_MOT_TH>) _param_rc_eng_mot_th,
+
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		(ParamInt<px4::params::RC_PLANAR_SW>) _param_rc_planar_mode_sw,
+		(ParamFloat<px4::params::RC_PLANAR_TH>) _param_rc_planar_th,
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 		(ParamInt<px4::params::RC_CHAN_CNT>) _param_rc_chan_cnt
 	)

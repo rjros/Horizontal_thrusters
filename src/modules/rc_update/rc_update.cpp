@@ -35,6 +35,9 @@
  * @file rc_update.cpp
  *
  * @author Beat Kueng <beat-kueng@gmx.net>
+ *
+ * Modifications of the rc inputs for planar flight
+ * @author Ricardo Rosales Martinez
  */
 
 #include "rc_update.h"
@@ -57,7 +60,12 @@ static bool operator ==(const manual_control_switches_s &a, const manual_control
 		a.gear_switch == b.gear_switch &&
 		a.photo_switch == b.photo_switch &&
 		a.video_switch == b.video_switch &&
-		a.engage_main_motor_switch == b.engage_main_motor_switch);
+		a.engage_main_motor_switch == b.engage_main_motor_switch &&
+
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		a.planar_mode_switch == b.planar_mode_switch) ; //planar switch parameter
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
+
 }
 
 static bool operator !=(const manual_control_switches_s &a, const manual_control_switches_s &b) { return !(a == b); }
@@ -238,6 +246,9 @@ void RCUpdate::update_rc_functions()
 	_rc.function[rc_channels_s::FUNCTION_TRANSITION] = _param_rc_map_trans_sw.get() - 1;
 	_rc.function[rc_channels_s::FUNCTION_GEAR] = _param_rc_map_gear_sw.get() - 1;
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	_rc.function[rc_channels_s::FUNCTION_PLANAR_MODE] = _param_rc_planar_mode_sw.get() -1;
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 	_rc.function[rc_channels_s::FUNCTION_FLAPS] = _param_rc_map_flaps.get() - 1;
 
 	_rc.function[rc_channels_s::FUNCTION_AUX_1] = _param_rc_map_aux1.get() - 1;
@@ -640,6 +651,10 @@ void RCUpdate::UpdateManualSwitches(const hrt_abstime &timestamp_sample)
 	switches.gear_switch = getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_GEAR, _param_rc_gear_th.get());
 	switches.engage_main_motor_switch =
 		getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_ENGAGE_MAIN_MOTOR, _param_rc_eng_mot_th.get());
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	switches.planar_mode_switch = getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_PLANAR_MODE, _param_rc_planar_th.get());
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+
 #if defined(ATL_MANTIS_RC_INPUT_HACKS)
 	switches.photo_switch = getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_AUX_3, 0.5f);
 	switches.video_switch = getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_AUX_4, 0.5f);
