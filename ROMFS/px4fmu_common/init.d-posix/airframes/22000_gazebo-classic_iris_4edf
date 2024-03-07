@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# @name 3DR Iris Quadrotor SITL
+#
+# @type Quadrotor Wide with 4 edfs attached to each side
+#
+# @maintainer Julian Oes <julian@oes.ch>
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+#In the new firmware by default
+#param set-default SYS_CTRL_ALLOC 1
+param set-default CA_ROTOR_COUNT 8
+
+
+param set-default CA_AIRFRAME 0
+
+param set-default CA_ROTOR0_PX 0.1515
+param set-default CA_ROTOR0_PY 0.245
+param set-default CA_ROTOR0_KM 0.05
+param set-default CA_ROTOR1_PX -0.1515
+param set-default CA_ROTOR1_PY -0.1875
+param set-default CA_ROTOR1_KM 0.05
+param set-default CA_ROTOR2_PX 0.1515
+param set-default CA_ROTOR2_PY -0.245
+param set-default CA_ROTOR2_KM -0.05
+param set-default CA_ROTOR3_PX -0.1515
+param set-default CA_ROTOR3_PY 0.1875
+param set-default CA_ROTOR3_KM -0.05
+
+param set-default CA_ROTOR4_PX 0.00
+param set-default CA_ROTOR4_PY 0.15
+param set-default CA_ROTOR4_KM 0.00
+param set-default CA_ROTOR4_AX 0.0
+param set-default CA_ROTOR4_AY -1.0
+param set-default CA_ROTOR4_AZ 0.0
+# param set-default CA_ROTOR4_CT 1.96
+
+
+param set-default CA_ROTOR5_PX 0.00
+param set-default CA_ROTOR5_PY -0.15
+param set-default CA_ROTOR5_KM 0.00
+param set-default CA_ROTOR5_AX 0.0
+param set-default CA_ROTOR5_AY 1.0
+param set-default CA_ROTOR5_AZ 0.0
+# param set-default CA_ROTOR5_CT 1.96
+
+#Front fan, pushes back
+param set-default CA_ROTOR6_PX 0.15
+param set-default CA_ROTOR6_PY 0.00
+param set-default CA_ROTOR6_KM 0.00
+param set-default CA_ROTOR6_AX -1.0
+param set-default CA_ROTOR6_AY 0.0
+param set-default CA_ROTOR6_AZ 0.0
+# param set-default CA_ROTOR6_CT 1.96
+
+#Back fan, pushes front
+param set-default CA_ROTOR7_PX -0.15
+param set-default CA_ROTOR7_PY 0.00
+param set-default CA_ROTOR7_KM 0.00
+param set-default CA_ROTOR7_AX 1.0
+param set-default CA_ROTOR7_AY 0.0
+param set-default CA_ROTOR7_AZ 0.0
+# param set-default CA_ROTOR7_CT 1.96
+
+
+param set-default PWM_MAIN_FUNC1 101
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+param set-default PWM_MAIN_FUNC5 105
+param set-default PWM_MAIN_FUNC6 106
+param set-default PWM_MAIN_FUNC7 107
+param set-default PWM_MAIN_FUNC8 108
+
+#disable MC desaturation which improves attitude tracking
+param set-default CA_METHOD 0
+
+# disable attitude failure detection
+param set-default FD_FAIL_P 0
+param set-default FD_FAIL_R 0
+
+#Set omni parameters
+param set VECT_ATT_MODE 1
+
+set MIXER skip
+set MIXER_AUX none

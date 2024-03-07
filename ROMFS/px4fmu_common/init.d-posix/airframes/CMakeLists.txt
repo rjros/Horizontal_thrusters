@@ -94,4 +94,7 @@ px4_add_romfs_files(
 
 	17001_flightgear_tf-g1
 	17002_flightgear_tf-g2
+	## CUSTOM ##
+	22000_gazebo-classic_iris_4edf
+	## CUSTOM ##
 )

@@ -37,9 +37,11 @@
  * @author Ricardo Rosales Martinez
  */
 
+
 #include "ControlMath.hpp"
 #include <px4_platform_common/defines.h>
 #include <px4_platform_common/module_params.h>
+
 #include <float.h>
 #include <mathlib/mathlib.h>
 
@@ -47,45 +49,53 @@ using namespace matrix;
 
 namespace ControlMath
 {
-//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,const int planar_att_mode,
-		      vehicle_attitude_setpoint_s &att_sp, planar_attitude_status_s &planar_status, bool planar_flag)
-{
 
-	switch (planar_att_mode) {
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att, const int vectoring_att_mode,
+		      vehicle_attitude_setpoint_s &att_sp, planar_attitude_status_s &planar_status,bool planar_flight)
+{
+	switch (vectoring_att_mode) {
 
 	case 1:
-		if (planar_flag){
-		thrustToPlanarAttitude(thr_sp, yaw_sp,att, att_sp);
-		PX4_INFO("PLANAR MODE");
+		if (planar_flight){
+		thrustToPlanarAttitude(thr_sp, yaw_sp, att,att_sp);
 		}
-		else
-		{
+		else {
+		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
+		att_sp.thrust_body[2] = -thr_sp.length();
+		}
+		break;
+	case 2:
+		if (planar_flight){
+		thrustToPlanarAttitude(thr_sp, yaw_sp, att,att_sp);
+		}
+		else {
 		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
 		att_sp.thrust_body[2] = -thr_sp.length();
 		}
 		break;
 
 	case 3:
-
 		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
 		att_sp.thrust_body[2] = -thr_sp.length();
-
 		break;
+
 
 	default: //Altitude is calculated from the desired thrust direction
 		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
 		att_sp.thrust_body[2] = -thr_sp.length();
-
-
 	}
 
+
+	// Estimate the optimal tilt angle and direction to counteract the wind
+	// Calculate the setpoint z axis
 	Vector3f cmd_z;
 	matrix::Dcmf R_cmd = matrix::Quatf(att_sp.q_d);
 
 	for (int i = 0; i < 3; i++) {
 		cmd_z(i) = R_cmd(i, 2);
 	}
+
 
 	// Calculate the current z axis
 	Vector3f curr_z;
@@ -95,9 +105,11 @@ void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::
 		curr_z(i) = R_body(i, 2);
 	}
 
+
 }
 
-void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,const matrix::Quatf &att,
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
 			      vehicle_attitude_setpoint_s &att_sp)
 	{
 
@@ -119,6 +131,9 @@ void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,const mat
 		R_sp(i, 2) = body_z(i);
 	}
 
+	// copy quaternion setpoint to attitude setpoint topic
+	Quatf q_sp = R_sp;
+	q_sp.copyTo(att_sp.q_d);
 
 
 	// set the euler angles, for logging only, must not be used for control
@@ -132,8 +147,7 @@ void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,const mat
 	att_sp.thrust_body[2] = thr_sp.dot(body_z);
 	}
 
-//// CUSTOM END Converts thrust to planar attitude  ////
-
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 void limitTilt(Vector3f &body_unit, const Vector3f &world_unit, const float max_angle)
 {
@@ -154,7 +168,9 @@ void limitTilt(Vector3f &body_unit, const Vector3f &world_unit, const float max_
 
 void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpoint_s &att_sp)
 {
-	// zero vector, no direction, set safe level value
+
+	matrix::Dcmf _rotation; //_rotation2;
+	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};//rotation to the body frame
 	if (body_z.norm_squared() < FLT_EPSILON) {
 		body_z(2) = 1.f;
 	}
@@ -202,6 +218,8 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	att_sp.roll_body = euler.phi();
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
+
+
 }
 
 Vector2f constrainXY(const Vector2f &v0, const Vector2f &v1, const float &max)
@@ -286,7 +304,7 @@ bool cross_sphere_line(const Vector3f &sphere_c, const float sphere_r,
 		// we have triangle CDX with known CD and CX = R, find DX
 		float dx_len = sqrtf(sphere_r * sphere_r - cd_len * cd_len);
 
-		if ((sphere_c - line_b) * ab_norm > 0.0f) {
+		if ((sphere_c - line_b) * ab_norm > 0.f) {
 			// target waypoint is already behind us
 			res = line_b;
 
@@ -303,12 +321,12 @@ bool cross_sphere_line(const Vector3f &sphere_c, const float sphere_r,
 		res = d; // go directly to line
 
 		// previous waypoint is still in front of us
-		if ((sphere_c - line_a) * ab_norm < 0.0f) {
+		if ((sphere_c - line_a) * ab_norm < 0.f) {
 			res = line_a;
 		}
 
 		// target waypoint is already behind us
-		if ((sphere_c - line_b) * ab_norm > 0.0f) {
+		if ((sphere_c - line_b) * ab_norm > 0.f) {
 			res = line_b;
 		}
 

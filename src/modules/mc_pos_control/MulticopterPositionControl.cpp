@@ -36,14 +36,13 @@
  * @author Ricardo Rosales Martinez
  */
 
-
 #include "MulticopterPositionControl.hpp"
 
 #include <float.h>
 #include <lib/mathlib/mathlib.h>
 #include <lib/matrix/matrix/math.hpp>
+#include <matrix/Quaternion.hpp>
 #include <px4_platform_common/events.h>
-#include <px4_platform_common/module_params.h>
 #include "PositionControl/ControlMath.hpp"
 
 using namespace matrix;
@@ -185,6 +184,7 @@ void MulticopterPositionControl::parameters_update(bool force)
 			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_pxy_vel_p_acc.get(), _param_mpc_z_vel_p_acc.get()),
 			Vector3f(_param_mpc_pxy_vel_i_acc.get(), _param_mpc_pxy_vel_i_acc.get(), _param_mpc_z_vel_i_acc.get()),
 			Vector3f(_param_mpc_pxy_vel_d_acc.get(), _param_mpc_pxy_vel_d_acc.get(), _param_mpc_z_vel_d_acc.get()));
+		//Control Gains fot the planar control
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 
@@ -281,6 +281,7 @@ void MulticopterPositionControl::parameters_update(bool force)
 		_takeoff.setSpoolupTime(_param_com_spoolup_time.get());
 		_takeoff.setTakeoffRampTime(_param_mpc_tko_ramp_t.get());
 		_takeoff.generateInitialRampValue(_param_mpc_z_vel_p_acc.get());
+
 	}
 }
 
@@ -532,7 +533,7 @@ void MulticopterPositionControl::Run()
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 			float minimum_planar_thrust = flying ? _param_mpc_planar_thr_min.get() : 0.f;
 			_control.setPlanarThrustLimits(minimum_planar_thrust, _param_mpc_planar_thr_max.get(),_param_planar_threshold.get());
-			//// CUSTOM END planar thrust limits ////
+			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
 
 			float max_speed_xy = _param_mpc_xy_vel_max.get();
 
@@ -574,7 +575,7 @@ void MulticopterPositionControl::Run()
 			Vector3f(_param_mpc_pxy_vel_d_acc.get(), _param_mpc_pxy_vel_d_acc.get(), _param_mpc_z_vel_d_acc.get()));
 			//Control Gains fot the planar control
 
-			// Run position control
+			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 			if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
 				// Failsafe
 				_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
@@ -584,20 +585,17 @@ void MulticopterPositionControl::Run()
 				_control.update(dt,_param_planar_att_mode.get(),planar_flight);
 
 			}
+			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
 
 
-			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 			//Check the values of the stick to allow for mode switching tilted stop, and planar motion
 			manual_control_set_sub.copy(&stick_setpoints);
-			//Check the values of the stick are larger than threshold
+			//check the values of the stick are larger than threshold
 			stick_roll=abs(stick_setpoints.roll);
 			stick_pitch=abs(stick_setpoints.pitch);
 			planar_flight=(stick_roll>=0.05f || stick_pitch>=0.05f)?true:false;
-			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 
-			// Publish internal position control setpoints
-			// on top of the input/feed-forward setpoints these containt the PID corrections
-			// This message is used by other modules (such as Landdetector) to determine vehicle intention.
 			vehicle_local_position_setpoint_s local_pos_sp{};
 			_control.getLocalPositionSetpoint(local_pos_sp);
 			local_pos_sp.timestamp = hrt_absolute_time();
@@ -605,34 +603,33 @@ void MulticopterPositionControl::Run()
 
 			// Publish attitude setpoint output
 			vehicle_attitude_setpoint_s attitude_setpoint{};
+			//_control.getAttitudeSetpoint(attitude_setpoint);
 			attitude_setpoint.timestamp = hrt_absolute_time();
 
-			//// CUSTOM planar attitude status ////
+			// Thrust planar parameters, changed by rc or by the QGroundControl
 			planar_attitude_status_s planar_status{};
 			planar_status.timestamp = _time_stamp_last_loop;
-			_control.getAttitudeSetpoint(matrix::Quatf(att.q),_param_planar_att_mode.get(),
-						     attitude_setpoint, planar_status);
+
+			//Get the the attitude setpoint with the omni parameters
+			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
+							attitude_setpoint, planar_status);
+
+			param_t planar_param = param_handle(px4::params::PLANAR_ATT_MODE);
+
 
 			if (_param_rc_sim_mode.get()==1)
 			{
-				param_t planar_param = param_handle(px4::params::PLANAR_ATT_MODE);
 				manual_control_switches_sub.update(&switches);
 				int32_t att_mode= switches.planar_mode_switch;
 				param_set(planar_param,&att_mode);
-				//Thrust vectoring status for tilting and not tilting mode
 				planar_status.att_mode=switches.planar_mode_switch;
-			}
 
+			}
 			planar_status.att_mode = _param_planar_att_mode.get();
 			_planar_attitude_status_pub.publish(planar_status);
-			//// CUSTOM END planar attitude status ////
+
+			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
-
-
-
-
-
-
 
 		} else {
 			// an update is necessary here because otherwise the takeoff state doesn't get skipped with non-altitude-controlled modes

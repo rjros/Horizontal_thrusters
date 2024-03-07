@@ -38,7 +38,6 @@
  * @author Ricardo Rosales Martinez
  */
 
-
 #pragma once
 
 #include "PositionControl/PositionControl.hpp"
@@ -69,13 +68,18 @@
 #include <uORB/topics/vehicle_local_position.h>
 #include <uORB/topics/vehicle_local_position_setpoint.h>
 
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-#include <uORB/topics/planar_attitude_status.h>
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_status.h>
+#include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/manual_control_setpoint.h>
+#include <uORB/topics/planar_attitude_status.h>
+//read values from switches
 #include <uORB/topics/manual_control_switches.h>
-//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
+
 
 using namespace time_literals;
 
@@ -84,6 +88,7 @@ class MulticopterPositionControl : public ModuleBase<MulticopterPositionControl>
 {
 public:
 	vehicle_attitude_s att;
+
 	MulticopterPositionControl(bool vtol = false);
 	~MulticopterPositionControl() override;
 
@@ -109,7 +114,9 @@ private:
 	uORB::Publication<vehicle_attitude_setpoint_s>	     _vehicle_attitude_setpoint_pub{ORB_ID(vehicle_attitude_setpoint)};
 	uORB::Publication<vehicle_local_position_setpoint_s> _local_pos_sp_pub{ORB_ID(vehicle_local_position_setpoint)};	/**< vehicle local position setpoint publication */
 
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 	uORB::Publication<planar_attitude_status_s>	_planar_attitude_status_pub{ORB_ID(planar_attitude_status)}; //planar flight status
+	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
 	uORB::SubscriptionCallbackWorkItem _local_pos_sub{this, ORB_ID(vehicle_local_position)};	/**< vehicle local position */
 
@@ -125,14 +132,14 @@ private:
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 	uORB::Subscription manual_control_switches_sub{ORB_ID(manual_control_switches)};
 	uORB::Subscription manual_control_set_sub{ORB_ID(manual_control_setpoint)};
-
-	manual_control_switches_s switches{};
 	manual_control_setpoint_s stick_setpoints{};
+
 	//Stick values from the controller
 	float stick_roll{0};
 	float stick_pitch{0};
 	//Values from setpoints
 	bool planar_flight =false;
+	manual_control_switches_s switches{};
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 	hrt_abstime _time_stamp_last_loop{0};		/**< time stamp of last loop iteration */
@@ -156,6 +163,11 @@ private:
 		.landed = true,
 	};
 
+	float _param_tilt_angle = 0, _param_tilt_dir = 0; // Keeping the last parameter values in degrees
+	float _tilt_angle = 0, _tilt_dir = 0; // Keeping the currently used values in radians
+	float _param_roll_angle = 0, _param_pitch_angle = 0; // Keeping the last parameter values in degrees
+	float _tilt_roll = 0, _tilt_pitch = 0; // Keeping the currently used values in radians
+
 	DEFINE_PARAMETERS(
 		// Position Control
 		(ParamFloat<px4::params::MPC_XY_P>)         _param_mpc_xy_p,
@@ -166,6 +178,16 @@ private:
 		(ParamFloat<px4::params::MPC_Z_VEL_P_ACC>)  _param_mpc_z_vel_p_acc,
 		(ParamFloat<px4::params::MPC_Z_VEL_I_ACC>)  _param_mpc_z_vel_i_acc,
 		(ParamFloat<px4::params::MPC_Z_VEL_D_ACC>)  _param_mpc_z_vel_d_acc,
+
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		(ParamFloat<px4::params::MPC_PXY_P>) _param_mpc_pxy_pos_p_vel,
+		(ParamFloat<px4::params::MPC_PXY_I>) _param_mpc_pxy_pos_i_vel,
+		(ParamFloat<px4::params::MPC_PXY_D>) _param_mpc_pxy_pos_d_vel,
+		(ParamFloat<px4::params::MPC_PXY_VEL_P_A>) _param_mpc_pxy_vel_p_acc,
+		(ParamFloat<px4::params::MPC_PXY_VEL_I_A>) _param_mpc_pxy_vel_i_acc,
+		(ParamFloat<px4::params::MPC_PXY_VEL_D_A>) _param_mpc_pxy_vel_d_acc,
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
 		(ParamFloat<px4::params::MPC_XY_VEL_MAX>)   _param_mpc_xy_vel_max,
 		(ParamFloat<px4::params::MPC_Z_V_AUTO_UP>)  _param_mpc_z_v_auto_up,
 		(ParamFloat<px4::params::MPC_Z_VEL_MAX_UP>) _param_mpc_z_vel_max_up,
@@ -193,6 +215,14 @@ private:
 		(ParamFloat<px4::params::MPC_THR_MAX>)      _param_mpc_thr_max,
 		(ParamFloat<px4::params::MPC_THR_XY_MARG>)  _param_mpc_thr_xy_marg,
 
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		(ParamFloat<px4::params::MPC_PTH_MIN>)      _param_mpc_planar_thr_min,
+		(ParamFloat<px4::params::MPC_PTH_MAX>)      _param_mpc_planar_thr_max,
+		(ParamFloat<px4::params::PLANAR_TH>)        _param_planar_threshold,
+
+		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+
+
 		(ParamFloat<px4::params::SYS_VEHICLE_RESP>) _param_sys_vehicle_resp,
 		(ParamFloat<px4::params::MPC_ACC_HOR>)      _param_mpc_acc_hor,
 		(ParamFloat<px4::params::MPC_ACC_DOWN_MAX>) _param_mpc_acc_down_max,
@@ -207,20 +237,8 @@ private:
 		(ParamFloat<px4::params::MPC_Z_VEL_ALL>)    _param_mpc_z_vel_all,
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-		(ParamFloat<px4::params::MPC_PXY_P>) _param_mpc_pxy_pos_p_vel,
-		(ParamFloat<px4::params::MPC_PXY_I>) _param_mpc_pxy_pos_i_vel,
-		(ParamFloat<px4::params::MPC_PXY_D>) _param_mpc_pxy_pos_d_vel,
-		(ParamFloat<px4::params::MPC_PXY_VEL_P_A>) _param_mpc_pxy_vel_p_acc,
-		(ParamFloat<px4::params::MPC_PXY_VEL_I_A>) _param_mpc_pxy_vel_i_acc,
-		(ParamFloat<px4::params::MPC_PXY_VEL_D_A>) _param_mpc_pxy_vel_d_acc,
-		//Planar Parameters
-		(ParamFloat<px4::params::MPC_PTH_MIN>)      _param_mpc_planar_thr_min,
-		(ParamFloat<px4::params::MPC_PTH_MAX>)      _param_mpc_planar_thr_max,
-		(ParamFloat<px4::params::PLANAR_TH>)        _param_planar_threshold,
-		//Planar Parameters
-		(ParamInt<px4::params::PLANAR_ATT_MODE>) _param_planar_att_mode,
-		//Control mode with RC
 		(ParamInt<px4::params::RC_SIM>) _param_rc_sim_mode,
+		(ParamInt<px4::params::PLANAR_ATT_MODE>) _param_planar_att_mode,
 		//Control mode with RC
 		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////

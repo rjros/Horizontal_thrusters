@@ -85,6 +85,9 @@ if(gazebo_FOUND)
 		iris_opt_flow_mockup
 		iris_rplidar
 		iris_vision
+		## CUSTOM MODELS ##
+		iris_4edf
+		## CUSTOM MODELS END ##
 		omnicopter
 		plane
 		plane_cam
