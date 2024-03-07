@@ -39,6 +39,7 @@
 
 #include "ControlMath.hpp"
 #include <px4_platform_common/defines.h>
+#include <px4_platform_common/module_params.h>
 #include <float.h>
 #include <mathlib/mathlib.h>
 
@@ -47,7 +48,7 @@ using namespace matrix;
 namespace ControlMath
 {
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const int planar_att_mode,
+void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,const int planar_att_mode,
 		      vehicle_attitude_setpoint_s &att_sp, planar_attitude_status_s &planar_status, bool planar_flag)
 {
 
@@ -55,7 +56,8 @@ void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const int plan
 
 	case 1:
 		if (planar_flag){
-		thrustToPlanarAttitude(thr_sp, yaw_sp,att_sp);
+		thrustToPlanarAttitude(thr_sp, yaw_sp,att, att_sp);
+		PX4_INFO("PLANAR MODE");
 		}
 		else
 		{
@@ -72,14 +74,30 @@ void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const int plan
 		break;
 
 	default: //Altitude is calculated from the desired thrust direction
-		thrustToPlanarAttitude(thr_sp, yaw_sp, att_sp);
+		bodyzToAttitude(-thr_sp, yaw_sp, att_sp);
+		att_sp.thrust_body[2] = -thr_sp.length();
 
 
 	}
 
+	Vector3f cmd_z;
+	matrix::Dcmf R_cmd = matrix::Quatf(att_sp.q_d);
+
+	for (int i = 0; i < 3; i++) {
+		cmd_z(i) = R_cmd(i, 2);
+	}
+
+	// Calculate the current z axis
+	Vector3f curr_z;
+	matrix::Dcmf R_body = att;
+
+	for (int i = 0; i < 3; i++) {
+		curr_z(i) = R_body(i, 2);
+	}
+
 }
 
-void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,
+void thrustToPlanarAttitude(const Vector3f &thr_sp, const float yaw_sp,const matrix::Quatf &att,
 			      vehicle_attitude_setpoint_s &att_sp)
 	{
 

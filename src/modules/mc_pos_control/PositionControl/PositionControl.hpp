@@ -213,7 +213,7 @@ public:
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.
 	 * @param attitude_setpoint reference to struct to fill up
 	 */
-	void getAttitudeSetpoint(const int planar_att_mode,vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status) const;
+	void getAttitudeSetpoint(const matrix::Quatf &att, const int planar_att_mode,vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status) const;
 
 	/**
 	 * All setpoints are set to NAN (uncontrolled). Timestampt zero.

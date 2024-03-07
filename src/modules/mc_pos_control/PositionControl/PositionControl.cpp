@@ -40,6 +40,8 @@
 #include <float.h>
 #include <mathlib/mathlib.h>
 #include <px4_platform_common/defines.h>
+#include <px4_platform_common/module_params.h>
+
 #include <geo/geo.h>
 
 using namespace matrix;
@@ -157,7 +159,7 @@ bool PositionControl::update(const float dt, const int planar_att_mode,bool plan
 			if (planar_flag){
 			_planar_positionControl(dt,_yaw_sp);
 			_planar_velocityControl(dt,_yaw_sp);
-			// PX4_INFO("Planar error %f ", double(error_xy));
+			PX4_INFO("Planar error %f ", double(error_xy));
 
 			}
 			else{
@@ -471,10 +473,10 @@ void PositionControl::getLocalPositionSetpoint(vehicle_local_position_setpoint_s
 	_thr_sp.copyTo(local_position_setpoint.thrust);
 }
 
-void PositionControl::getAttitudeSetpoint(const int planar_att_mode,
+void PositionControl::getAttitudeSetpoint(const matrix::Quatf &att, const int planar_att_mode,
 					vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status)
 					const
 {
-	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, planar_att_mode,attitude_setpoint, planar_status,planar_flag);
+	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att,planar_att_mode,attitude_setpoint, planar_status,planar_flag);
 	attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
 }

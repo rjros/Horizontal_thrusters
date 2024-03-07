@@ -43,6 +43,7 @@
 #include <lib/mathlib/mathlib.h>
 #include <lib/matrix/matrix/math.hpp>
 #include <px4_platform_common/events.h>
+#include <px4_platform_common/module_params.h>
 #include "PositionControl/ControlMath.hpp"
 
 using namespace matrix;
@@ -608,8 +609,8 @@ void MulticopterPositionControl::Run()
 
 			//// CUSTOM planar attitude status ////
 			planar_attitude_status_s planar_status{};
-			planar_status.timestamp = hrt_absolute_time();
-			_control.getAttitudeSetpoint(_param_planar_att_mode.get(),
+			planar_status.timestamp = _time_stamp_last_loop;
+			_control.getAttitudeSetpoint(matrix::Quatf(att.q),_param_planar_att_mode.get(),
 						     attitude_setpoint, planar_status);
 
 			if (_param_rc_sim_mode.get()==1)

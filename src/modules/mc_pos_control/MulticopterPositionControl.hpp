@@ -83,6 +83,7 @@ class MulticopterPositionControl : public ModuleBase<MulticopterPositionControl>
 	public ModuleParams, public px4::ScheduledWorkItem
 {
 public:
+	vehicle_attitude_s att;
 	MulticopterPositionControl(bool vtol = false);
 	~MulticopterPositionControl() override;
 

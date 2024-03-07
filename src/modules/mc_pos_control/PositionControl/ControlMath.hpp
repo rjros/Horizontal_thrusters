@@ -59,7 +59,7 @@ namespace ControlMath
  * @param att_sp attitude setpoint to fill
  * @param omni_att_mode attitude mode for omnidirectional vehicles
  */
-void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp,
+void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
 		      const int planar_att_mode, vehicle_attitude_setpoint_s &att_sp,
 		      planar_attitude_status_s & planar_status, bool planar_flag);
 
@@ -70,7 +70,7 @@ void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp,
  * @param att current attitude of the robot
  * @param att_sp attitude setpoint to fill
  */
-void thrustToPlanarAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp,
+void thrustToPlanarAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
 			      vehicle_attitude_setpoint_s &att_sp);
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
