@@ -561,6 +561,18 @@ void MulticopterPositionControl::Run()
 
 			_control.setState(states);
 
+			// _control.setPlanarPositionGains(Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_pxy_pos_p_vel.get(), _param_mpc_z_p.get()));
+			_control.setPlanarPositionGains(
+			Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_pxy_pos_p_vel.get(), _param_mpc_z_p.get()),
+			Vector3f(_param_mpc_pxy_pos_i_vel.get(),_param_mpc_pxy_pos_i_vel.get(), 0.0f),
+			Vector3f(_param_mpc_pxy_pos_d_vel.get(),_param_mpc_pxy_pos_d_vel.get(), 0.0f));
+
+			_control.setPlanarVelocityGains(
+			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_pxy_vel_p_acc.get(), _param_mpc_z_vel_p_acc.get()),
+			Vector3f(_param_mpc_pxy_vel_i_acc.get(), _param_mpc_pxy_vel_i_acc.get(), _param_mpc_z_vel_i_acc.get()),
+			Vector3f(_param_mpc_pxy_vel_d_acc.get(), _param_mpc_pxy_vel_d_acc.get(), _param_mpc_z_vel_d_acc.get()));
+			//Control Gains fot the planar control
+
 			// Run position control
 			if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
 				// Failsafe
@@ -582,10 +594,6 @@ void MulticopterPositionControl::Run()
 			planar_flight=(stick_roll>=0.05f || stick_pitch>=0.05f)?true:false;
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 
-
-
-
-
 			// Publish internal position control setpoints
 			// on top of the input/feed-forward setpoints these containt the PID corrections
 			// This message is used by other modules (such as Landdetector) to determine vehicle intention.
@@ -597,11 +605,10 @@ void MulticopterPositionControl::Run()
 			// Publish attitude setpoint output
 			vehicle_attitude_setpoint_s attitude_setpoint{};
 			attitude_setpoint.timestamp = hrt_absolute_time();
-			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
 
 			//// CUSTOM planar attitude status ////
 			planar_attitude_status_s planar_status{};
-			planar_status.timestamp = _time_stamp_last_loop;
+			planar_status.timestamp = hrt_absolute_time();
 			_control.getAttitudeSetpoint(_param_planar_att_mode.get(),
 						     attitude_setpoint, planar_status);
 
@@ -618,6 +625,8 @@ void MulticopterPositionControl::Run()
 			planar_status.att_mode = _param_planar_att_mode.get();
 			_planar_attitude_status_pub.publish(planar_status);
 			//// CUSTOM END planar attitude status ////
+			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
+
 
 
 
