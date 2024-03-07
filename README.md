@@ -1,6 +1,6 @@
 # PX4 Autopilot modified for fully actuated system (Work in Progress)
 
-Modified version of the release version v1.14.0 of the PX4-Autopilot firmware, using the existing control allocation method.
+Modified version of the release version v1.14.2 of the PX4-Autopilot firmware, using the existing control allocation method.
 
 * Modify the controllers in the system to allow for flight with no tilt.
 * Consider semi-actuated systems (have limited control on some axes and can produce 3D forces in others)
