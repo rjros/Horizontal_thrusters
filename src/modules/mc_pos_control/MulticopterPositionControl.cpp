@@ -594,7 +594,8 @@ void MulticopterPositionControl::Run()
 			//check the values of the stick are larger than threshold
 			stick_roll=abs(stick_setpoints.roll);
 			stick_pitch=abs(stick_setpoints.pitch);
-			planar_flight=(stick_roll>=0.05f || stick_pitch>=0.05f)?true:false;
+			planar_flight=(stick_roll>=0.05f || stick_pitch>=0.05f);
+
 
 			vehicle_local_position_setpoint_s local_pos_sp{};
 			_control.getLocalPositionSetpoint(local_pos_sp);
