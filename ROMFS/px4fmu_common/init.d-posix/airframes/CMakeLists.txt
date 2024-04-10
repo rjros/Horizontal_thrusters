@@ -94,8 +94,13 @@ px4_add_romfs_files(
 
 	17001_flightgear_tf-g1
 	17002_flightgear_tf-g2
-	## CUSTOM ##
+
+	## CUSTOM GZ models ##
 	4011_gz_holybro_x500
+	4012_gz_holybro_x500_dual
+	## CUSTOM GZ models ##
+
+	## CUSTOM gazebo ##
 	22000_gazebo-classic_iris_4edf
-	## CUSTOM ##
+	## CUSTOM gazebo ##
 )
