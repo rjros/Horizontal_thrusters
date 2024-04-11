@@ -921,9 +921,10 @@ PARAM_DEFINE_FLOAT(MPC_Z_VEL_ALL, -3.0f);
  * to counteract with the external force (e.g., wind).
  *
  * @min 0
- * @max 2
+ * @max 3
  * @value 3 Tilted attitude
- * @value 1 Planar attitude
+ * @value 2 Dual thruster mode
+ * @value 1 Single Thruster mode
  */
 PARAM_DEFINE_INT32(PLANAR_ATT_MODE, 0);
 

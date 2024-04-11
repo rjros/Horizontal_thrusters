@@ -158,22 +158,22 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 
 		case 1:
 		if (planar_flag){
-		_planar_positionControl(dt,_yaw_sp);
-		_planar_velocityControl(dt,_yaw_sp);
-		// PX4_INFO("combined planar");
+		_single_positionControl(dt,_yaw_sp);
+		_single_velocityControl(dt,_yaw_sp);
+		 PX4_INFO("combined planar");
 		}
 		else {
 		_positionControl();
 		_velocityControl(dt);
-		// PX4_INFO("tilted");
+		 PX4_INFO("tilted planar");
 		}
 		break;//here
 
 	case 2:
 
 		if (planar_flag){
-		_planar_positionControl(dt,_yaw_sp);
-		_planar_velocityControl(dt,_yaw_sp);
+		_combined_positionControl(dt,_yaw_sp);
+		_combined_velocityControl(dt,_yaw_sp);
 		// PX4_INFO("combined planar");
 		}
 		else {
@@ -573,8 +573,6 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 
 	// PX4_INFO("Thrust  %f %f %f",(double)th_body(0),(double)th_body(1),(double)th_body(2));
 	// PX4_INFO("Thrust Body %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
-
-
 
 
 }
