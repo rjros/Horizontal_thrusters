@@ -520,6 +520,71 @@
         </dynamics>
       </axis>
     </joint>
+
+    <link name='front_arm'>
+        <pose>0.2 0 0 0 -1.5707 0</pose> <!--angles are in radian-->
+        <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000166667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000166667</iyy>
+          <iyz>0</iyz>
+          <izz>0.000166667</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose>0 0 0 0 0 0</pose> <!--angles are in radian-->
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>1.0 0.0 0.0 1</ambient>
+          <diffuse>1.0 0.0 0.0 1</diffuse>
+          <specular>1.0 0.0 0.0 1</specular>
+        </material>
+      </visual>
+      <collision name='collision'>
+        <density>6.3</density>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.3</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+      <!--connecting these links together using joints-->
+     <!--connecting these links together using joints-->
+    <joint name='front_arm_joint' type='revolute'> <!--continous joint is not supported yet-->
+        <pose relative_to='front_arm'/>
+        <parent>base_link</parent>
+        <child>front_arm</child>
+        <axis>
+            <xyz expressed_in='__model__'>1 0 0</xyz> <!--can be descired to any frame or even arbitrary frames-->
+            <limit>
+                <lower>0</lower>    <!--negative infinity-->
+                <upper>0</upper>     <!--positive infinity-->
+            </limit>
+        </axis>
+        <sensor name= 'forcetorque' type='force_torque'>
+            <always_on>true</always_on>
+            <update_rate>100.0</update_rate>
+            <visualize>true</visualize>
+            <force_torque>
+                <frame>sensor</frame>
+                <measure_direction>child_to_parent</measure_direction>
+            </force_torque>
+            <topic>wrench</topic>
+        </sensor>
+    </joint>
+
+
    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_0_joint</jointName>
       <linkName>rotor_0</linkName>
