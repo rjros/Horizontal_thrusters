@@ -418,6 +418,117 @@
         </dynamics>
       </axis>
     </joint>
+<!-- Manipulator arm  -->
+    <link name="manipulator_arm">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.40 0 -0.01 0 0 0 </pose>
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>6.25e-5</ixx>
+            <iyy>3.292e-5</iyy>
+            <izz>3.292e-5</izz>
+        </inertia>
+        </inertial>
+       <visual name="manipulator_arm_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://holybro_x500_dual/meshes/manipulator_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="manipulator_arm_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="manipulator_arm_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>manipulator_arm</child>
+    </joint>
+
+     <link name="manipulator_tip">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.5 0 0.0 0 0 3.14159 </pose>
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>6.25e-5</ixx>
+            <iyy>3.292e-5</iyy>
+            <izz>3.292e-5</izz>
+        </inertia>
+        </inertial>
+       <visual name="manipulator_tip_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://holybro_x500_dual/meshes/manipulator_tip.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="manipulator_tip_collision">
+        <pose>-0.015 0 0 0 0 0 </pose>
+        <geometry>
+          <sphere>
+            <radius>0.05</radius> <!-- Adjust the radius as needed -->
+          </sphere>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="manipulator_tip_joint" type="fixed">
+      <parent>manipulator_arm</parent>
+      <child>manipulator_tip</child>
+        <sensor name= 'forcetorque' type='force_torque'>
+            <always_on>true</always_on>
+            <update_rate>100.0</update_rate>
+            <visualize>true</visualize>
+            <force_torque>
+                <frame>sensor</frame>
+                <measure_direction>child_to_parent</measure_direction>
+            </force_torque>
+            <topic>wrench</topic>
+        </sensor>
+    </joint>
+
+
+
+<!-- Manipulator arm  END -->
+
 
 <!-- Additional Rotors 4,5END -->
 
