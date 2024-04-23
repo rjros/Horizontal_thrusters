@@ -46,10 +46,10 @@ param set-default CA_ROTOR4_AZ 0.0
 #### Back fan, pushes back END ####
 
 #### Front fan, pushes back ####
-param set-default CA_ROTOR5_PX 0.25
+param set-default CA_ROTOR5_PX -0.25
 param set-default CA_ROTOR5_PY 0.00
 param set-default CA_ROTOR5_KM 0.00
-param set-default CA_ROTOR5_AX -1.0
+param set-default CA_ROTOR5_AX 1.0
 param set-default CA_ROTOR5_AY 0.0
 param set-default CA_ROTOR5_AZ 0.0
 #### Front fan, pushes back END ####

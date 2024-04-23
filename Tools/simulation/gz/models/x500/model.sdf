@@ -36,6 +36,24 @@
           </mesh>
         </geometry>
       </visual>
+       <visual name="manipualtor_arm">
+        <pose>0  0  0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500/meshes/manipulator_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+       <visual name="upboard_assembly">
+        <pose>0 0 -0.05grapout -3.14 0 -1.57 </pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500/meshes/upboard_assembly.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
       <visual name="5010_motor_base_1">
         <pose>-0.174 0.174 .032 0 0 -.45</pose>
         <geometry>
