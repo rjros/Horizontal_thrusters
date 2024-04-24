@@ -329,7 +329,7 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
           </box>
         </geometry>
         <surface>
@@ -387,7 +387,7 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
           </box>
         </geometry>
         <surface>
@@ -403,6 +403,7 @@
         </surface>
       </collision>
     </link>
+
     <joint name="rotor_4_joint" type="revolute">
       <parent>base_link</parent>
       <child>rotor_4</child>
@@ -423,13 +424,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.40 0 -0.01 0 0 0 </pose>
+        <pose> 0.40 0 -0.0086 0 0 0 </pose>
         <inertial>
-          <mass>0.05</mass>
+          <pose> -0.207 0 0 0 0 0</pose>
+          <mass>0.16</mass>
           <inertia>
-            <ixx>6.25e-5</ixx>
-            <iyy>3.292e-5</iyy>
-            <izz>3.292e-5</izz>
+            <ixx>1.8727e-05</ixx>
+            <iyy>0.0027</iyy>
+            <izz>0.0027</izz>
         </inertia>
         </inertial>
        <visual name="manipulator_arm_visual">
@@ -442,10 +444,10 @@
         </geometry>
       </visual>
       <collision name="manipulator_arm_collision">
-        <pose>0 0 0 0 0 0 </pose>
+        <pose> -0.207 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.444 0.009 0.009 </size>
           </box>
         </geometry>
         <surface>
@@ -471,13 +473,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.5 0 0.0 0 0 3.14159 </pose>
+        <pose> 0.420 0 -0.0086 0 0 3.14159 </pose>
         <inertial>
+          <pose>-0.030522 0 0 0 0 0 </pose>
           <mass>0.05</mass>
           <inertia>
-            <ixx>6.25e-5</ixx>
-            <iyy>3.292e-5</iyy>
-            <izz>3.292e-5</izz>
+            <ixx>1.8225e-05</ixx>
+            <iyy>2.4614e-05</iyy>
+            <izz>2.4614e-05</izz>
         </inertia>
         </inertial>
        <visual name="manipulator_tip_visual">
@@ -490,10 +493,10 @@
         </geometry>
       </visual>
       <collision name="manipulator_tip_collision">
-        <pose>-0.015 0 0 0 0 0 </pose>
+        <pose>-0.034296 0 0 0 0 0 </pose>
         <geometry>
           <sphere>
-            <radius>0.05</radius> <!-- Adjust the radius as needed -->
+            <radius>0.03</radius> <!-- Adjust the radius as needed -->
           </sphere>
         </geometry>
         <surface>
@@ -525,11 +528,7 @@
         </sensor>
     </joint>
 
-
-
 <!-- Manipulator arm  END -->
-
-
 <!-- Additional Rotors 4,5END -->
 
    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
@@ -538,8 +537,8 @@
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>0</motorNumber>
@@ -554,8 +553,8 @@
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+     <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>1</motorNumber>
@@ -570,8 +569,8 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>2</motorNumber>
@@ -586,8 +585,8 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+     <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>3</motorNumber>
@@ -601,11 +600,11 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>9.54858e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>4</motorNumber>
@@ -618,11 +617,11 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_5_joint</jointName>
       <linkName>rotor_5</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>9.54858e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>5</motorNumber>
