@@ -149,7 +149,7 @@
             <!--wall-->
         <model name='wall'>
             <static>true</static>
-            <pose>5 0 0 0 0 0</pose><!--pose relative to the world-->
+            <pose>0 5 0 0 0 1.54</pose><!--pose relative to the world-->
             <link name='box'>
                 <pose/>
                 <inertial> <!--inertial properties of the link mass, inertia matix-->
@@ -166,7 +166,7 @@
                 <visual name='visual'>
                     <geometry>
                         <box>
-                            <size>0.5 10.0 2.0</size>
+                            <size>0.5 10.0 10</size>
                         </box>
                     </geometry>
                     <!--let's add color to our link-->
@@ -179,7 +179,7 @@
                 <collision name='collision'> <!--todo: describe why we need the collision-->
                     <geometry>
                         <box>
-                            <size>0.5 10.0 2.0</size>
+                            <size>0.5 10.0 10</size>
                         </box>
                     </geometry>
                 </collision>

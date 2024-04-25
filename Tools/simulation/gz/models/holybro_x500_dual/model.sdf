@@ -517,6 +517,7 @@
     <joint name="manipulator_tip_joint" type="fixed">
       <parent>manipulator_arm</parent>
       <child>manipulator_tip</child>
+      <pose> 0 0 0 0 -1.5708 0 </pose>
         <sensor name= 'forcetorque' type='force_torque'>
             <always_on>true</always_on>
             <update_rate>100.0</update_rate>
@@ -525,7 +526,7 @@
                 <frame>sensor</frame>
                 <measure_direction>child_to_parent</measure_direction>
             </force_torque>
-            <topic>wrench</topic>
+            <topic>leptrino_force_sensor/sensor_wrench</topic>
         </sensor>
     </joint>
 
