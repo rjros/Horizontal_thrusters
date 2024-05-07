@@ -314,6 +314,7 @@ MulticopterAttitudeControl::Run()
 			}
 
 			// publish rate setpoint
+			// Thrust calculation should be solved here
 			vehicle_rates_setpoint_s rates_setpoint{};
 			rates_setpoint.roll = rates_sp(0);
 			rates_setpoint.pitch = rates_sp(1);

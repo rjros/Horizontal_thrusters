@@ -43,6 +43,10 @@ using namespace matrix;
 using namespace time_literals;
 using math::radians;
 
+// The current rate controllers lacks information regarding the structure of the UAV, i.e. Inertia and CoM information
+//MulticopterRateControl uses the rate_control.cpp library in ~/src/lib/rate_control
+// Tuning for the rate controller
+
 MulticopterRateControl::MulticopterRateControl(bool vtol) :
 	ModuleParams(nullptr),
 	WorkItem(MODULE_NAME, px4::wq_configurations::rate_ctrl),
