@@ -398,8 +398,6 @@ PARAM_DEFINE_FLOAT(MC_ACRO_SUPEXPOY, 0.7f);
  * @group Multicopter Rate Control
  */
 PARAM_DEFINE_INT32(MC_BAT_SCALE_EN, 0);
-
-
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////
 /**

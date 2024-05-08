@@ -299,7 +299,6 @@ MulticopterAttitudeControl::Run()
 			}
 
 			Vector3f rates_sp = _attitude_control.update(q);
-
 			const hrt_abstime now = hrt_absolute_time();
 			autotune_attitude_control_status_s pid_autotune;
 

@@ -159,6 +159,14 @@ private:
 		(ParamFloat<px4::params::MC_ACRO_SUPEXPO>) _param_mc_acro_supexpo,		/**< superexpo stick curve shape (roll & pitch) */
 		(ParamFloat<px4::params::MC_ACRO_SUPEXPOY>) _param_mc_acro_supexpoy,		/**< superexpo stick curve shape (yaw) */
 
-		(ParamBool<px4::params::MC_BAT_SCALE_EN>) _param_mc_bat_scale_en
+		(ParamBool<px4::params::MC_BAT_SCALE_EN>) _param_mc_bat_scale_en,
+
+		(ParamFloat<px4::params::MC_IXX>) _param_mc_ixx,                        	/**< Ixx component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IYY>) _param_mc_iyy,                        	/**< Iyy component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IZZ>) _param_mc_izz,                        	/**< Izz component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IXY>) _param_mc_ixy,                        	/**< Ixy component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IXZ>) _param_mc_ixz,                        	/**< Ixz component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IYZ>) _param_mc_iyz    				/**< Ixz component of the inertial tensor */
+
 	)
 };

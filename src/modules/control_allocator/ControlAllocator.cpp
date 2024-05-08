@@ -99,6 +99,11 @@ ControlAllocator::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+		if (!_planar_thrust_setpoint_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
+
 
 #ifndef ENABLE_LOCKSTEP_SCHEDULER // Backup schedule would interfere with lockstep
 	ScheduleDelayed(50_ms);
@@ -294,6 +299,7 @@ ControlAllocator::Run()
 	if (should_exit()) {
 		_vehicle_torque_setpoint_sub.unregisterCallback();
 		_vehicle_thrust_setpoint_sub.unregisterCallback();
+		_planar_thrust_setpoint_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
@@ -362,6 +368,24 @@ ControlAllocator::Run()
 	bool do_update = false;
 	vehicle_torque_setpoint_s vehicle_torque_setpoint;
 	vehicle_thrust_setpoint_s vehicle_thrust_setpoint;
+	planar_thrust_setpoint_s planar_thrust_setpoint;
+
+
+	// If the sytem is in offboard use the following
+	if (_planar_thrust_setpoint_sub.update(&planar_thrust_setpoint)){
+		_planar_control_mode = planar_thrust_setpoint.control_mode;
+		_planar_thrust_sp= matrix::Vector3f(planar_thrust_setpoint.force);
+			if (dt > 5_ms) {
+			do_update = true;
+			_timestamp_sample = planar_thrust_setpoint.timestamp;
+			}
+	}
+	else
+	{
+		_planar_control_mode=false;
+
+	}
+
 
 	// Run allocator on torque changes
 	if (_vehicle_torque_setpoint_sub.update(&vehicle_torque_setpoint)) {
@@ -392,12 +416,30 @@ ControlAllocator::Run()
 
 		// Set control setpoint vector(s)
 		matrix::Vector<float, NUM_AXES> c[ActuatorEffectiveness::MAX_NUM_MATRICES];
-		c[0](0) = _torque_sp(0);
-		c[0](1) = _torque_sp(1);
-		c[0](2) = _torque_sp(2);
-		c[0](3) = _thrust_sp(0);
-		c[0](4) = _thrust_sp(1);
-		c[0](5) = _thrust_sp(2);
+
+		// Set the control setpoints depending on the current mode
+
+		if(!_planar_control_mode)
+		{
+			c[0](0) = _torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+		}
+		else{
+			c[0](0) = _planar_thrust_sp(0);
+			c[0](1) = _planar_thrust_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+
+		}
+
+
+
 
 		if (_num_control_allocation > 1) {
 			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
