@@ -276,6 +276,9 @@ void PositionControl::_velocityControl(const float dt)
 
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
+	// PX4_INFO("Thrust  %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
+
+
 
 
 }
@@ -570,9 +573,15 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
+	//THRUST IS SENT IN THE INERTIAL FRAME
+	// PX4_INFO("Thrust Body %f %f",(double)_thr_sp(0),(double)_thr_sp(1));
+
+
+
 
 	// PX4_INFO("Thrust  %f %f %f",(double)th_body(0),(double)th_body(1),(double)th_body(2));
 	// PX4_INFO("Thrust Body %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
+
 
 
 }

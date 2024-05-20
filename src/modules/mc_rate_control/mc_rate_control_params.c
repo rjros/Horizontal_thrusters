@@ -398,6 +398,7 @@ PARAM_DEFINE_FLOAT(MC_ACRO_SUPEXPOY, 0.7f);
  * @group Multicopter Rate Control
  */
 PARAM_DEFINE_INT32(MC_BAT_SCALE_EN, 0);
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -450,7 +451,7 @@ PARAM_DEFINE_FLOAT(MC_IZZ, 1.0f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXY, 1.0f);
+PARAM_DEFINE_FLOAT(MC_IXY, 0.0f);
 
 /**
  * Ixz
@@ -463,7 +464,7 @@ PARAM_DEFINE_FLOAT(MC_IXY, 1.0f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXZ, 1.0f);
+PARAM_DEFINE_FLOAT(MC_IXZ, 0.0f);
 
 /**
  * Iyz
@@ -476,7 +477,7 @@ PARAM_DEFINE_FLOAT(MC_IXZ, 1.0f);
  * @decimal 2
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IYZ, 1.0f);
+PARAM_DEFINE_FLOAT(MC_IYZ, 0.0f);
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT END MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////

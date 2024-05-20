@@ -99,6 +99,11 @@ MulticopterRateControl::parameters_updated()
 	// manual rate control acro mode rate limits
 	_acro_rate_max = Vector3f(radians(_param_mc_acro_r_max.get()), radians(_param_mc_acro_p_max.get()),
 				  radians(_param_mc_acro_y_max.get()));
+
+	// Inertia Values
+
+	// Screw matrix of the wb
+	//_inertia_body={}
 }
 
 void
