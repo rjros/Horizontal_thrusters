@@ -62,6 +62,7 @@
 
 using namespace time_literals;
 
+
 class MulticopterRateControl : public ModuleBase<MulticopterRateControl>, public ModuleParams, public px4::WorkItem
 {
 public:
@@ -125,6 +126,10 @@ private:
 
 	float _battery_status_scale{0.0f};
 	matrix::Vector3f _thrust_setpoint{};
+
+	// Inertial Body matrix
+	matrix::SquareMatrix <float,3> _inertia_body= matrix::eye <float,3>();
+
 
 	float _energy_integration_time{0.0f};
 	float _control_energy[4] {};

@@ -39,8 +39,8 @@
 #include <mathlib/math/Functions.hpp>
 #include <px4_platform_common/events.h>
 
-using namespace matrix;
 using namespace time_literals;
+using namespace matrix;
 using math::radians;
 
 // The current rate controllers lacks information regarding the structure of the UAV, i.e. Inertia and CoM information
@@ -100,10 +100,19 @@ MulticopterRateControl::parameters_updated()
 	_acro_rate_max = Vector3f(radians(_param_mc_acro_r_max.get()), radians(_param_mc_acro_p_max.get()),
 				  radians(_param_mc_acro_y_max.get()));
 
-	// Inertia Values
 
-	// Screw matrix of the wb
-	//_inertia_body={}
+	float Ixx = _param_mc_ixx.get();
+	float Iyy = _param_mc_iyy.get();
+	float Izz = _param_mc_izz.get();
+	float Ixy = _param_mc_ixy.get();
+	float Ixz = _param_mc_ixz.get();
+	float Iyz = _param_mc_iyz.get();
+
+	float data[9]={Ixx,Ixy,Ixz,Ixy,Iyy,Iyz,Ixz,Iyz,Izz};
+	SquareMatrix <float,3> Inertia_matrix(data);
+	_inertia_body=Inertia_matrix;
+	// Inertia_matrix.print();
+
 }
 
 void
@@ -223,7 +232,7 @@ MulticopterRateControl::Run()
 			}
 
 			// run rate controller
-			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+			const Vector3f att_control = _rate_control.update_mc(rates, _inertia_body, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
 			// publish rate controller status
 			rate_ctrl_status_s rate_ctrl_status{};

@@ -402,82 +402,82 @@ PARAM_DEFINE_INT32(MC_BAT_SCALE_EN, 0);
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////
 /**
- * Ixx
+ * Ixx component of inertia
  *
  * Parameter for Inertial Tensor
  *
  * @unit kg m^2
- * @min 0.0
- * @max 2.0
- * @decimal 2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXX, 1.0f);
+PARAM_DEFINE_FLOAT(MC_IXX, 1.000f);
 
 /**
- * Iyy
+ * Iyy component of inertia
+ *
+ * Parameter for Inertial Tensor
+ *
+ * @unit kg m^2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(MC_IYY, 1.000f);
+
+/**
+ * Izz component of inertia
  *
  * Setting this parameter to 0 disables the filter
  *
- * @unit s
- * @min 0.0
- * @max 2.0
- * @decimal 2
+ * @unit kg m^2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IYY, 1.0f);
+PARAM_DEFINE_FLOAT(MC_IZZ, 1.000f);
 
 /**
- * Izz
- *
- * Setting this parameter to 0 disables the filter
- *
- * @unit s
- * @min 0.0
- * @max 2.0
- * @decimal 2
- * @group Multicopter Position Control
- */
-PARAM_DEFINE_FLOAT(MC_IZZ, 1.0f);
-
-/**
- * Ixy
+ * Ixy component of inertia
  *
  * Parameter for Inertial Tensor
  *
  * @unit kg m^2
- * @min 0.0
- * @max 2.0
- * @decimal 2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXY, 0.0f);
+PARAM_DEFINE_FLOAT(MC_IXY, 0.000f);
 
 /**
- * Ixz
+ * Ixz component of inertia
  *
  * Parameter for Inertial Tensor
  *
  * @unit kg m^2
- * @min 0.0
- * @max 2.0
- * @decimal 2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXZ, 0.0f);
+PARAM_DEFINE_FLOAT(MC_IXZ, 0.000f);
 
 /**
- * Iyz
+ * Iyz component of inertia
  *
  * Parameter for Inertial Tensor
  *
  * @unit kg m^2
- * @min 0.0
- * @max 2.0
- * @decimal 2
+ * @min -2.000
+ * @max 2.000
+ * @decimal 3
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IYZ, 0.0f);
+PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT END MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -89,13 +89,23 @@ public:
 	/**
 	 * Run one control loop cycle calculation
 	 * @param rate estimation of the current vehicle angular rate
+	 * @param Inertia inertia matrix
 	 * @param rate_sp desired vehicle angular rate setpoint
 	 * @param dt desired vehicle angular rate setpoint
 	 * @return [-1,1] normalized torque vector to apply to the vehicle
 	 */
-	matrix::Vector3f update(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp,
+	matrix::Vector3f update_mc(const matrix::Vector3f &rate, const matrix::SquareMatrix <float,3> &Inertia ,const matrix::Vector3f &rate_sp,
 				const matrix::Vector3f &angular_accel, const float dt, const bool landed);
 
+	/**
+	 * Run one control loop cycle calculation
+	 * @param rate estimation of the current vehicle angular rate
+	 * @param rate_sp desired vehicle angular rate setpoint
+	 * @param dt desired vehicle angular rate setpoint
+	 * @return [-1,1] normalized torque vector to apply to the vehicle
+	 */
+	matrix::Vector3f update(const matrix::Vector3f &rate,const matrix::Vector3f &rate_sp,
+				const matrix::Vector3f &angular_accel, const float dt, const bool landed);
 	/**
 	 * Set the integral term to 0 to prevent windup
 	 * @see _rate_int
