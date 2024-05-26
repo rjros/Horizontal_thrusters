@@ -72,7 +72,7 @@
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
     <scene>
-      <grid>false</grid>
+      <grid>true</grid>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.7 0.7 0.7 1</background>
       <shadows>true</shadows>
@@ -149,7 +149,7 @@
             <!--wall-->
         <model name='wall'>
             <static>true</static>
-            <pose>0 5 0 0 0 1.54</pose><!--pose relative to the world-->
+            <pose>0 5 0 0 0 1.5708</pose><!--pose relative to the world-->
             <link name='box'>
                 <pose/>
                 <inertial> <!--inertial properties of the link mass, inertia matix-->
