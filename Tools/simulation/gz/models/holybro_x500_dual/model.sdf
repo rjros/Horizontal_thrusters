@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
   <model name='holybro_x500_dual'>
-    <pose>0 0 0.217 0 0 0</pose>
+    <pose>0 0 0.217 0 0 1.57</pose>
     <self_collide>false</self_collide>
     <static>false</static>
     <link name="base_link">

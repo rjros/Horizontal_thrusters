@@ -30,12 +30,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
+
 /**
  * @file PositionControl.cpp
- * Modifications for suport of geometric controller SE(3)
- * @author Ricardo Rosales Martinez
  */
-
 
 #include "PositionControl.hpp"
 #include "ControlMath.hpp"
@@ -159,17 +157,30 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 
 
 		case 1:
+		if (planar_flag){
 		_single_positionControl(dt,_yaw_sp);
 		_single_velocityControl(dt,_yaw_sp);
 		 PX4_INFO("combined planar");
-
+		}
+		else {
+		_positionControl();
+		_velocityControl(dt);
+		 PX4_INFO("tilted planar");
+		}
 		break;//here
 
 	case 2:
 
+		if (planar_flag){
 		_combined_positionControl(dt,_yaw_sp);
 		_combined_velocityControl(dt,_yaw_sp);
 		// PX4_INFO("combined planar");
+		}
+		else {
+		_positionControl();
+		_velocityControl(dt);
+		// PX4_INFO("tilted");
+		}
 		break;
 	case 3:
 		_positionControl();
@@ -187,14 +198,18 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 	return valid && _acc_sp.isAllFinite() && _thr_sp.isAllFinite();
 }
 
-//// CUSTOM PARAMETERS FOR GEOMETRIC CONTROLLER ////
+
+
+//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
+
 void PositionControl::_positionControl()
 {	// P-position controller
-	Vector3f vel_sp_position = (_pos_sp - _pos).emult(_gain_pos_p); // x,y,z different when using fans and roll and pitch...
+	Vector3f vel_sp_position = (_pos_sp - _pos).emult(_gain_pos_p);
 	// Position and feed-forward velocity setpoints or position states being NAN results in them not having an influence
 	ControlMath::addIfNotNanVector3f(_vel_sp, vel_sp_position);
 	// make sure there are no NAN elements for further reference while constraining
 	ControlMath::setZeroIfNanVector3f(vel_sp_position);
+
 	// Constrain horizontal velocity by prioritizing the velocity component along the
 	// the desired position setpoint over the feed-forward term.
 	_vel_sp.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
@@ -203,6 +218,7 @@ void PositionControl::_positionControl()
 	// PX4_INFO("Position setpoint %f %f %f",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
 }
 
+
 void PositionControl::_velocityControl(const float dt)
 {
 
@@ -210,7 +226,7 @@ void PositionControl::_velocityControl(const float dt)
 	Vector3f vel_error = _vel_sp - _vel;
 	Vector3f acc_sp_velocity = vel_error.emult(_gain_vel_p) + _vel_int - _vel_dot.emult(_gain_vel_d);
 
-	// PX4_INFO("Velocity Estimate x %f and y %f  ",(double)_vel_dot(0),(double)_vel_dot(1));
+	PX4_INFO("Velocity Estimate x %f and y %f  ",(double)_vel_dot(0),(double)_vel_dot(1));
 
 	// No control input from setpoints or corresponding states which are NAN
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_sp_velocity);
@@ -261,11 +277,15 @@ void PositionControl::_velocityControl(const float dt)
 	ControlMath::setZeroIfNanVector3f(vel_error);
 	// Update integral part of velocity control
 	_vel_int += vel_error.emult(_gain_vel_i) * dt;
+
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
 	// PX4_INFO("Thrust  %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
-}
 
+
+
+
+}
 void PositionControl::_accelerationControl()
 {
 	// Assume standard acceleration due to gravity in vertical direction for attitude generation
@@ -281,9 +301,6 @@ void PositionControl::_accelerationControl()
 
 	_thr_sp = body_z * collective_thrust;
 }
-
-
-//// CUSTOM PARAMETERS FOR GEOMETRIC CONTROLLER END////
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 void PositionControl::_planar_positionControl(const float dt, const float yaw_sp)

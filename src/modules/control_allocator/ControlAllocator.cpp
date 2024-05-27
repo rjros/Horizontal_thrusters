@@ -421,7 +421,7 @@ ControlAllocator::Run()
 			c[0](3) = _planar_thrust_sp(0);
 			c[0](4) = _thrust_sp(1);
 			c[0](5) = _thrust_sp(2);
-		PX4_INFO("Planar command 1 %f and th 0 %f  ",(double)_planar_thrust_sp(0), (double)_thrust_sp(0));
+		// PX4_INFO("Planar command 1 %f and th 0 %f  ",(double)_planar_thrust_sp(0), (double)_thrust_sp(0));
 
 		}
 		else{
@@ -431,7 +431,7 @@ ControlAllocator::Run()
 			c[0](3) = _thrust_sp(0);
 			c[0](4) = _thrust_sp(1);
 			c[0](5) = _thrust_sp(2);
-		PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
+		// PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
 
 
 		}

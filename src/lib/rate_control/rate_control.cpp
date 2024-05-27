@@ -78,18 +78,15 @@ Vector3f RateControl::update_mc(const Vector3f &rate, const SquareMatrix<float,3
 		 rate(2),   0, -rate(0),
 		-rate(1), rate(0), 0};
 	SquareMatrix<float,3> S_wb(wb);
+	SquareMatrix <float,3> I_b=Inertia;
 
 	// PID control with feed forward
 	//Multiply the inertia tensor
-	const Vector3f rate_accel = -_gain_p.emult(rate_error) + _rate_int - _gain_d.emult(angular_accel) + _gain_ff.emult(rate_sp);
+	const Vector3f rate_accel =_gain_p.emult(rate_error) + _rate_int - _gain_d.emult(angular_accel) + _gain_ff.emult(rate_sp);
 
+	const Vector3f torque = I_b*rate_accel*2 + S_wb*I_b*rate;
 
-
-	const Vector3f torque = Inertia*rate_accel + S_wb*Inertia*rate;
-	// emult(rate_error) + _rate_int - _gain_d.emult(angular_accel) + _gain_ff.emult(rate_sp);
 	// torque.print();
-	// S_wb.print();
-	// Inertia.print();
 
 	// update integral only if we are not landed
 	if (!landed) {
@@ -108,6 +105,7 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	// PID control with feed forward
 	//Multiply the inertia tensor
 	const Vector3f torque = _gain_p.emult(rate_error) + _rate_int - _gain_d.emult(angular_accel) + _gain_ff.emult(rate_sp);
+	torque.print();
 
 	// update integral only if we are not landed
 	if (!landed) {
