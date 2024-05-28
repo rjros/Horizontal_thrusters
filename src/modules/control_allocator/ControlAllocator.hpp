@@ -199,6 +199,8 @@ private:
 	matrix::Vector3f _thrust_sp;
 
 	matrix::Vector3f _planar_thrust_sp;
+	matrix::Vector3f _planar_torque_sp;
+
 	bool _planar_control_mode {false};
 
 	// Reflects motor failures that are currently handled, not motor failures that are reported.

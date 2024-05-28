@@ -530,69 +530,6 @@
         </sensor>
     </joint>
 
-    <frame name="caster_frame" attached_to='manipulator_tip'>
-    </frame>
-
-<!--caster wheel-->
-    <link name='caster'>
-        <pose>0.475 0 -0.0086  0 0 0 </pose>
-        <velocity_decay/>
-            <inertial>
-            <mass>0.001</mass>
-            <inertia>
-                <ixx>0.1</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.1</iyy>
-                <iyz>0</iyz>
-                <izz>0.1</izz>
-            </inertia>
-        </inertial>
-        <visual name='visual'>
-            <geometry>
-                <sphere>
-                    <radius>0.02</radius>
-                </sphere>
-            </geometry>
-            <material>
-                <ambient>0.0 1 0.0 1</ambient>
-                <diffuse>0.0 1 0.0 1</diffuse>
-                <specular>0.0 1 0.0 1</specular>
-            </material>
-        </visual>
-        <collision name='collision'>
-            <geometry>
-              <sphere>
-                  <radius>0.02</radius>
-              </sphere>
-            </geometry>
-            <surface>
-              <friction>
-                <ode>
-                  <mu>0.6</mu>  <!-- Typical coefficient for metal cast -->
-                  <mu2>0.6</mu2> <!-- Secondary coefficient, often same as mu for isotropic materials -->
-                  <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
-                  <slip1>0.0</slip1> <!-- No slip for realistic static friction -->
-                  <slip2>0.0</slip2> <!-- No slip for realistic static friction -->
-                </ode>
-                <bullet>
-                  <friction>
-                    <friction>0.6</friction> <!-- Primary friction coefficient -->
-                    <friction2>0.6</friction2> <!-- Secondary friction coefficient -->
-                    <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
-                    <rolling_friction>0.01</rolling_friction> <!-- No rolling friction -->
-                  </friction>
-                </bullet>
-              </friction>
-            </surface>
-        </collision>
-    </link>
-<!--different type of joints ball joint--> <!--defult value is the child-->
-    <joint name='chassis' type='ball'>
-      <parent>caster_frame</parent>
-      <child>caster</child>
-    </joint>
-
 <!-- Manipulator arm  END -->
 <!-- Additional Rotors 4,5END -->
 

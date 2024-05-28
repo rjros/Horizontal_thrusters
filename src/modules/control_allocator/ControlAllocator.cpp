@@ -375,6 +375,8 @@ ControlAllocator::Run()
 	if (_planar_thrust_setpoint_sub.update(&planar_thrust_setpoint)){
 		_planar_control_mode = planar_thrust_setpoint.control_mode;
 		_planar_thrust_sp= matrix::Vector3f(planar_thrust_setpoint.force);
+		_planar_torque_sp= matrix::Vector3f(planar_thrust_setpoint.torque);
+
 			if (dt > 5_ms) {
 			do_update = true;
 			// _timestamp_sample = planar_thrust_setpoint.timestamp;
@@ -415,13 +417,13 @@ ControlAllocator::Run()
 
 		if(_planar_control_mode)
 		{
-			c[0](0) = _torque_sp(0);
+			c[0](0) = _torque_sp(0) + _planar_torque_sp(0);
 			c[0](1) = _torque_sp(1);
 			c[0](2) = _torque_sp(2);
 			c[0](3) = _planar_thrust_sp(0);
 			c[0](4) = _thrust_sp(1);
 			c[0](5) = _thrust_sp(2);
-		// PX4_INFO("Planar command 1 %f and th 0 %f  ",(double)_planar_thrust_sp(0), (double)_thrust_sp(0));
+		PX4_INFO("Planar command torque_controller %f and position_tq 0 %f  ",(double)_planar_torque_sp(0), (double)_torque_sp(0));
 
 		}
 		else{
