@@ -122,6 +122,16 @@ void PositionControl::setState(const PositionControlStates &states)
 	_vel = states.velocity;
 	_yaw = states.yaw;
 	_vel_dot = states.acceleration;
+	_rates = states.rates;
+	_attitude = states.attitude;
+
+	//angular velocity//
+
+}
+
+void PositionControl::setMass(const float vehicle_mass)
+{
+	_mass=vehicle_mass;
 }
 
 void PositionControl::setInputSetpoint(const trajectory_setpoint_s &setpoint)
@@ -140,6 +150,8 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 	bool valid = _inputValid();
 
 	if (valid) {
+
+
 
 	_yawspeed_sp = PX4_ISFINITE(_yawspeed_sp) ? _yawspeed_sp : 0.f;
 	_yaw_sp = PX4_ISFINITE(_yaw_sp) ? _yaw_sp : _yaw;
@@ -268,6 +280,24 @@ void PositionControl::_velocityControl(const float dt)
 
 void PositionControl::_accelerationControl()
 {
+
+	Dcmf R_w;
+	R_w=_attitude;
+	float wb[9]={       0, -_rates(2),  _rates(1),
+		    _rates(2),          0, -_rates(0),
+		   -_rates(1),  _rates(0),         0};
+
+	SquareMatrix<float,3> S_wb(wb);
+	// R_B.print();
+
+	// // //Acceleration controlled by the previous PID
+	//force values in the body frame
+	Vector3f total_acceleration = R_w.transpose()* (_acc_sp - Vector3f(0,0,CONSTANTS_ONE_G));
+	Vector3f force = _mass*(total_acceleration) + _mass*S_wb*R_w.transpose()*_vel;
+
+	PX4_INFO("Calculated desired force x %.2f y %.2f z %.2f ",(double)force(0),(double)force(1),(double)force(2));
+
+
 	// Assume standard acceleration due to gravity in vertical direction for attitude generation
 	Vector3f body_z = Vector3f(-_acc_sp(0), -_acc_sp(1), CONSTANTS_ONE_G).normalized();
 	// PX4_INFO("Acceleration setpoint %f %f %f",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
@@ -280,6 +310,8 @@ void PositionControl::_accelerationControl()
 	collective_thrust = math::min(collective_thrust, -_lim_thr_min);
 
 	_thr_sp = body_z * collective_thrust;
+	PX4_INFO("Calculated desired thrust x %f y %f z %f ",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
+
 }
 
 

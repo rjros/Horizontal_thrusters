@@ -46,15 +46,17 @@
 #include <uORB/topics/vehicle_local_position_setpoint.h>
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 #include <uORB/topics/planar_attitude_status.h>
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 
 struct PositionControlStates {
 	matrix::Vector3f position;
 	matrix::Vector3f velocity;
 	matrix::Vector3f acceleration;
+	matrix::Vector3f rates;
+	matrix::Quaternionf attitude;
 	float yaw;
 };
-
 /**
  * 	Core Position-Control for MC.
  * 	This class contains P-controller for position and
@@ -171,11 +173,20 @@ public:
 	 */
 	void updateHoverThrust(const float hover_thrust_new);
 
+
 	/**
 	 * Pass the current vehicle state to the controller
 	 * @param PositionControlStates structure
 	 */
 	void setState(const PositionControlStates &states);
+
+
+	/**
+	 * Pass the current vehicle state to the controller
+	 * @param vehicle_mass total mass of the uav, for model dependent controller
+	 */
+	void setMass(const float vehicle_mass);
+
 
 	/**
 	 * Pass the desired setpoints
@@ -293,6 +304,9 @@ private:
 
 	float _hover_thrust{}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
 
+	float _mass{0}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
+
+
 	// States
 	matrix::Vector3f _pos; /**< current position */
 	matrix::Vector3f _vel; /**< current velocity */
@@ -300,6 +314,9 @@ private:
 
 	matrix::Vector3f _vel_dot; /**< velocity derivative (replacement for acceleration estimate) */
 	matrix::Vector3f _vel_int; /**< integral term of the velocity controller */
+	matrix::Vector3f _rates; /**current body rates*/
+	matrix::Quaternionf _attitude; /**current uav attitude in quaternion*/
+
 	float _yaw{}; /**< current heading */
 
 	// Setpoints

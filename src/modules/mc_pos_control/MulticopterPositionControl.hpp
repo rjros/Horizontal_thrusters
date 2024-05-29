@@ -72,9 +72,9 @@
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_status.h>
-#include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/manual_control_setpoint.h>
 #include <uORB/topics/planar_attitude_status.h>
+#include <uORB/topics/vehicle_angular_velocity.h>
 //read values from switches
 #include <uORB/topics/manual_control_switches.h>
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
@@ -119,6 +119,9 @@ private:
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
 	uORB::SubscriptionCallbackWorkItem _local_pos_sub{this, ORB_ID(vehicle_local_position)};	/**< vehicle local position */
+	uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
+	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
+
 
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 
@@ -180,6 +183,7 @@ private:
 		(ParamFloat<px4::params::MPC_Z_VEL_D_ACC>)  _param_mpc_z_vel_d_acc,
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+		(ParamFloat<px4::params::TOTAL_MASS>) _param_mpc_total_mass,
 		(ParamFloat<px4::params::MPC_PXY_P>) _param_mpc_pxy_pos_p_vel,
 		(ParamFloat<px4::params::MPC_PXY_I>) _param_mpc_pxy_pos_i_vel,
 		(ParamFloat<px4::params::MPC_PXY_D>) _param_mpc_pxy_pos_d_vel,
@@ -283,7 +287,8 @@ private:
 	/**
 	 * Check for validity of positon/velocity states.
 	 */
-	PositionControlStates set_vehicle_states(const vehicle_local_position_s &local_pos);
+	PositionControlStates set_vehicle_states(const vehicle_local_position_s &local_pos, const vehicle_angular_velocity_s &vehicle_angular_velocity,
+						 const vehicle_attitude_s &vehicle_attitude);
 
 	/**
 	 * Generate setpoint to bridge no executable setpoint being available.

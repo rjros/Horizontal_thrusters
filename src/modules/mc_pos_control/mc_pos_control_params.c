@@ -1063,6 +1063,19 @@ PARAM_DEFINE_FLOAT(MPC_PTH_MAX, 1.0f);
  */
 PARAM_DEFINE_FLOAT(PLANAR_TH, 0.10f);
 
+/**
+ * Total weight of the uav in [kg].
+ *
+ * Model dependent controller .
+ *
+ * @min 0.0
+ * @max 100
+ * @decimal 3
+ * @increment 0.001
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_FLOAT(TOTAL_MASS, 2.5f);
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 ///////////////////////////////////////////////////////////////////////////////////////
 

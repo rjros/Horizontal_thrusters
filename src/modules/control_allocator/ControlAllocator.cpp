@@ -414,7 +414,7 @@ ControlAllocator::Run()
 		matrix::Vector<float, NUM_AXES> c[ActuatorEffectiveness::MAX_NUM_MATRICES];
 
 		// Set the control setpoints depending on the current mode
-
+		// add condition to stop from controller
 		if(_planar_control_mode)
 		{
 			c[0](0) = _torque_sp(0) + _planar_torque_sp(0);

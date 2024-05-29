@@ -123,7 +123,6 @@ void thrustToZeroTiltAttitude(const Vector3f &thr_sp, const float yaw_sp, const 
 
 	Dcmf R_sp;
 
-
 	// fill rotation matrix
 	for (int i = 0; i < 3; i++) {
 		R_sp(i, 0) = body_x(i);

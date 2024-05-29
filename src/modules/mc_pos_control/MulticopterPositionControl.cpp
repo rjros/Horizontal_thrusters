@@ -72,7 +72,14 @@ bool MulticopterPositionControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
-
+	if (!_vehicle_angular_velocity_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
+	if (!_vehicle_attitude_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
 	_time_stamp_last_loop = hrt_absolute_time();
 	ScheduleNow();
 
@@ -286,7 +293,7 @@ void MulticopterPositionControl::parameters_update(bool force)
 }
 
 PositionControlStates MulticopterPositionControl::set_vehicle_states(const vehicle_local_position_s
-		&vehicle_local_position)
+		&vehicle_local_position,const vehicle_angular_velocity_s &vehicle_angular_velocity, const vehicle_attitude_s &vehicle_attitude)
 {
 	PositionControlStates states;
 
@@ -336,6 +343,8 @@ PositionControlStates MulticopterPositionControl::set_vehicle_states(const vehic
 	}
 
 	states.yaw = vehicle_local_position.heading;
+	states.rates= Vector3f(vehicle_angular_velocity.xyz);
+	states.attitude = Quaternionf(vehicle_attitude.q);
 
 	return states;
 }
@@ -344,6 +353,7 @@ void MulticopterPositionControl::Run()
 {
 	if (should_exit()) {
 		_local_pos_sub.unregisterCallback();
+		_vehicle_angular_velocity_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
@@ -355,6 +365,10 @@ void MulticopterPositionControl::Run()
 
 	perf_begin(_cycle_perf);
 	vehicle_local_position_s vehicle_local_position;
+	// CUSTOM //
+	vehicle_attitude_s vehicle_attitude;
+	vehicle_angular_velocity_s vehicle_angular_velocity;
+	// CUSTOM //
 
 	if (_local_pos_sub.update(&vehicle_local_position)) {
 		const float dt =
@@ -379,6 +393,9 @@ void MulticopterPositionControl::Run()
 		}
 
 		_vehicle_land_detected_sub.update(&_vehicle_land_detected);
+
+		_vehicle_attitude_sub.update(&vehicle_attitude);
+		_vehicle_angular_velocity_sub.update(&vehicle_angular_velocity);
 
 		if (_param_mpc_use_hte.get()) {
 			hover_thrust_estimate_s hte;
@@ -434,7 +451,7 @@ void MulticopterPositionControl::Run()
 		_heading_reset_counter = vehicle_local_position.heading_reset_counter;
 
 
-		PositionControlStates states{set_vehicle_states(vehicle_local_position)};
+		PositionControlStates states{set_vehicle_states(vehicle_local_position,vehicle_angular_velocity,vehicle_attitude)};
 
 
 		if (_vehicle_control_mode.flag_multicopter_position_control_enabled) {
@@ -562,6 +579,7 @@ void MulticopterPositionControl::Run()
 			}
 
 			_control.setState(states);
+			_control.setMass(_param_mpc_total_mass.get());
 
 			// _control.setPlanarPositionGains(Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_pxy_pos_p_vel.get(), _param_mpc_z_p.get()));
 			_control.setPlanarPositionGains(
