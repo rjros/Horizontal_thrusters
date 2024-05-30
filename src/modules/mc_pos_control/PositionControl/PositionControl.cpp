@@ -293,23 +293,40 @@ void PositionControl::_accelerationControl()
 	// // //Acceleration controlled by the previous PID
 	//force values in the body frame
 	Vector3f total_acceleration = R_w.transpose()* (_acc_sp - Vector3f(0,0,CONSTANTS_ONE_G));
-	Vector3f force = _mass*(total_acceleration) + _mass*S_wb*R_w.transpose()*_vel;
+	// Vector3f total_acceleration = R_w.transpose()* (_acc_sp);// - Vector3f(0,0,CONSTANTS_ONE_G));
 
+	Vector3f force = _mass*(total_acceleration) + _mass*S_wb*R_w.transpose()*_vel_sp;
+
+	// Vector3f body_fz  = Vector3f (force(0),force(1),CONSTANTS_ONE_G);
 	PX4_INFO("Calculated desired force x %.2f y %.2f z %.2f ",(double)force(0),(double)force(1),(double)force(2));
+
+	force=R_w*force;
+
+	ControlMath::limitTilt(force, Vector3f(0, 0, 1), _lim_tilt);
+
+
+	PX4_INFO("Calculated desired force limit angle x %.2f y %.2f z %.2f ",(double)force(0),(double)force(1),(double)force(2));
+
+
+	// PX4_INFO("Calculated desired force normalized x %f y %f z %f ",(double)unit_v(0),(double)unit_v(1),(double)unit_v(2));
+
 
 
 	// Assume standard acceleration due to gravity in vertical direction for attitude generation
-	Vector3f body_z = Vector3f(-_acc_sp(0), -_acc_sp(1), CONSTANTS_ONE_G).normalized();
-	// PX4_INFO("Acceleration setpoint %f %f %f",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
+	// Vector3f body_z = Vector3f(-_acc_sp(0), -_acc_sp(1), CONSTANTS_ONE_G).normalized();
+	Vector3f body_z = Vector3f(-force(0), -force(1), force(2)).normalized();
 
-	ControlMath::limitTilt(body_z, Vector3f(0, 0, 1), _lim_tilt);
+	// ControlMath::limitTilt(body_z, Vector3f(0, 0, 1), _lim_tilt);
 	// Scale thrust assuming hover thrust produces standard gravity
-	float collective_thrust = _acc_sp(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
-	// Project thrust to planned body attitude
-	collective_thrust /= (Vector3f(0, 0, 1).dot(body_z));
-	collective_thrust = math::min(collective_thrust, -_lim_thr_min);
+	// float collective_thrust = force(2)/(_hover_thrust ) - _hover_thrust;
+	// float collective_thrust = force(2);//- _hover_thrust;
 
-	_thr_sp = body_z * collective_thrust;
+	// Project thrust to planned body attitude
+	// collective_thrust /= (Vector3f(0, 0, 1).dot(body_z));
+	// collective_thrust = math::min(collective_thrust, -_lim_thr_min);
+
+	_thr_sp = body_z;//* collective_thrust;
+
 	PX4_INFO("Calculated desired thrust x %f y %f z %f ",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
 
 }
