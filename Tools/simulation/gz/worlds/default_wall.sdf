@@ -146,5 +146,63 @@
       </spot>
     </light>
 
+            <!--wall-->
+        <model name='wall'>
+            <static>true</static>
+            <pose>0 5.20 0 0 0 1.5708</pose><!--pose relative to the world-->
+            <link name='box'>
+                <pose/>
+                <inertial> <!--inertial properties of the link mass, inertia matix-->
+                    <mass>1.14395</mass>
+                    <inertia>
+                        <ixx>9.532917</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.023832</iyy>
+                        <iyz>0</iyz>
+                        <izz>9.556749</izz>
+                    </inertia>
+                </inertial>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 10</size>
+                        </box>
+                    </geometry>
+                    <!--let's add color to our link-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'> <!--todo: describe why we need the collision-->
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 10</size>
+                        </box>
+                    </geometry>
+                    <surface>
+                      <friction>
+                        <ode>
+                          <mu>0.4</mu>  <!-- Typical coefficient for metal cast -->
+                          <mu2>0.4</mu2> <!-- Secondary coefficient, often same as mu for isotropic materials -->
+                          <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
+                          <slip1>0.0</slip1> <!-- No slip for realistic static friction -->
+                          <slip2>0.0</slip2> <!-- No slip for realistic static friction -->
+                        </ode>
+                        <bullet>
+                          <friction>
+                            <friction>0.4</friction> <!-- Primary friction coefficient -->
+                            <friction2>0.4</friction2> <!-- Secondary friction coefficient -->
+                            <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
+                            <rolling_friction>0.01</rolling_friction> <!-- No rolling friction -->
+                          </friction>
+                        </bullet>
+                      </friction>
+                  </surface>
+                </collision>
+            </link>
+            </model>
   </world>
 </sdf>

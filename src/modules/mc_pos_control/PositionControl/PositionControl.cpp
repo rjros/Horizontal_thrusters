@@ -271,7 +271,7 @@ void PositionControl::_velocityControl(const float dt)
 
 	// Make sure integral doesn't get NAN
 	ControlMath::setZeroIfNanVector3f(vel_error);
-	// Update integral part of velocity control
+	// Update integral part of velocity controld
 	_vel_int += vel_error.emult(_gain_vel_i) * dt;
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
@@ -292,41 +292,52 @@ void PositionControl::_accelerationControl()
 
 	// // //Acceleration controlled by the previous PID
 	//force values in the body frame
-	Vector3f total_acceleration = R_w.transpose()* (_acc_sp - Vector3f(0,0,CONSTANTS_ONE_G));
+	Vector3f total_acceleration = R_w.transpose()*_acc_sp;// (_acc_sp + Vector3f(0,0,CONSTANTS_ONE_G));
+	// Vector3f coriolis_acc= S_wb*R_w.transpose()*_vel_sp;
+
+	// PX4_INFO("Acceleration x %.4f y %.4f z %.4f ",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
+
+
+
+
+	// PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));
+	// PX4_INFO("Vel x %.2f y %.2f z %.2f ",(double)_vel_sp(0),(double)_vel_sp(1),(double)_vel_sp(2));
+
 	// Vector3f total_acceleration = R_w.transpose()* (_acc_sp);// - Vector3f(0,0,CONSTANTS_ONE_G));
 
-	Vector3f force = _mass*(total_acceleration) + _mass*S_wb*R_w.transpose()*_vel_sp;
+	Vector3f force = (total_acceleration)+ S_wb*R_w.transpose()*_vel;
 
 	// Vector3f body_fz  = Vector3f (force(0),force(1),CONSTANTS_ONE_G);
-	PX4_INFO("Calculated desired force x %.2f y %.2f z %.2f ",(double)force(0),(double)force(1),(double)force(2));
+	// PX4_INFO("Calculated desired force x %.4f y %.4f z %.4f ",(double)force(0),(double)force(1),(double)force(2));
+
 
 	force=R_w*force;
+	PX4_INFO("Calculated force before converting %.4f y %.4f z %.4f ",(double)force(0),(double)force(1),(double)force(2));
+	Vector3f body_zf = Vector3f(-force(0), -force(1), CONSTANTS_ONE_G).normalized();
+	float collective_thrust = force(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
 
-	ControlMath::limitTilt(force, Vector3f(0, 0, 1), _lim_tilt);
+	ControlMath::limitTilt(body_zf, Vector3f(0, 0, 1), _lim_tilt);
+	// double fz= (double)force(2)*0.018436+0.2096;
+	// Vector3f force_t=body_zf*fz;
+	collective_thrust /= (Vector3f(0, 0, 1).dot(body_zf));
+	collective_thrust = math::min(collective_thrust, -_lim_thr_min);
+
+	// PX4_INFO("Calculated desired force limit angle x %.4f y %.4f z %.4f ",(double)force_t(0),(double)force_t(1),(double)force_t(2));
 
 
-	PX4_INFO("Calculated desired force limit angle x %.2f y %.2f z %.2f ",(double)force(0),(double)force(1),(double)force(2));
 
-
-	// PX4_INFO("Calculated desired force normalized x %f y %f z %f ",(double)unit_v(0),(double)unit_v(1),(double)unit_v(2));
-
-
-
-	// Assume standard acceleration due to gravity in vertical direction for attitude generation
+	// // Assume standard acceleration due to gravity in vertical direction for attitude generation
 	// Vector3f body_z = Vector3f(-_acc_sp(0), -_acc_sp(1), CONSTANTS_ONE_G).normalized();
-	Vector3f body_z = Vector3f(-force(0), -force(1), force(2)).normalized();
+	// // PX4_INFO("Acceleration setpoint %f %f %f",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
 
 	// ControlMath::limitTilt(body_z, Vector3f(0, 0, 1), _lim_tilt);
-	// Scale thrust assuming hover thrust produces standard gravity
-	// float collective_thrust = force(2)/(_hover_thrust ) - _hover_thrust;
-	// float collective_thrust = force(2);//- _hover_thrust;
-
-	// Project thrust to planned body attitude
+	// // Scale thrust assuming hover thrust produces standard gravity
+	// float collective_thrust = _acc_sp(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
+	// // Project thrust to planned body attitude
 	// collective_thrust /= (Vector3f(0, 0, 1).dot(body_z));
 	// collective_thrust = math::min(collective_thrust, -_lim_thr_min);
 
-	_thr_sp = body_z;//* collective_thrust;
-
+	_thr_sp = body_zf * collective_thrust;
 	PX4_INFO("Calculated desired thrust x %f y %f z %f ",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
 
 }
@@ -641,6 +652,9 @@ void PositionControl::_combined_accelerationControl(const float yaw_sp)
 	th_body=body_z * collective_thrust;
 	th_body(0)=body_accel_sp(0)*_hover_thrust;
 	_thr_sp=_rotation2*th_body;
+
+	PX4_INFO("Desired pos x %.2f y %.2f z %.2f ",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
+	PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));
 
 }
 //// COMBINED POSITION CONTROL PID END ////
