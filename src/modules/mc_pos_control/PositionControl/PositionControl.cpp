@@ -312,7 +312,7 @@ void PositionControl::_accelerationControl()
 
 
 	force=R_w*force;
-	PX4_INFO("Calculated force before converting %.4f y %.4f z %.4f ",(double)force(0),(double)force(1),(double)force(2));
+	// PX4_INFO("Calculated force before converting %.4f y %.4f z %.4f ",(double)force(0),(double)force(1),(double)force(2));
 	Vector3f body_zf = Vector3f(-force(0), -force(1), CONSTANTS_ONE_G).normalized();
 	float collective_thrust = force(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
 
@@ -338,7 +338,7 @@ void PositionControl::_accelerationControl()
 	// collective_thrust = math::min(collective_thrust, -_lim_thr_min);
 
 	_thr_sp = body_zf * collective_thrust;
-	PX4_INFO("Calculated desired thrust x %f y %f z %f ",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
+	// PX4_INFO("Calculated desired thrust x %f y %f z %f ",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
 
 }
 
@@ -653,8 +653,8 @@ void PositionControl::_combined_accelerationControl(const float yaw_sp)
 	th_body(0)=body_accel_sp(0)*_hover_thrust;
 	_thr_sp=_rotation2*th_body;
 
-	PX4_INFO("Desired pos x %.2f y %.2f z %.2f ",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
-	PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));
+	// PX4_INFO("Desired pos x %.2f y %.2f z %.2f ",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
+	// PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));
 
 }
 //// COMBINED POSITION CONTROL PID END ////

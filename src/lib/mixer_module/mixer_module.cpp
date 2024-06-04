@@ -432,6 +432,7 @@ bool MixingOutput::update()
 	// check for actuator test
 	_actuator_test.update(_max_num_outputs, _param_thr_mdl_fac.get());
 
+
 	// get output values
 	float outputs[MAX_ACTUATORS];
 	bool all_disabled = true;
@@ -443,6 +444,8 @@ bool MixingOutput::update()
 
 			if (_armed.armed || (_armed.prearmed && _functions[i]->allowPrearmControl())) {
 				outputs[i] = _functions[i]->value(_function_assignment[i]);
+			// PX4_INFO("Actuator Test value of motors IDX %d M %f  ",i,(double)outputs[i]);
+
 
 			} else {
 				outputs[i] = NAN;

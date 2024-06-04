@@ -80,7 +80,10 @@ void ActuatorTest::update(int num_outputs, float thrust_curve)
 						motors.reversible_flags = 0;
 						_actuator_motors_sub.copy(&motors);
 						int motor_idx = actuator_test.function - (int)OutputFunction::Motor1;
+					PX4_INFO("Actuator Test value of motors IDX %d M %f  ",motor_idx,(double)motors.control[motor_idx]);
+
 						FunctionMotors::updateValues(motors.reversible_flags >> motor_idx, thrust_curve, &value, 1);
+
 					}
 
 					// handle servos: add trim

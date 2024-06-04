@@ -76,6 +76,7 @@ public:
 
 	static inline void updateValues(uint32_t reversible, float thrust_factor, float *values, int num_values)
 	{
+
 		if (thrust_factor > 0.f && thrust_factor <= 1.f) {
 			// thrust factor
 			//  rel_thrust = factor * x^2 + (1-factor) * x,
@@ -89,6 +90,7 @@ public:
 			for (int i = 0; i < num_values; ++i) {
 				float control = values[i];
 
+
 				if (control > 0.f) {
 					values[i] = -tmp1 + sqrtf(tmp2 + (control / a));
 
@@ -101,6 +103,8 @@ public:
 			}
 		}
 
+
+
 		for (int i = 0; i < num_values; ++i) {
 			if ((reversible & (1u << i)) == 0) {
 				if (values[i] < -FLT_EPSILON) {
@@ -108,8 +112,13 @@ public:
 
 				} else {
 					// remap from [0, 1] to [-1, 1]
+			PX4_INFO("Actuator Test value of motors IDX %d M %f  ",i,(double)values[i]);
+
 					values[i] = values[i] * 2.f - 1.f;
+			PX4_INFO("Actuator Test after value of motors IDX %d M %f  ",i,(double)values[i]);
+
 				}
+
 			}
 		}
 	}

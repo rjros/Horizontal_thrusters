@@ -708,6 +708,7 @@ ControlAllocator::publish_actuator_controls()
 
 		++actuator_idx_matrix[selected_matrix];
 		++actuator_idx;
+	// PX4_INFO("CA value of motors IDX %d M %f  ",motors_idx,(double)actuator_motors.control[motors_idx]);
 	}
 
 	for (int i = motors_idx; i < actuator_motors_s::NUM_CONTROLS; i++) {
