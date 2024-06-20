@@ -297,9 +297,6 @@ void PositionControl::_accelerationControl()
 
 	// PX4_INFO("Acceleration x %.4f y %.4f z %.4f ",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
 
-
-
-
 	// PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));
 	// PX4_INFO("Vel x %.2f y %.2f z %.2f ",(double)_vel_sp(0),(double)_vel_sp(1),(double)_vel_sp(2));
 
@@ -325,7 +322,6 @@ void PositionControl::_accelerationControl()
 	// PX4_INFO("Calculated desired force limit angle x %.4f y %.4f z %.4f ",(double)force_t(0),(double)force_t(1),(double)force_t(2));
 
 
-
 	// // Assume standard acceleration due to gravity in vertical direction for attitude generation
 	// Vector3f body_z = Vector3f(-_acc_sp(0), -_acc_sp(1), CONSTANTS_ONE_G).normalized();
 	// // PX4_INFO("Acceleration setpoint %f %f %f",(double)_acc_sp(0),(double)_acc_sp(1),(double)_acc_sp(2));
@@ -344,6 +340,7 @@ void PositionControl::_accelerationControl()
 
 
 //// CUSTOM PARAMETERS FOR GEOMETRIC CONTROLLER END////
+
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 void PositionControl::_planar_positionControl(const float dt, const float yaw_sp)
