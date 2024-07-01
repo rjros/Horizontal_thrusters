@@ -226,7 +226,7 @@ void PositionControl::_velocityControl(const float dt)
 	Vector3f vel_error = _vel_sp - _vel;
 	Vector3f acc_sp_velocity = vel_error.emult(_gain_vel_p) + _vel_int - _vel_dot.emult(_gain_vel_d);
 
-	PX4_INFO("Velocity Estimate x %f and y %f  ",(double)_vel_dot(0),(double)_vel_dot(1));
+	// PX4_INFO("Velocity Estimate x %f and y %f  ",(double)_vel_dot(0),(double)_vel_dot(1));
 
 	// No control input from setpoints or corresponding states which are NAN
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_sp_velocity);

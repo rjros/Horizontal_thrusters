@@ -18,7 +18,10 @@ param set-default SENS_EN_BAROSIM 0
 param set-default SENS_EN_MAGSIM 1
 
 param set-default CA_AIRFRAME 0
-param set-default CA_ROTOR_COUNT 9
+param set-default CA_ROTOR_COUNT 8
+
+param set CA_INDEX 6
+param set CA_SV_TL_COUNT 3
 
 param set-default CA_ROTOR0_PX  0.28
 param set-default CA_ROTOR0_PY  0.00
@@ -60,8 +63,6 @@ param set-default CA_ROTOR8_KM -0.05
 #### Horizontal Thrusters END ####
 
 
-
-
 param set-default SIM_GZ_EC_FUNC1 101
 param set-default SIM_GZ_EC_FUNC2 102
 param set-default SIM_GZ_EC_FUNC3 103
@@ -70,7 +71,12 @@ param set-default SIM_GZ_EC_FUNC5 105
 param set-default SIM_GZ_EC_FUNC6 106
 param set-default SIM_GZ_EC_FUNC7 107
 param set-default SIM_GZ_EC_FUNC8 108
-# param set-default SIM_GZ_EC_FUNC9 109
+param set-default SIM_GZ_EC_FUNC9 109
+
+
+param set-default SIM_GZ_SV_FUNC1 201
+param set-default SIM_GZ_SV_FUNC2 202
+param set-default SIM_GZ_SV_FUNC3 203
 
 
 param set-default SIM_GZ_EC_MIN1 150
@@ -81,8 +87,7 @@ param set-default SIM_GZ_EC_MIN5 150
 param set-default SIM_GZ_EC_MIN6 150
 param set-default SIM_GZ_EC_MIN7 150
 param set-default SIM_GZ_EC_MIN8 150
-# param set-default SIM_GZ_EC_MIN9 150
-
+param set-default SIM_GZ_EC_MIN9 150
 
 
 param set-default SIM_GZ_EC_MAX1 1000
@@ -93,7 +98,7 @@ param set-default SIM_GZ_EC_MAX5 1000
 param set-default SIM_GZ_EC_MAX6 1000
 param set-default SIM_GZ_EC_MAX7 1000
 param set-default SIM_GZ_EC_MAX8 1000
-# param set-default SIM_GZ_EC_MAX9 1000
+param set-default SIM_GZ_EC_MAX9 1000
 
 
 param set-default MPC_THR_HOVER 0.60

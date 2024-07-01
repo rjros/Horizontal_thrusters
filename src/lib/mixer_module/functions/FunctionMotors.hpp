@@ -112,10 +112,10 @@ public:
 
 				} else {
 					// remap from [0, 1] to [-1, 1]
-			PX4_INFO("Actuator Test value of motors IDX %d M %f  ",i,(double)values[i]);
+			// PX4_INFO("Actuator Test value of motors IDX %d M %f  ",i,(double)values[i]);
 
 					values[i] = values[i] * 2.f - 1.f;
-			PX4_INFO("Actuator Test after value of motors IDX %d M %f  ",i,(double)values[i]);
+			// PX4_INFO("Actuator Test after value of motors IDX %d M %f  ",i,(double)values[i]);
 
 				}
 

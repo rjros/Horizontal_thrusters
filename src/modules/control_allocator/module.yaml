@@ -28,6 +28,8 @@ parameters:
                 8: Multirotor with Tilt
                 9: Custom
                 10: Helicopter
+                          #*** Thrust Vectoring Multirotor ***#
+                11: Thrust Vectoring Multirotor
             default: 0
 
         CA_METHOD:
@@ -42,6 +44,49 @@ parameters:
                 1: Pseudo-inverse with sequential desaturation technique
                 2: Automatic
             default: 2
+
+###############################################################################################
+        # *** Thrust Vectoring Modifications ***
+        CA_MAN_ANGLE:
+            description:
+                short: Thrust direction for known tilting angles, used for manual testing. #Mavros topic pending
+                long: |
+                  This manually change the tilting angle of the actuators. The orientation refers to the
+                  direction of the thrust.
+            type: enum
+            values:
+                0: Forward
+                1: Backward
+                2: Downward
+                3: Upward
+                4: X_axis_ccw
+                5: X_axis_cw
+                6: Z_axis_ccw
+                7: Z_axis_cw
+            default: 0
+        CA_INDEX:
+            description:
+                  short: Index of tilt servo
+                  long: Index to be used in the control allocation matrix
+            type: enum
+            values:
+                0: '0'
+                1: '1'
+                2: '2'
+                3: '3'
+                4: '4'
+                5: '5'
+                6: '6'
+                7: '7'
+                8: '8'
+                9: '9'
+                10: '10'
+                11: '11'
+                12: '12'
+            default: 0
+        # *** END ***
+###############################################################################################
+
 
         # Motor parameters
         CA_R_REV:
@@ -537,7 +582,63 @@ parameters:
                 0: Ignore
                 1: Remove first failed motor from effectiveness
             default: 0
-
+###############################################################################################
+        # *** Thrust Vectoring Modifications# ***
+        CA_SV_TM_COUNT:
+            description:
+                short: Total number of Tilt Servos
+            type: enum
+            values:
+                0: '0'
+                1: '1'
+                2: '2'
+                3: '3'
+                4: '4'
+            default: 0
+        CA_SV_TM${i}_MINA:
+            description:
+                short: Tilt Servo ${i} Tilt Angle at Minimum
+                long: |
+                  Defines the tilt angle when the servo is at the minimum.
+                  An angle of zero means upwards.
+            type: float
+            decimal: 0
+            unit: 'deg'
+            num_instances: *max_num_tilts
+            instance_start: 0
+            min: -180.0
+            max: 180.0
+            default: 0.0
+        CA_SV_TM${i}_MAXA:
+            description:
+                short: Tilt Servo ${i} Tilt Angle at Maximum
+                long: |
+                  Defines the tilt angle when the servo is at the maximum.
+                  An angle of zero means upwards.
+            type: float
+            decimal: 0
+            unit: 'deg'
+            num_instances: *max_num_tilts
+            instance_start: 0
+            min: -90.0
+            max: 90.0
+            default: 90.0
+        CA_SV_TM${i}_TD:
+            description:
+                short: Tilt Servo ${i} Tilt Direction
+                long: |
+                  Defines the direction the servo tilts towards when moving towards the maximum tilt angle.
+            type: enum
+            values:
+                0: 'Positive'
+                90: 'Negative'
+            min: 0
+            max: 359
+            num_instances: *max_num_tilts
+            instance_start: 0
+            default: 0
+        # *** END-CUSTOM ***
+###############################################################################################
 # Mixer
 mixer:
     actuator_types:
@@ -1086,4 +1187,38 @@ mixer:
                         name: CA_HELI_YAW_CCW
                       - label: 'Throttle spoolup time'
                         name: COM_SPOOLUP_TIME
-
+###############################################################################################
+            # *** Thrust Vectoring Multirotor ***
+            12: #Thrust Vectoring Multirotor
+                title: 'Thrust Vectoring Multirotor'
+                actuators:
+                  - actuator_type: 'motor'
+                    group_label: 'Rotors'
+                    count: 'CA_ROTOR_COUNT'
+                    item_label_prefix: 'Rotor ${i}'
+                    per_item_parameters:
+                      standard:
+                        position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
+                      extra:
+                        - name: 'CA_ROTOR${i}_KM'
+                          label: 'Direction CCW'
+                          function: 'spin-dir'
+                          show_as: 'true-if-positive'
+                        - name: 'CA_ROTOR${i}_CT'
+                          label: "Thrust\nCoefficient"
+                        - name: 'CA_ROTOR${i}_TILT'
+                          label: 'Tilted by'
+                  - actuator_type: 'servo'
+                    group_label: 'Tilt Servos'
+                    count: 'CA_SV_TL_COUNT'
+                    item_label_prefix: 'Tilt ${i}'
+                    per_item_parameters:
+                        extra:
+                          - name: 'CA_SV_TL${i}_MINA'
+                            label: "Angle at Min\nTilt"
+                          - name: 'CA_SV_TL${i}_MAXA'
+                            label: "Angle at Max\nTilt"
+                          - name: 'CA_SV_TL${i}_TD'
+                            label: 'Tilt Direction'
+            # *** END-CUSTOM ***
+###############################################################################################

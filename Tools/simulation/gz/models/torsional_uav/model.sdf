@@ -7,7 +7,7 @@
     <link name="base_link">
       <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>3.0</mass>
+        <mass>2.5</mass>
         <inertia>
           <ixx>0.02166666666666667</ixx>
           <ixy>0</ixy>
@@ -91,8 +91,8 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <mesh>
-              <scale>1 1 1</scale>
-              <uri>model://torsional_uav/meshes/torsional_manipulator.dae</uri>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_uav/meshes/torsional_manipulator.dae</uri>
           </mesh>
         </geometry>
         <surface>
@@ -479,7 +479,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.26532 0.459357 -0.0115  0 0 -2.0944 </pose>
+        <pose> 0.260 0.447046 -0.0115  0 0 -2.0944 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -520,11 +520,12 @@
     <joint name="edf_0_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_0_body</child>
+      <pose>-0.014217 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
@@ -533,11 +534,11 @@
       </axis>
     </joint>
 
-    <link name="impeler_0">
+    <link name="rotor_6">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.26532 0.459357 -0.0115  0 0 -2.0944 </pose>
+        <pose> 0.260 0.447046 -0.0115  0 0 -2.0944 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -546,7 +547,7 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="impeler_0_visual">
+       <visual name="rotor_6_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -555,7 +556,7 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="impeler_0_collision">
+      <collision name="rotor_6_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -575,9 +576,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="impeler_0_joint" type="revolute">
+    <joint name="rotor_6_joint" type="revolute">
       <parent>edf_0_body</parent>
-      <child>impeler_0</child>
+      <child>rotor_6</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -595,7 +596,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.26532 -0.459357 -0.0115  0 0 2.0944 </pose>
+        <pose> 0.260 -0.447046  -0.0115  0 0 2.0944 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -636,11 +637,12 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_1_body</child>
+      <pose>-0.014217 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
@@ -649,7 +651,7 @@
       </axis>
     </joint>
 
-    <link name="impeler_1">
+    <link name="rotor_7">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
@@ -662,7 +664,7 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="impeler_1_visual">
+       <visual name="rotor_7_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -671,7 +673,7 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="impeler_1_collision">
+      <collision name="rotor_7_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -691,9 +693,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="impeler_1_joint" type="revolute">
+    <joint name="rotor_7_joint" type="revolute">
       <parent>edf_1_body</parent>
-      <child>impeler_1</child>
+      <child>rotor_7</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -752,13 +754,12 @@
     <joint name="edf_2_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_2_body</child>
-      <pose> -0.014259 0 0 0 0 0 </pose>
-
+      <pose>-0.014217 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
@@ -767,7 +768,7 @@
       </axis>
     </joint>
 
-    <link name="impeler_2">
+    <link name="rotor_8">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
@@ -780,7 +781,7 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="impeler_2_visual">
+       <visual name="rotor_8_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -789,7 +790,7 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="impeler_2_collision">
+      <collision name="rotor_8_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -809,9 +810,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="impeler_2_joint" type="revolute">
+    <joint name="rotor_8_joint" type="revolute">
       <parent>edf_2_body</parent>
-      <child>impeler_2</child>
+      <child>rotor_8</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -829,7 +830,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_0_joint</jointName>
       <linkName>rotor_0</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>10920.0</maxRotVelocity>
@@ -880,7 +881,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_3_joint</jointName>
       <linkName>rotor_3</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -897,7 +898,7 @@
      <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -914,7 +915,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_5_joint</jointName>
       <linkName>rotor_5</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -929,9 +930,26 @@
     </plugin>
 
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>impeler_0_joint"</jointName>
-      <linkName>impeler_0</linkName>
-      <turningDirection>cw</turningDirection>
+      <jointName>rotor_5_joint</jointName>
+      <linkName>rotor_5</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>5</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_6_joint</jointName>
+      <linkName>rotor_6</linkName>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -944,6 +962,97 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
+
+      <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_7_joint</jointName>
+      <linkName>rotor_7</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>7</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_8_joint</jointName>
+      <linkName>rotor_8</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>8</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>impeler_1_joint"</jointName>
+      <linkName>impeler_1</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>7</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+<!--
+   <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>impeler_2_joint"</jointName>
+      <linkName>impeler_2</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>8</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin> -->
+
     <!-- Servos Plugins END -->
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_0_joint"</joint_name>
+      <sub_topic>servo_0</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_1_joint"</joint_name>
+      <sub_topic>servo_1</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_2_joint"</joint_name>
+      <sub_topic>servo_2</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+
   </model>
 </sdf>

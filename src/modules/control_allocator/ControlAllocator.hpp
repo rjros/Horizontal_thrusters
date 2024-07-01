@@ -80,6 +80,9 @@
 
 //CUSTOM
 #include <uORB/topics/planar_thrust_setpoint.h>
+#include <uORB/topics/thrust_vectoring_attitude_status.h>
+#include <uORB/topics/thrust_vectoring_setpoint.h>
+#include <uORB/topics/vehicle_attitude_setpoint.h>
 
 
 class ControlAllocator : public ModuleBase<ControlAllocator>, public ModuleParams, public px4::ScheduledWorkItem
@@ -159,6 +162,8 @@ private:
 		MULTIROTOR_WITH_TILT = 8,
 		CUSTOM = 9,
 		HELICOPTER = 10,
+		THRUST_VECTORING_MC=11
+
 	};
 
 	enum class FailureMode {
@@ -177,7 +182,8 @@ private:
 	uORB::SubscriptionCallbackWorkItem _vehicle_thrust_setpoint_sub{this, ORB_ID(vehicle_thrust_setpoint)};	 /**< vehicle thrust setpoint subscription */
 	/////  CUSTOM /////
 	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
-	/////  CUSTOM /////
+	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_attitude_status_sub{this,ORB_ID(thrust_vectoring_attitude_status)};	 /**< vehicle thrust setpoint subscription */
+	/////  CUSTOM  END/////
 
 
 	uORB::Subscription _vehicle_torque_setpoint1_sub{ORB_ID(vehicle_torque_setpoint), 1};  /**< vehicle torque setpoint subscription (2. instance) */
@@ -195,11 +201,24 @@ private:
 	uORB::Subscription _vehicle_status_sub{ORB_ID(vehicle_status)};
 	uORB::Subscription _failure_detector_status_sub{ORB_ID(failure_detector_status)};
 
+
+	///// CUSTOM /////
+	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_attitude_status)};
+	uORB::Subscription _thrust_vectoring_setpoint_sub{ORB_ID(thrust_vectoring_setpoint)};
+	uORB::Subscription _vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
+	float prev_orientation{0.0};
+	///// CUSTOM END /////
+
 	matrix::Vector3f _torque_sp;
 	matrix::Vector3f _thrust_sp;
 
+	///// CUSTOM /////
 	matrix::Vector3f _planar_thrust_sp;
 	matrix::Vector3f _planar_torque_sp;
+
+	float tilt_angle{0};
+	matrix::Vector<float, NUM_ACTUATORS> servo_sp;
+	///// CUSTOM END /////
 
 	bool _planar_control_mode {false};
 
@@ -225,7 +244,11 @@ private:
 		(ParamInt<px4::params::CA_AIRFRAME>) _param_ca_airframe,
 		(ParamInt<px4::params::CA_METHOD>) _param_ca_method,
 		(ParamInt<px4::params::CA_FAILURE_MODE>) _param_ca_failure_mode,
-		(ParamInt<px4::params::CA_R_REV>) _param_r_rev
+		(ParamInt<px4::params::CA_R_REV>) _param_r_rev,
+		// *** CUSTOM ***
+		(ParamInt<px4::params::CA_INDEX>) _param_ca_index
+		// (ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode
+		//*** END ***
 	)
 
 };

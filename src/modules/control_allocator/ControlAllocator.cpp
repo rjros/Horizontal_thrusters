@@ -438,9 +438,6 @@ ControlAllocator::Run()
 
 		}
 
-
-
-
 		if (_num_control_allocation > 1) {
 			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
 				c[1](0) = vehicle_torque_setpoint.xyz[0];

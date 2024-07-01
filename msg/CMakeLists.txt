@@ -139,8 +139,10 @@ set(msg_files
 	OrbTestMedium.msg
 	ParameterUpdate.msg
 	Ping.msg
-	PlanarAttitudeStatus.msg ## CUSTOM ##
-	PlanarThrustSetpoint.msg ## CUSTOM ##
+	## CUSTOM ##
+	PlanarAttitudeStatus.msg
+	PlanarThrustSetpoint.msg
+	## CUSTOM ##
 	PositionControllerLandingStatus.msg
 	PositionControllerStatus.msg
 	PositionSetpoint.msg
@@ -182,6 +184,10 @@ set(msg_files
 	TaskStackInfo.msg
 	TecsStatus.msg
 	TelemetryStatus.msg
+	## CUSTOM ##
+	ThrustVectoringAttitudeStatus.msg
+	ThrustVectoringSetpoint.msg
+	## CUSTOM ##
 	TiltrotorExtraControls.msg
 	TimesyncStatus.msg
 	TrajectoryBezier.msg
