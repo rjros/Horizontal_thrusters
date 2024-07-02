@@ -63,8 +63,8 @@ px4_add_library(ActuatorEffectiveness
 	ActuatorEffectivenessRoverDifferential.hpp
 	ActuatorEffectivenessRoverDifferential.cpp
 	###Custom###
-	ActuatorEffectivenessThrustVectoringMC.cpp
-	ActuatorEffectivenessThrustVectoringMC.hpp
+	# ActuatorEffectivenessThrustVectoringMC.cpp
+	# ActuatorEffectivenessThrustVectoringMC.hpp
 	##Custom ###
 )
 

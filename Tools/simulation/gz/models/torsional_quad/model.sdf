@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='torsional_uav'>
-    <pose>0 0 0.14113 0 0 0</pose>
+  <model name='torsional_quad'>
+    <pose>0 0 0.10363 0 0 0</pose>
     <self_collide>false</self_collide>
     <static>false</static>
     <link name="base_link">
@@ -24,7 +24,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/f550_frame_board.dae</uri>
+            <uri>model://torsional_quad/meshes/x500_torsional.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -83,7 +83,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/torsional_manipulator.dae</uri>
+            <uri>model://torsional_quad/meshes/torsional_quad_manipulator.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -92,7 +92,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/torsional_manipulator.dae</uri>
+            <uri>model://torsional_quad/meshes/torsional_quad_manipulator.dae</uri>
           </mesh>
         </geometry>
         <surface>
@@ -129,7 +129,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0.275 0 0.043 0 0 0</pose>
+        <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -143,7 +143,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://torsional_quad/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -187,7 +187,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.275 0 0.043 0 0 0</pose>
+        <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -201,7 +201,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://torsional_quad/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -245,7 +245,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.137567 0.238249 0.043 0 0 0</pose>
+        <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -259,7 +259,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://torsional_quad/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -303,7 +303,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0.137567 -0.238249  0.043 0 0 0</pose>
+        <pose>-0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -317,7 +317,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://torsional_quad/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -356,130 +356,14 @@
         </dynamics>
       </axis>
     </joint>
-
-    <link name="rotor_4">
-        <gravity>true</gravity>
-        <self_collide>false</self_collide>
-        <velocity_decay/>
-        <pose> 0.137567 0.238249 0.043 0 0 0</pose>
-        <inertial>
-            <mass>0.016076923076923075</mass>
-            <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
-            </inertia>
-        </inertial>
-       <visual name="rotor_4_visual">
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <collision name="rotor_4_collision">
-        <pose>0 0 0 0 0 0 </pose>
-        <geometry>
-          <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
-          </box>
-        </geometry>
-        <surface>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <max_vel>0</max_vel>
-            </ode>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-    </link>
-    <joint name="rotor_4_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>rotor_4</child>
-      <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
-
-    <link name="rotor_5">
-        <gravity>true</gravity>
-        <self_collide>false</self_collide>
-        <velocity_decay/>
-        <pose> -0.137567 -0.238249 0.043 0 0 0</pose>
-        <inertial>
-            <mass>0.016076923076923075</mass>
-            <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
-            </inertia>
-        </inertial>
-       <visual name="rotor_5_visual">
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/holybro_propeller_ccw.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <collision name="rotor_5_collision">
-        <pose>0 0 0 0 0 0 </pose>
-        <geometry>
-          <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
-          </box>
-        </geometry>
-        <surface>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <max_vel>0</max_vel>
-            </ode>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-    </link>
-    <joint name="rotor_5_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>rotor_5</child>
-      <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
     <!-- ROTOR END -->
 
     <!-- EDF -->
-       <link name="edf_0_body">
+   <link name="edf_0_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.260 0.447046 -0.0115  0 0 -2.0944 </pose>
+        <pose> 0.365049533 -0.365049533 0.025  0 0 2.35619 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -493,7 +377,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -519,12 +403,12 @@
     </link>
     <joint name="edf_0_joint" type="revolute">
       <parent>base_link</parent>
-      <child>edf_0_body</child>
+      <child>edf_1_body</child>
       <pose>-0.014217 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.145159</lower>
+          <lower>3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -534,11 +418,11 @@
       </axis>
     </joint>
 
-    <link name="rotor_6">
+    <link name="rotor_4">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.260 0.447046 -0.0115  0 0 -2.0944 </pose>
+        <pose> 0.365049533 -0.365049533 0.025  0 0 2.35619</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -547,20 +431,20 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="rotor_6_visual">
+       <visual name="rotor_4_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <collision name="rotor_6_collision">
+      <collision name="rotor_4_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
           </box>
         </geometry>
         <surface>
@@ -576,9 +460,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="rotor_6_joint" type="revolute">
+    <joint name="rotor_4_joint" type="revolute">
       <parent>edf_0_body</parent>
-      <child>rotor_6</child>
+      <child>rotor_4</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -596,7 +480,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.260 -0.447046  -0.0115  0 0 2.0944 </pose>
+        <pose> 0.365049533 0.365049533 0.025  0 0 -2.35619 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -610,7 +494,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -636,12 +520,12 @@
     </link>
     <joint name="edf_1_joint" type="revolute">
       <parent>base_link</parent>
-      <child>edf_1_body</child>
+      <child>edf_0_body</child>
       <pose>-0.014217 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.145159</lower>
+          <lower>3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -651,11 +535,11 @@
       </axis>
     </joint>
 
-    <link name="rotor_7">
+    <link name="rotor_5">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.26532 -0.459357 -0.0115 0 0 2.0944</pose>
+        <pose> 0.365049533 0.365049533 0.025  0 0 -2.35619 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -664,20 +548,20 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="rotor_7_visual">
+       <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <collision name="rotor_7_collision">
+      <collision name="rotor_5_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
           </box>
         </geometry>
         <surface>
@@ -693,9 +577,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="rotor_7_joint" type="revolute">
+    <joint name="rotor_5_joint" type="revolute">
       <parent>edf_1_body</parent>
-      <child>rotor_7</child>
+      <child>rotor_5</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -709,11 +593,11 @@
       </axis>
     </joint>
 
-       <link name="edf_2_body">
+    <link name="edf_2_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.516258 0 -0.0115 0 0 0</pose>
+        <pose>-0.516258 0 0.025 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -727,7 +611,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -758,7 +642,7 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.145159</lower>
+          <lower>3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -768,11 +652,11 @@
       </axis>
     </joint>
 
-    <link name="rotor_8">
+    <link name="rotor_6">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.516258 0 -0.0115 0 0 0</pose>
+        <pose>-0.516258 0 0.025 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -781,20 +665,20 @@
               <izz>2.649858234714004e-05</izz>
             </inertia>
         </inertial>
-       <visual name="rotor_8_visual">
+       <visual name="rotor_6_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_uav/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <collision name="rotor_8_collision">
+      <collision name="rotor_6_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
           </box>
         </geometry>
         <surface>
@@ -810,9 +694,9 @@
         </surface>
       </collision>
     </link>
-    <joint name="rotor_8_joint" type="revolute">
+    <joint name="rotor_6_joint" type="revolute">
       <parent>edf_2_body</parent>
-      <child>rotor_8</child>
+      <child>rotor_6</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -830,7 +714,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_0_joint</jointName>
       <linkName>rotor_0</linkName>
-      <turningDirection>cw</turningDirection>
+      <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>10920.0</maxRotVelocity>
@@ -881,7 +765,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_3_joint</jointName>
       <linkName>rotor_3</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -894,11 +778,11 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
-
+<!--
      <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -912,11 +796,10 @@
       <motorType>velocity</motorType>
     </plugin>
 
-
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_5_joint</jointName>
       <linkName>rotor_5</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -933,7 +816,7 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_6_joint</jointName>
       <linkName>rotor_6</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
@@ -945,62 +828,10 @@
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
-    </plugin>
-
-      <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>rotor_7_joint</jointName>
-      <linkName>rotor_7</linkName>
-      <turningDirection>ccw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
-      <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
-      <momentConstant>0.016</momentConstant>
-      <commandSubTopic>command/motor_speed</commandSubTopic>
-      <motorNumber>7</motorNumber>
-      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
-      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
-      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
-      <motorType>velocity</motorType>
-    </plugin>
-
-    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>rotor_8_joint</jointName>
-      <linkName>rotor_8</linkName>
-      <turningDirection>ccw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
-      <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
-      <momentConstant>0.016</momentConstant>
-      <commandSubTopic>command/motor_speed</commandSubTopic>
-      <motorNumber>8</motorNumber>
-      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
-      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
-      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
-      <motorType>velocity</motorType>
-    </plugin>
-
-<!--
-   <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
-      <jointName>impeler_2_joint"</jointName>
-      <linkName>impeler_2</linkName>
-      <turningDirection>cw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
-      <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
-      <momentConstant>0.016</momentConstant>
-      <commandSubTopic>command/motor_speed</commandSubTopic>
-      <motorNumber>8</motorNumber>
-      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
-      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
-      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
-      <motorType>velocity</motorType>
     </plugin> -->
 
-    <!-- Servos Plugins END -->
-    <plugin
+
+    <!-- <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_0_joint"</joint_name>
       <sub_topic>servo_0</sub_topic>
@@ -1019,7 +850,7 @@
       <joint_name>edf_2_joint"</joint_name>
       <sub_topic>servo_2</sub_topic>
       <p_gain>10.0</p_gain>
-    </plugin>
+    </plugin> -->
 
   </model>
 </sdf>

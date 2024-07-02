@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name='valve_assembly'>
+        <static>true</static>
+        <pose>0 0 0 0 0 0 </pose><!--pose relative to the world-->
+        <link name='base_link'>
+            <pose/>
+            <inertial> <!--inertial properties of the link mass, inertia matix-->
+                <mass>1.14395</mass>
+                <inertia>
+                    <ixx>9.532917</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.023832</iyy>
+                    <iyz>0</iyz>
+                    <izz>9.556749</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+              <geometry>
+                <mesh>
+                  <scale>1 1 1</scale>
+                  <uri>model://valve_assembly/meshes/valve_assembly.dae</uri>
+                </mesh>
+              </geometry>
+            </visual>
+            <collision name='collision'> <!--todo: describe why we need the collision-->
+              <geometry>
+                <mesh>
+                  <scale>1 1 1</scale>
+                  <uri>model://valve_assembly/meshes/valve_assembly.dae</uri>
+                </mesh>
+              </geometry>
+              <surface>
+                <contact>
+                <ode>
+                <min_depth>0.001</min_depth>
+                <max_vel>0</max_vel>
+                </ode>
+                </contact>
+                <friction>
+                <ode/>
+                </friction>
+            </surface>
+            </collision>
+        </link>
+
+    <link name="valve_handle">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>0 0 0.831 0 0 0</pose>
+        <inertial>
+            <mass>0.016076923076923075</mass>
+            <inertia>
+              <ixx>3.8464910483993325e-07</ixx>
+              <iyy>2.6115851691700804e-05</iyy>
+              <izz>2.649858234714004e-05</izz>
+            </inertia>
+        </inertial>
+       <visual name="valve_handle_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+                <uri>model://valve_assembly/meshes/valve_handle.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="valve_handle_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+                <uri>model://valve_assembly/meshes/valve_handle.dae</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="valve_handle_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>valve_handle</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    </model>
+</sdf>
+
+

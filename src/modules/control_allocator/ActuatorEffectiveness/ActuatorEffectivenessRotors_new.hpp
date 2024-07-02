@@ -47,6 +47,10 @@
 #include <uORB/Subscription.hpp>
 #include <uORB/SubscriptionInterval.hpp>
 
+///CUSTOM///
+#include <uORB/topics/thrust_vectoring_attitude_status.h>
+///END///
+
 class ActuatorEffectivenessTilts;
 
 using namespace time_literals;
@@ -55,7 +59,7 @@ class ActuatorEffectivenessRotors : public ModuleParams, public ActuatorEffectiv
 {
 public:
 	enum class AxisConfiguration {
-		Configurable, ///< axis can be configured
+		Configurable, ///< axis can be configured // can refer to a dynamic allocation
 		FixedForward, ///< axis is fixed, pointing forwards (positive X)
 		FixedUpwards, ///< axis is fixed, pointing upwards (negative Z)
 	};
@@ -77,6 +81,8 @@ public:
 		bool yaw_by_differential_thrust_disabled{false};
 		bool propeller_torque_disabled_non_upwards{false}; ///< keeps propeller torque enabled for upward facing motors
 		bool three_dimensional_thrust_disabled{false}; ///< for handling of tiltrotor VTOL, as they pass in 1D thrust and collective tilt
+		//CUSTOM
+		int tilting_index{0};// use for defining the value where the tilting rotors are located
 	};
 
 	ActuatorEffectivenessRotors(ModuleParams *parent, AxisConfiguration axis_config = AxisConfiguration::Configurable,
@@ -85,6 +91,11 @@ public:
 
 	bool getEffectivenessMatrix(Configuration &configuration, EffectivenessUpdateReason external_update) override;
 
+	//### CUSTOM ###
+
+	void checkAxis(int tilting_index);
+
+	//### END ###
 	void getDesiredAllocationMethod(AllocationMethod allocation_method_out[MAX_NUM_MATRICES]) const override
 	{
 		allocation_method_out[0] = AllocationMethod::SEQUENTIAL_DESATURATION;
@@ -96,9 +107,9 @@ public:
 	}
 
 	static int computeEffectivenessMatrix(const Geometry &geometry,
-					      EffectivenessMatrix &effectiveness, int actuator_start_index = 0);
+					      EffectivenessMatrix &effectiveness, int actuator_start_index = 0,bool tiltable_matrix=false,float tilt_angle=0,int att_mode=1);
 
-	bool addActuators(Configuration &configuration);
+	bool addActuators(Configuration &configuration,bool tiltable=0);
 
 	const char *name() const override { return "Rotors"; }
 
@@ -129,11 +140,25 @@ public:
 	uint32_t getMotors() const;
 	uint32_t getUpwardsMotors() const;
 	uint32_t getForwardsMotors() const;
+	uint32_t _num_tilted_rotors {2}; //total number tilted motors
+	int32_t tilting_index {0}; //value from the first tiltable motor
+	thrust_vectoring_attitude_status_s thrust_vec_status;
+
+	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_attitude_status)};
+
+
+
 
 private:
 	void updateParams() override;
 	const AxisConfiguration _axis_config;
-	const bool _tilt_support; ///< if true, tilt servo assignment params are loaded
+	const bool _tilt_support; ///< if true, tilt servo assignment params are loaded]
+	// switch for changing the axis config manually to known fixed pos
+	//forward, backward
+	//CCW, CW -> horizontal
+	//upward, downward
+	//CCW, CW -> vertical
+	//have a Parameter for the first tilt index of each motor
 
 	struct ParamHandles {
 		param_t position_x;
@@ -147,7 +172,11 @@ private:
 		param_t tilt_index;
 	};
 	ParamHandles _param_handles[NUM_ROTORS_MAX];
+
 	param_t _count_handle;
+	param_t _tilting_index;
 
 	Geometry _geometry{};
+
+
 };
