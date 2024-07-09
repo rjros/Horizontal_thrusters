@@ -37,6 +37,13 @@
 
 #include <gz/transport.hh>
 
+///// CUSTOM /////
+#include <uORB/Subscription.hpp>
+#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+
+///// CUSTOM END /////
+
+
 // GZBridge mixing class for Servos.
 // It is separate from GZBridge to have separate WorkItems and therefore allowing independent scheduling
 // All work items are expected to run on the same work queue.
@@ -73,4 +80,9 @@ private:
 	MixingOutput _mixing_output{"SIM_GZ_SV", MAX_ACTUATORS, *this, MixingOutput::SchedulingPolicy::Auto, false, false};
 
 	std::vector<gz::transport::Node::Publisher> _servos_pub;
+
+	///// CUSTOM /////
+	uORB::Subscription _thrust_vectoring_setpoint_status_sub{ORB_ID(thrust_vectoring_setpoint_status)};
+
+	///// CUSTOM END /////
 };

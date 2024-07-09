@@ -77,6 +77,10 @@
 #include <uORB/topics/vehicle_angular_velocity.h>
 //read values from switches
 #include <uORB/topics/manual_control_switches.h>
+#include <uORB/topics/thrust_vectoring_setpoint.h>
+#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 
@@ -116,6 +120,7 @@ private:
 
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 	uORB::Publication<planar_attitude_status_s>	_planar_attitude_status_pub{ORB_ID(planar_attitude_status)}; //planar flight status
+	uORB::Publication<thrust_vectoring_setpoint_status_s>	_thrust_vectoring_setpoint_status_pub{ORB_ID(thrust_vectoring_setpoint_status)}; //thrust vectoring setpoint
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
 	uORB::SubscriptionCallbackWorkItem _local_pos_sub{this, ORB_ID(vehicle_local_position)};	/**< vehicle local position */
@@ -242,7 +247,7 @@ private:
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 		(ParamInt<px4::params::RC_SIM>) _param_rc_sim_mode,
-		(ParamInt<px4::params::PLANAR_ATT_MODE>) _param_planar_att_mode,
+		(ParamInt<px4::params::VECT_ATT_MODE>) _param_planar_att_mode,
 		//Control mode with RC
 		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////

@@ -64,6 +64,7 @@ enum class EffectivenessUpdateReason {
 	NO_EXTERNAL_UPDATE = 0,
 	CONFIGURATION_UPDATE = 1,
 	MOTOR_ACTIVATION_UPDATE = 2,
+	MANUAL_ANGLE_CHANGE =3,
 };
 
 

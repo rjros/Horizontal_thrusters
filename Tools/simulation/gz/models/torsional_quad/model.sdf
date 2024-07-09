@@ -408,7 +408,7 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>3.145159</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -525,7 +525,7 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>3.145159</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -642,7 +642,7 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>3.145159</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
@@ -778,7 +778,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
-<!--
+
      <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
@@ -831,7 +831,7 @@
     </plugin> -->
 
 
-    <!-- <plugin
+    <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_0_joint"</joint_name>
       <sub_topic>servo_0</sub_topic>
@@ -850,7 +850,7 @@
       <joint_name>edf_2_joint"</joint_name>
       <sub_topic>servo_2</sub_topic>
       <p_gain>10.0</p_gain>
-    </plugin> -->
+    </plugin>
 
   </model>
 </sdf>

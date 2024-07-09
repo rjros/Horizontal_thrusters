@@ -87,7 +87,6 @@
 // Separate based on the type of vehicles
 #include <uORB/topics/planar_thrust_setpoint.h>
 
-#include <uORB/topics/thrust_vectoring_attitude_status.h>
 #include <uORB/topics/thrust_vectoring_setpoint.h>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
 
@@ -211,10 +210,10 @@ private:
 
 	///// CUSTOM /////
 	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
-	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_attitude_status)};
+	// uORB::SubscriptionCallbackWorkItem _thrust_vectoring_status_sub{this,ORB_ID(thrust_vectoring_setpoint_status)};
+
 	uORB::Subscription _thrust_vectoring_setpoint_sub{ORB_ID(thrust_vectoring_setpoint)};
 	uORB::Subscription _vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
-	float prev_orientation{0.0};
 	///// CUSTOM END /////
 
 	matrix::Vector3f _torque_sp;
@@ -226,7 +225,8 @@ private:
 	matrix::Vector3f _planar_thrust_sp;
 	matrix::Vector3f _planar_torque_sp;
 
-	float tilt_angle{0};
+	matrix::Vector<float,8> angle_sp;
+	matrix::Vector<float,8> prev_angle_sp;
 	matrix::Vector<float, NUM_ACTUATORS> servo_sp;
 	///// CUSTOM END /////
 

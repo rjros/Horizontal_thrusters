@@ -17,11 +17,11 @@ param set-default SENS_EN_GPSSIM 1
 param set-default SENS_EN_BAROSIM 0
 param set-default SENS_EN_MAGSIM 1
 
-param set-default CA_AIRFRAME 0
+param set-default CA_AIRFRAME 11
 param set-default CA_ROTOR_COUNT 7
 
 param set CA_INDEX 4
-# param set CA_SV_TL_COUNT 3
+param set CA_SV_TL_COUNT 3
 
 param set-default CA_ROTOR0_PX  0.18
 param set-default CA_ROTOR0_PY  0.18
@@ -42,8 +42,8 @@ param set-default CA_ROTOR3_KM -0.05
 #### Horizontal Thrusters ####
 param set-default CA_ROTOR4_PX  0.37
 param set-default CA_ROTOR4_PY  0.37
-param set-default CA_ROTOR4_KM  0.05
-param set-default CA_ROTOR4_CT  0.00
+param set-default CA_ROTOR4_KM  0.00
+param set-default CA_ROTOR4_CT  4.00
 
 ## THRUST VECTOR DIRECTION 4 ###
 param set-default CA_ROTOR4_AX -0.71
@@ -52,8 +52,8 @@ param set-default CA_ROTOR4_AZ  0.05
 
 param set-default CA_ROTOR5_PX  0.37
 param set-default CA_ROTOR5_PY -0.37
-param set-default CA_ROTOR5_KM  0.05
-param set-default CA_ROTOR5_CT  0.00
+param set-default CA_ROTOR5_KM  0.00
+param set-default CA_ROTOR5_CT  4.00
 
 ## THRUST VECTOR DIRECTION  5 ###
 param set-default CA_ROTOR5_AX -0.71
@@ -64,8 +64,8 @@ param set-default CA_ROTOR5_AZ  0.05
 ## THRUST VECTOR DIRECTION 6 ###
 param set-default CA_ROTOR6_PX -0.52
 param set-default CA_ROTOR6_PY  0.00
-param set-default CA_ROTOR6_KM  0.05
-param set-default CA_ROTOR6_CT  0.00
+param set-default CA_ROTOR6_KM  0.00
+param set-default CA_ROTOR6_CT  4.00
 
 
 param set-default CA_ROTOR6_AX  1.00
@@ -84,10 +84,10 @@ param set-default SIM_GZ_EC_FUNC6 106
 param set-default SIM_GZ_EC_FUNC7 107
 
 
-
-# param set-default SIM_GZ_SV_FUNC1 201
-# param set-default SIM_GZ_SV_FUNC2 202
-# param set-default SIM_GZ_SV_FUNC3 203
+#### Servo functions #####
+param set-default SIM_GZ_SV_FUNC1 201
+param set-default SIM_GZ_SV_FUNC2 202
+param set-default SIM_GZ_SV_FUNC3 203
 
 
 param set-default SIM_GZ_EC_MIN1 150

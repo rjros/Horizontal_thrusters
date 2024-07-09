@@ -926,7 +926,7 @@ PARAM_DEFINE_FLOAT(MPC_Z_VEL_ALL, -3.0f);
  * @value 2 Dual thruster mode
  * @value 1 Single Thruster mode
  */
-PARAM_DEFINE_INT32(PLANAR_ATT_MODE, 0);
+PARAM_DEFINE_INT32(VECT_ATT_MODE, 0);
 
 /**
  * Parameters that need an RC input.

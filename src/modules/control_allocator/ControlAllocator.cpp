@@ -266,11 +266,11 @@ ControlAllocator::update_effectiveness_source()
 		case EffectivenessSource::HELICOPTER:
 			tmp = new ActuatorEffectivenessHelicopter(this);
 			break;
-		#### CUSTOM ####
+		///// CUSTOM /////
 		case EffectivenessSource::THRUST_VECTORING_MC:
 			tmp = new ActuatorEffectivenessThrustVectoringMC(this);
 			break;
-		#### CUSTOM END ####
+		///// CUSTOM END /////
 
 		default:
 			PX4_ERR("Unknown airframe");
@@ -305,11 +305,15 @@ ControlAllocator::Run()
 		_vehicle_torque_setpoint_sub.unregisterCallback();
 		_vehicle_thrust_setpoint_sub.unregisterCallback();
 		_planar_thrust_setpoint_sub.unregisterCallback();
+		// _thrust_vectoring_setpoint_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
 
 	perf_begin(_loop_perf);
+	///// CUSTOM /////
+	const EffectivenessSource source = (EffectivenessSource)_param_ca_airframe.get();
+	///// CUSTOM END /////
 
 #ifndef ENABLE_LOCKSTEP_SCHEDULER // Backup schedule would interfere with lockstep
 	// Push backup schedule
@@ -323,7 +327,6 @@ ControlAllocator::Run()
 
 
 		parameter_update_s param_update;
-		const EffectivenessSource source = (EffectivenessSource)_param_ca_airframe.get();
 
 		_parameter_update_sub.copy(&param_update);
 
@@ -378,8 +381,20 @@ ControlAllocator::Run()
 	bool do_update = false;
 	vehicle_torque_setpoint_s vehicle_torque_setpoint;
 	vehicle_thrust_setpoint_s vehicle_thrust_setpoint;
+
+	///// CUSTOM /////
 	planar_thrust_setpoint_s planar_thrust_setpoint;
 
+	// thrust_vectoring_setpoint_s thrust_vec_setpoint;
+	matrix::Vector<float, NUM_ACTUATORS> actuator_sp;
+	matrix::Vector<float, NUM_ACTUATORS> fixed_actuator_sp;
+	matrix::Vector<float, NUM_ACTUATORS> tilting_actuator_sp;
+
+	//used to separate the thrust in tilted components
+	// _thrust_vector= matrix::Vector3f(att_sp.thrust_tilted);
+
+
+	///// CUSTOM END /////
 
 	// If the sytem is in offboard use the following
 	if (_planar_thrust_setpoint_sub.update(&planar_thrust_setpoint)){
@@ -414,6 +429,11 @@ ControlAllocator::Run()
 		}
 	}
 
+	// if (_thrust_vectoring_setpoint_sub.update(&thrust_vec_setpoint)) {
+	// 	do_update = true;
+
+	// }
+
 	if (do_update) {
 		_last_run = now;
 
@@ -427,14 +447,27 @@ ControlAllocator::Run()
 		// Set the control setpoints depending on the current mode
 		// add condition to stop from controller
 
+		///// CUSTOM /////
+		//for now just check the first angle
+		// if( std::abs(angle_sp.norm()-prev_angle_sp.norm())>0.000001f){
+		// 	update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::MANUAL_ANGLE_CHANGE);
+		// 	angle_sp=matrix::Vector<float,8>(thrust_vec_setpoint.servo_angle);//degrees
+		// 	updateParams();
+		// 	parameters_updated();
+		// 	//angle only needs to be used for updating the CA, but is not being used int he physical output
+		// 	//currently being used in sim
+		// 	prev_angle_sp=angle_sp;
+		// }
+		///// CUSTOM END /////
 
-		//Check the vehicle
 
+
+		//Check the type of vehicle
 		if( source != EffectivenessSource::THRUST_VECTORING_MC ||
 			( source == EffectivenessSource::THRUST_VECTORING_MC &&
 			_num_control_allocation == 1 ) )
 
-			{
+		{
 				c[0](0) = _torque_sp(0);
 				c[0](1) = _torque_sp(1);
 				c[0](2) = _torque_sp(2);
@@ -443,19 +476,76 @@ ControlAllocator::Run()
 				c[0](5) = _thrust_sp(2);
 
 
-						if (_num_control_allocation > 1) {
-			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
-				c[1](0) = vehicle_torque_setpoint.xyz[0];
-				c[1](1) = vehicle_torque_setpoint.xyz[1];
-				c[1](2) = vehicle_torque_setpoint.xyz[2];
-			}
+			if (_num_control_allocation > 1) {
+				if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
+					c[1](0) = vehicle_torque_setpoint.xyz[0];
+					c[1](1) = vehicle_torque_setpoint.xyz[1];
+					c[1](2) = vehicle_torque_setpoint.xyz[2];
+				}
 
-			if (_vehicle_thrust_setpoint1_sub.copy(&vehicle_thrust_setpoint)) {
-				c[1](3) = vehicle_thrust_setpoint.xyz[0] ;
-				c[1](4) = vehicle_thrust_setpoint.xyz[1];
-				c[1](5) = vehicle_thrust_setpoint.xyz[2];
+				if (_vehicle_thrust_setpoint1_sub.copy(&vehicle_thrust_setpoint)) {
+					c[1](3) = vehicle_thrust_setpoint.xyz[0] ;
+					c[1](4) = vehicle_thrust_setpoint.xyz[1];
+					c[1](5) = vehicle_thrust_setpoint.xyz[2];
+				}
 			}
 		}
+		else{
+
+			// PX4_INFO("Control Allocation Number in block %d ", _num_actuators[1]);
+			//TORQUE SETPOiNT XYZ
+			c[1](0) = 0;//_torque_sp(0);
+			c[1](1) = 0;//_torque_sp(1);
+			c[1](2) = 0;//_torque_sp(2);
+			//THRUST SETPOINTS XYZ
+			c[1](3) = _thrust_vector(0);//_thrust_sp(0);
+			c[1](4) = _thrust_vector(1);
+			c[1](5) = _thrust_vector(2);//_thrust_vector(2);//_thrust_sp(2);
+
+			// PX4_INFO("CA thrust vectors: %f  %f  %f \n", double(thrust_vector(0)),double(thrust_vector(1)),double(thrust_vector(2)));
+
+
+			//Do allocation
+			_control_allocation[0]->setControlSetpoint(c[0]);
+			_control_allocation[0]->allocate();
+			//Gets the setpoint in the actuator vector
+			fixed_actuator_sp = _control_allocation[0]->getActuatorSetpoint();
+
+			//PUT CONDITION TO REVERSE IF NEEDED
+			//TILTED ACTUATORS
+			_control_allocation[1]->setControlSetpoint(c[1]);
+			_control_allocation[1]->allocate();
+			tilting_actuator_sp = _control_allocation[1]->getActuatorSetpoint();
+			//Tilt propellers INDEX to be added
+			// For now assume the servos begin after the tilted motors
+			//Total num of motors-tilted index = num of tilting motors
+
+			//Known angles
+			// tilting_actuator_sp(2)=angle_sp(0);
+			// tilting_actuator_sp(3)=angle_sp(1);
+			// tilting_actuator_sp(4)=angle_sp(2);
+
+
+			_control_allocation[0]->setActuatorSetpoint(fixed_actuator_sp);
+			_control_allocation[1]->setActuatorSetpoint(tilting_actuator_sp);
+
+
+			_actuator_effectiveness->updateSetpoint(c[0], 0, _control_allocation[0]->_actuator_sp,
+								_control_allocation[0]->getActuatorMin(), _control_allocation[0]->getActuatorMax());
+
+			_actuator_effectiveness->updateSetpoint(c[1], 0, _control_allocation[1]->_actuator_sp,
+								_control_allocation[1]->getActuatorMin(), _control_allocation[1]->getActuatorMax());
+
+			if (_has_slew_rate) {
+			_control_allocation[0]->applySlewRateLimit(dt);
+
+			}
+
+			_control_allocation[0]->clipActuatorSetpoint();
+			_control_allocation[1]->clipActuatorSetpoint();
+
+		}
+
 
 		for (int i = 0; i < _num_control_allocation; ++i) {
 
@@ -473,39 +563,31 @@ ControlAllocator::Run()
 
 			_control_allocation[i]->clipActuatorSetpoint();
 		}
-			}
+		// if(_planar_control_mode)
+		// {
+		// 	c[0](0) = _torque_sp(0) + _planar_torque_sp(0);
+		// 	c[0](1) = _torque_sp(1);
+		// 	c[0](2) = _torque_sp(2);
+		// 	c[0](3) = _planar_thrust_sp(0);
+		// 	c[0](4) = _thrust_sp(1);
+		// 	c[0](5) = _thrust_sp(2);
+		// PX4_INFO("Planar command torque_controller %f and position_tq 0 %f  ",(double)_planar_torque_sp(0), (double)_torque_sp(0));
+
+		// }
+		// else{
+		// 	c[0](0) = _torque_sp(0);
+		// 	c[0](1) = _torque_sp(1);
+		// 	c[0](2) = _torque_sp(2);
+		// 	c[0](3) = _thrust_sp(0);
+		// 	c[0](4) = _thrust_sp(1);
+		// 	c[0](5) = _thrust_sp(2);
 
 
 
+		// // PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
 
 
-
-
-		if(_planar_control_mode)
-		{
-			c[0](0) = _torque_sp(0) + _planar_torque_sp(0);
-			c[0](1) = _torque_sp(1);
-			c[0](2) = _torque_sp(2);
-			c[0](3) = _planar_thrust_sp(0);
-			c[0](4) = _thrust_sp(1);
-			c[0](5) = _thrust_sp(2);
-		PX4_INFO("Planar command torque_controller %f and position_tq 0 %f  ",(double)_planar_torque_sp(0), (double)_torque_sp(0));
-
-		}
-		else{
-			c[0](0) = _torque_sp(0);
-			c[0](1) = _torque_sp(1);
-			c[0](2) = _torque_sp(2);
-			c[0](3) = _thrust_sp(0);
-			c[0](4) = _thrust_sp(1);
-			c[0](5) = _thrust_sp(2);
-
-
-
-		// PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
-
-
-		}
+		// }
 
 
 	}

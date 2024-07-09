@@ -116,7 +116,7 @@ void ActuatorEffectivenessVectoringRotors::updateParams()
 	_geometry.tilting_index=tilting_index;
 
 	// PX4_INFO("Changed Axis");
-	_thrust_vectoring_status_sub.copy(&thrust_vec_status);
+	_thrust_vectoring_setpoint_status_sub.copy(&thrust_vec_status);
 	// PX4_INFO("Tilting index %d", tilting_index);
 
 
@@ -169,7 +169,7 @@ ActuatorEffectivenessVectoringRotors::addActuators(Configuration &configuration,
 	}
 
 	// Check for current mode RC,SIM,PC
-	_thrust_vectoring_status_sub.copy(&thrust_vec_status);
+	_thrust_vectoring_setpoint_status_sub.copy(&thrust_vec_status);
 	float tilt_angle=0;
 	int att_tilt_mode=0;
 	// PX4_INFO("Tilting index in add actuators %d", tilting_index);
@@ -183,7 +183,7 @@ ActuatorEffectivenessVectoringRotors::addActuators(Configuration &configuration,
 	// 	}
 	//check the current value of the man orientation
 
-	tilt_angle=thrust_vec_status.tilt_angle;
+	tilt_angle=0;//thrust_vec_status.tilt_angle;
 
 	//Fixed Propellers
 	int num_actuators=0;

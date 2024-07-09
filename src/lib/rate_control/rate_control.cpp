@@ -105,7 +105,6 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	// PID control with feed forward
 	//Multiply the inertia tensor
 	const Vector3f torque = _gain_p.emult(rate_error) + _rate_int - _gain_d.emult(angular_accel) + _gain_ff.emult(rate_sp);
-	torque.print();
 
 	// update integral only if we are not landed
 	if (!landed) {

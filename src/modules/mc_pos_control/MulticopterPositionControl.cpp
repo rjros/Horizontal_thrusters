@@ -629,23 +629,39 @@ void MulticopterPositionControl::Run()
 			planar_attitude_status_s planar_status{};
 			planar_status.timestamp = _time_stamp_last_loop;
 
+			thrust_vectoring_setpoint_status_s thrust_vec_status;
+
 			//Get the the attitude setpoint with the omni parameters
 			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
 
-			param_t planar_param = param_handle(px4::params::PLANAR_ATT_MODE);
+			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
 
 
 			if (_param_rc_sim_mode.get()==1)
 			{
 				manual_control_switches_sub.update(&switches);
 				int32_t att_mode= switches.planar_mode_switch;
-				param_set(planar_param,&att_mode);
+				param_set(vectoring_param,&att_mode);
 				planar_status.att_mode=switches.planar_mode_switch;
+				thrust_vec_status.servo_angle[0]=math::radians(90);
+				thrust_vec_status.servo_angle[1]=math::radians(90);
+				thrust_vec_status.servo_angle[2]=math::radians(90);
 
 			}
+
+			else
+			{
+				thrust_vec_status.servo_angle[0]=math::radians(45);
+				thrust_vec_status.servo_angle[1]=math::radians(45);
+				thrust_vec_status.servo_angle[2]=math::radians(45);
+
+			}
+
 			planar_status.att_mode = _param_planar_att_mode.get();
 			_planar_attitude_status_pub.publish(planar_status);
+
+			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
 
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
