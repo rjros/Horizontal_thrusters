@@ -32,7 +32,7 @@
  ****************************************************************************/
 
 /**
- * @file ActuatorEffectivenessRotors.hpp
+ * @file ActuatorEffectivenessVectoringRotors.hpp
  *
  * Actuator effectiveness computed from rotors position and orientation
  *
@@ -55,7 +55,7 @@ class ActuatorEffectivenessTilts;
 
 using namespace time_literals;
 
-class ActuatorEffectivenessRotors : public ModuleParams, public ActuatorEffectiveness
+class ActuatorEffectivenessVectoringRotors : public ModuleParams, public ActuatorEffectiveness
 {
 public:
 	enum class AxisConfiguration {
@@ -85,9 +85,9 @@ public:
 		int tilting_index{0};// use for defining the value where the tilting rotors are located
 	};
 
-	ActuatorEffectivenessRotors(ModuleParams *parent, AxisConfiguration axis_config = AxisConfiguration::Configurable,
+	ActuatorEffectivenessVectoringRotors(ModuleParams *parent, AxisConfiguration axis_config = AxisConfiguration::Configurable,
 				    bool tilt_support = false);
-	virtual ~ActuatorEffectivenessRotors() = default;
+	virtual ~ActuatorEffectivenessVectoringRotors() = default;
 
 	bool getEffectivenessMatrix(Configuration &configuration, EffectivenessUpdateReason external_update) override;
 

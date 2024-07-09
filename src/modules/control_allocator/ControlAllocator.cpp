@@ -99,7 +99,7 @@ ControlAllocator::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
-		if (!_planar_thrust_setpoint_sub.registerCallback()) {
+	if (!_planar_thrust_setpoint_sub.registerCallback()) {
 		PX4_ERR("callback registration failed");
 		return false;
 	}
@@ -266,6 +266,11 @@ ControlAllocator::update_effectiveness_source()
 		case EffectivenessSource::HELICOPTER:
 			tmp = new ActuatorEffectivenessHelicopter(this);
 			break;
+		#### CUSTOM ####
+		case EffectivenessSource::THRUST_VECTORING_MC:
+			tmp = new ActuatorEffectivenessThrustVectoringMC(this);
+			break;
+		#### CUSTOM END ####
 
 		default:
 			PX4_ERR("Unknown airframe");
@@ -314,7 +319,12 @@ ControlAllocator::Run()
 	// Check if parameters have changed
 	if (_parameter_update_sub.updated() && !_armed) {
 		// clear update
+
+
+
 		parameter_update_s param_update;
+		const EffectivenessSource source = (EffectivenessSource)_param_ca_airframe.get();
+
 		_parameter_update_sub.copy(&param_update);
 
 		if (_handled_motor_failure_bitmask == 0) {
@@ -383,6 +393,7 @@ ControlAllocator::Run()
 			}
 	}
 
+
 	// Run allocator on torque changes
 	if (_vehicle_torque_setpoint_sub.update(&vehicle_torque_setpoint)) {
 		_torque_sp = matrix::Vector3f(vehicle_torque_setpoint.xyz);
@@ -415,30 +426,24 @@ ControlAllocator::Run()
 
 		// Set the control setpoints depending on the current mode
 		// add condition to stop from controller
-		if(_planar_control_mode)
-		{
-			c[0](0) = _torque_sp(0) + _planar_torque_sp(0);
-			c[0](1) = _torque_sp(1);
-			c[0](2) = _torque_sp(2);
-			c[0](3) = _planar_thrust_sp(0);
-			c[0](4) = _thrust_sp(1);
-			c[0](5) = _thrust_sp(2);
-		PX4_INFO("Planar command torque_controller %f and position_tq 0 %f  ",(double)_planar_torque_sp(0), (double)_torque_sp(0));
-
-		}
-		else{
-			c[0](0) = _torque_sp(0);
-			c[0](1) = _torque_sp(1);
-			c[0](2) = _torque_sp(2);
-			c[0](3) = _thrust_sp(0);
-			c[0](4) = _thrust_sp(1);
-			c[0](5) = _thrust_sp(2);
-		// PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
 
 
-		}
+		//Check the vehicle
 
-		if (_num_control_allocation > 1) {
+		if( source != EffectivenessSource::THRUST_VECTORING_MC ||
+			( source == EffectivenessSource::THRUST_VECTORING_MC &&
+			_num_control_allocation == 1 ) )
+
+			{
+				c[0](0) = _torque_sp(0);
+				c[0](1) = _torque_sp(1);
+				c[0](2) = _torque_sp(2);
+				c[0](3) = _thrust_sp(0);
+				c[0](4) = _thrust_sp(1);
+				c[0](5) = _thrust_sp(2);
+
+
+						if (_num_control_allocation > 1) {
 			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
 				c[1](0) = vehicle_torque_setpoint.xyz[0];
 				c[1](1) = vehicle_torque_setpoint.xyz[1];
@@ -468,6 +473,41 @@ ControlAllocator::Run()
 
 			_control_allocation[i]->clipActuatorSetpoint();
 		}
+			}
+
+
+
+
+
+
+
+		if(_planar_control_mode)
+		{
+			c[0](0) = _torque_sp(0) + _planar_torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _planar_thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+		PX4_INFO("Planar command torque_controller %f and position_tq 0 %f  ",(double)_planar_torque_sp(0), (double)_torque_sp(0));
+
+		}
+		else{
+			c[0](0) = _torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+
+
+
+		// PX4_INFO("Planar command %f ",(double)_thrust_sp(0));
+
+
+		}
+
+
 	}
 
 	// Publish actuator setpoint and allocator status

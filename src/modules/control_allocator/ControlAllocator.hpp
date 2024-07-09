@@ -54,6 +54,11 @@
 #include <ActuatorEffectivenessUUV.hpp>
 #include <ActuatorEffectivenessHelicopter.hpp>
 
+///// CUSTOM /////
+#include <ActuatorEffectivenessThrustVectoringMC.hpp>
+
+///// CUSTOM END /////
+
 #include <ControlAllocation.hpp>
 #include <ControlAllocationPseudoInverse.hpp>
 #include <ControlAllocationSequentialDesaturation.hpp>
@@ -79,7 +84,9 @@
 #include <uORB/topics/failure_detector_status.h>
 
 //CUSTOM
+// Separate based on the type of vehicles
 #include <uORB/topics/planar_thrust_setpoint.h>
+
 #include <uORB/topics/thrust_vectoring_attitude_status.h>
 #include <uORB/topics/thrust_vectoring_setpoint.h>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
@@ -166,6 +173,8 @@ private:
 
 	};
 
+	// Explore alternatives during motor failure, perhaps thrusters can be used
+	// For stopping the rotation or for hovering
 	enum class FailureMode {
 		IGNORE = 0,
 		REMOVE_FIRST_FAILING_MOTOR = 1,
@@ -180,10 +189,8 @@ private:
 	// Inputs
 	uORB::SubscriptionCallbackWorkItem _vehicle_torque_setpoint_sub{this, ORB_ID(vehicle_torque_setpoint)};  /**< vehicle torque setpoint subscription */
 	uORB::SubscriptionCallbackWorkItem _vehicle_thrust_setpoint_sub{this, ORB_ID(vehicle_thrust_setpoint)};	 /**< vehicle thrust setpoint subscription */
-	/////  CUSTOM /////
-	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
-	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_attitude_status_sub{this,ORB_ID(thrust_vectoring_attitude_status)};	 /**< vehicle thrust setpoint subscription */
-	/////  CUSTOM  END/////
+
+
 
 
 	uORB::Subscription _vehicle_torque_setpoint1_sub{ORB_ID(vehicle_torque_setpoint), 1};  /**< vehicle torque setpoint subscription (2. instance) */
@@ -203,6 +210,7 @@ private:
 
 
 	///// CUSTOM /////
+	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
 	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_attitude_status)};
 	uORB::Subscription _thrust_vectoring_setpoint_sub{ORB_ID(thrust_vectoring_setpoint)};
 	uORB::Subscription _vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
@@ -213,6 +221,8 @@ private:
 	matrix::Vector3f _thrust_sp;
 
 	///// CUSTOM /////
+	matrix::Vector3f _thrust_vector;
+
 	matrix::Vector3f _planar_thrust_sp;
 	matrix::Vector3f _planar_torque_sp;
 
@@ -246,8 +256,8 @@ private:
 		(ParamInt<px4::params::CA_FAILURE_MODE>) _param_ca_failure_mode,
 		(ParamInt<px4::params::CA_R_REV>) _param_r_rev,
 		// *** CUSTOM ***
-		(ParamInt<px4::params::CA_INDEX>) _param_ca_index
-		// (ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode
+		(ParamInt<px4::params::CA_INDEX>) _param_ca_index,
+		(ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode
 		//*** END ***
 	)
 

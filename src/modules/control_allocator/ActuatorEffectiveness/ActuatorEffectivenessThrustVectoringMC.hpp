@@ -34,7 +34,7 @@
 #pragma once
 
 #include "ActuatorEffectiveness.hpp"
-#include "ActuatorEffectivenessRotors.hpp"
+#include "ActuatorEffectivenessVectoringRotors.hpp"
 #include "ActuatorEffectivenessTilts.hpp"
 
 #include <px4_platform_common/module_params.h>
@@ -76,9 +76,9 @@ protected:
 
 	void updateParams() override;
 	// ActuatorVector _tilt_offsets;
-	ActuatorEffectivenessRotors _mc_rotors_fixed; //< UAV rotors
+	ActuatorEffectivenessVectoringRotors _mc_rotors_fixed; //< UAV rotors
 
-	ActuatorEffectivenessRotors _mc_rotors_tilted;//< Thrustvectoring device rotors
+	ActuatorEffectivenessVectoringRotors _mc_rotors_tilted;//< Thrustvectoring device rotors
 	ActuatorEffectivenessTilts _tilts;//< Servos attached to actuators
 	// struct YawTiltSaturationFlags {
 	// 	bool tilt_yaw_pos;

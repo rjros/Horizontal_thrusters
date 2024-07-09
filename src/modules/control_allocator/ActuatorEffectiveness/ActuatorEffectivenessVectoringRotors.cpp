@@ -32,20 +32,20 @@
  ****************************************************************************/
 
 /**
- * @file ActuatorEffectivenessRotors.hpp
+ * @file ActuatorEffectivenessVectoringRotors.hpp
  *
  * Actuator effectiveness computed from rotors position and orientation
  *
  * @author Julien Lecoeur <julien.lecoeur@gmail.com>
  */
 
-#include "ActuatorEffectivenessRotors.hpp"
+#include "ActuatorEffectivenessVectoringRotors.hpp"
 
 #include "ActuatorEffectivenessTilts.hpp"
 
 using namespace matrix;
 
-ActuatorEffectivenessRotors::ActuatorEffectivenessRotors(ModuleParams *parent, AxisConfiguration axis_config,
+ActuatorEffectivenessVectoringRotors::ActuatorEffectivenessVectoringRotors(ModuleParams *parent, AxisConfiguration axis_config,
 		bool tilt_support)
 	: ModuleParams(parent), _axis_config(axis_config), _tilt_support(tilt_support)
 {
@@ -87,7 +87,7 @@ ActuatorEffectivenessRotors::ActuatorEffectivenessRotors(ModuleParams *parent, A
 	updateParams();
 }
 
-void ActuatorEffectivenessRotors::updateParams()
+void ActuatorEffectivenessVectoringRotors::updateParams()
 {
 	ModuleParams::updateParams();
 
@@ -161,7 +161,7 @@ void ActuatorEffectivenessRotors::updateParams()
 }
 
 bool
-ActuatorEffectivenessRotors::addActuators(Configuration &configuration,bool tiltable)
+ActuatorEffectivenessVectoringRotors::addActuators(Configuration &configuration,bool tiltable)
 {
 	if (configuration.num_actuators[(int)ActuatorType::SERVOS] > 0) {
 		PX4_ERR("Wrong actuator ordering: servos need to be after motors");
@@ -214,8 +214,7 @@ ActuatorEffectivenessRotors::addActuators(Configuration &configuration,bool tilt
 	return true;
 }
 
-int
-ActuatorEffectivenessRotors::computeEffectivenessMatrix(const Geometry &geometry,
+int ActuatorEffectivenessVectoringRotors::computeEffectivenessMatrix(const Geometry &geometry,
 		EffectivenessMatrix &effectiveness, int actuator_start_index,bool tiltable_matrix,float tilt_angle,int att_mode)
 {
 
@@ -342,7 +341,7 @@ ActuatorEffectivenessRotors::computeEffectivenessMatrix(const Geometry &geometry
 	return num_actuators;
 }
 
-uint32_t ActuatorEffectivenessRotors::updateAxisFromTilts(const ActuatorEffectivenessTilts &tilts,
+uint32_t ActuatorEffectivenessVectoringRotors::updateAxisFromTilts(const ActuatorEffectivenessTilts &tilts,
 		float collective_tilt_control)
 {
 	if (!PX4_ISFINITE(collective_tilt_control)) {
@@ -368,13 +367,13 @@ uint32_t ActuatorEffectivenessRotors::updateAxisFromTilts(const ActuatorEffectiv
 	return nontilted_motors;
 }
 
-Vector3f ActuatorEffectivenessRotors::tiltedAxis(float tilt_angle, float tilt_direction)
+Vector3f ActuatorEffectivenessVectoringRotors::tiltedAxis(float tilt_angle, float tilt_direction)
 {
 	Vector3f axis{0.f, 0.f, -1.f};
 	return Dcmf{Eulerf{0.f, -tilt_angle, tilt_direction}} * axis;
 }
 
-uint32_t ActuatorEffectivenessRotors::getMotors() const
+uint32_t ActuatorEffectivenessVectoringRotors::getMotors() const
 {
 	uint32_t motors = 0;
 
@@ -385,7 +384,7 @@ uint32_t ActuatorEffectivenessRotors::getMotors() const
 	return motors;
 }
 
-uint32_t ActuatorEffectivenessRotors::getUpwardsMotors() const
+uint32_t ActuatorEffectivenessVectoringRotors::getUpwardsMotors() const
 {
 	uint32_t upwards_motors = 0;
 
@@ -400,7 +399,7 @@ uint32_t ActuatorEffectivenessRotors::getUpwardsMotors() const
 	return upwards_motors;
 }
 
-uint32_t ActuatorEffectivenessRotors::getForwardsMotors() const
+uint32_t ActuatorEffectivenessVectoringRotors::getForwardsMotors() const
 {
 	uint32_t forward_motors = 0;
 
@@ -416,7 +415,7 @@ uint32_t ActuatorEffectivenessRotors::getForwardsMotors() const
 }
 
 bool
-ActuatorEffectivenessRotors::getEffectivenessMatrix(Configuration &configuration,
+	ActuatorEffectivenessVectoringRotors::getEffectivenessMatrix(Configuration &configuration,
 		EffectivenessUpdateReason external_update)
 {
 	if (external_update == EffectivenessUpdateReason::NO_EXTERNAL_UPDATE) {
@@ -427,7 +426,7 @@ ActuatorEffectivenessRotors::getEffectivenessMatrix(Configuration &configuration
 }
 
 // void
-// ActuatorEffectivenessRotors::checkAxis(tilting_index){
+// 	ActuatorEffectivenessVectoringRotors::checkAxis(tilting_index){
 
 // }
 

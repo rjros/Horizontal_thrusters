@@ -46,8 +46,8 @@ using namespace matrix;
 
 ActuatorEffectivenessThrustVectoringMC::ActuatorEffectivenessThrustVectoringMC(ModuleParams *parent)
 	: ModuleParams(parent),
-	_mc_rotors_fixed(this, ActuatorEffectivenessRotors::AxisConfiguration::Configurable, true),
-	_mc_rotors_tilted(this, ActuatorEffectivenessRotors::AxisConfiguration::Configurable, true),
+	_mc_rotors_fixed(this, ActuatorEffectivenessVectoringRotors::AxisConfiguration::Configurable, true),
+	_mc_rotors_tilted(this, ActuatorEffectivenessVectoringRotors::AxisConfiguration::Configurable, true),
 	_tilts(this)
 	{
 		updateParams();
@@ -58,8 +58,8 @@ void ActuatorEffectivenessThrustVectoringMC::updateParams()
 {
 	ModuleParams::updateParams();
 	PX4_INFO("Updated params in Thrust Vectoring Effectivness Matrix");
-	// _mc_rotors_fixed=new ActuatorEffectivenessRotors(this,ActuatorEffectivenessRotors::AxisConfiguration::FixedUpwards,false);
-	// _mc_rotors_tilted= new ActuatorEffectivenessRotors(this,ActuatorEffectivenessRotors::AxisConfiguration::FixedUpwards,false);
+	// _mc_rotors_fixed=new ActuatorEffectivenessVectoringRotors(this,ActuatorEffectivenessVectoringRotors::AxisConfiguration::FixedUpwards,false);
+	// _mc_rotors_tilted= new ActuatorEffectivenessVectoringRotors(this,ActuatorEffectivenessVectoringRotors::AxisConfiguration::FixedUpwards,false);
 }
 
 
