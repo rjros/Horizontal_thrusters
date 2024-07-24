@@ -492,17 +492,26 @@ ControlAllocator::Run()
 		}
 		else{
 
-			// PX4_INFO("Control Allocation Number in block %d ", _num_actuators[1]);
-			//TORQUE SETPOiNT XYZ
-			c[1](0) = 0;//_torque_sp(0);
-			c[1](1) = 0;//_torque_sp(1);
-			c[1](2) = 0;//_torque_sp(2);
-			//THRUST SETPOINTS XYZ
-			c[1](3) = _thrust_vector(0);//_thrust_sp(0);
-			c[1](4) = _thrust_vector(1);
-			c[1](5) = _thrust_vector(2);//_thrust_vector(2);//_thrust_sp(2);
 
-			// PX4_INFO("CA thrust vectors: %f  %f  %f \n", double(thrust_vector(0)),double(thrust_vector(1)),double(thrust_vector(2)));
+			//Torque and Thrust Commands
+			c[0](0) = _torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+
+			// // PX4_INFO("Control Allocation Number in block %d ", _num_actuators[1]);
+			// //TORQUE SETPOiNT XYZ
+			// c[1](0) = _torque_sp(0);
+			// c[1](1) = _torque_sp(1);
+			// c[1](2) = _torque_sp(2);
+			// //THRUST SETPOINTS XYZ
+			// c[1](3) = _thrust_vector(0);//_thrust_sp(0);
+			// c[1](4) = _thrust_vector(1);
+			// c[1](5) = _thrust_vector(2);//_thrust_vector(2);//_thrust_sp(2);
+
+			// // PX4_INFO("CA thrust vectors: %f  %f  %f \n", double(thrust_vector(0)),double(thrust_vector(1)),double(thrust_vector(2)));
 
 
 			//Do allocation
@@ -521,9 +530,9 @@ ControlAllocator::Run()
 			//Total num of motors-tilted index = num of tilting motors
 
 			//Known angles
-			// tilting_actuator_sp(2)=angle_sp(0);
-			// tilting_actuator_sp(3)=angle_sp(1);
-			// tilting_actuator_sp(4)=angle_sp(2);
+			tilting_actuator_sp(2)=50;//angle_sp(0);
+			tilting_actuator_sp(3)=50;//angle_sp(1);
+			tilting_actuator_sp(4)=50;//angle_sp(2);
 
 
 			_control_allocation[0]->setActuatorSetpoint(fixed_actuator_sp);

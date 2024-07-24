@@ -57,9 +57,9 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 		unsigned num_control_groups_updated)
 {
 	///// CUSTOM /////
-	thrust_vectoring_setpoint_status_s thrust_vec_status;
-	_thrust_vectoring_setpoint_status_sub.copy(&thrust_vec_status);
-	matrix::Vector<float,8>angle_sp= matrix::Vector<float,8> (thrust_vec_status.servo_angle);
+	// thrust_vectoring_setpoint_status_s thrust_vec_status;
+	// _thrust_vectoring_setpoint_status_sub.copy(&thrust_vec_status);
+	// matrix::Vector<float,8>angle_sp= matrix::Vector<float,8> (thrust_vec_status.servo_angle);
 	///// CUSTOM  END /////
 
 
@@ -74,11 +74,7 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 		if (_mixing_output.isFunctionSet(i)) {
 			gz::msgs::Double servo_output;
 			///TODO: Normalize output data
-			double output = angle_sp(i);//(outputs[i] - 500) / 500.0;
-			// PX4_INFO("index %d Angle %f ", i,double(output));
-
-			// std::cout << "outputs[" << i << "]: " << outputs[i] << std::endl;
-			// std::cout << "  output: " << output << std::endl;
+			double output = (outputs[i] - 500) / 500.0;
 			servo_output.set_data(output);
 
 			if (servo_pub.Valid()) {

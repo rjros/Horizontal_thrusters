@@ -18,7 +18,7 @@ param set-default SENS_EN_BAROSIM 0
 param set-default SENS_EN_MAGSIM 1
 
 param set-default CA_AIRFRAME 0
-param set-default CA_ROTOR_COUNT 8
+param set-default CA_ROTOR_COUNT 6
 
 param set CA_INDEX 6
 param set CA_SV_TL_COUNT 3
