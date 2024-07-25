@@ -1189,7 +1189,7 @@ mixer:
                         name: COM_SPOOLUP_TIME
 ###############################################################################################
             # *** Thrust Vectoring Multirotor ***
-            12: #Thrust Vectoring Multirotor
+            11: #Thrust Vectoring Multirotor
                 title: 'Thrust Vectoring Multirotor'
                 actuators:
                   - actuator_type: 'motor'

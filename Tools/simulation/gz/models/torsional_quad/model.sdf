@@ -385,7 +385,7 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.01 0.01 0.01</size>
           </box>
         </geometry>
         <surface>
@@ -408,10 +408,11 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>0.00</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
+          <friction>1.0</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -502,7 +503,7 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.01 0.01 0.01</size>
           </box>
         </geometry>
         <surface>
@@ -525,10 +526,11 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>0.00</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
+          <friction>1.0</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -619,7 +621,7 @@
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+            <size>0.01 0.01 0.01</size>
           </box>
         </geometry>
         <surface>
@@ -642,10 +644,11 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>0.00</lower>
+          <lower>-3.145159</lower>
           <upper>3.145159</upper>
         </limit>
         <dynamics>
+          <friction>1.0</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -825,7 +828,7 @@
       <maxRotVelocity>1000.0</maxRotVelocity>
       <motorConstant>8.54858e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
-      <commandSubTopic>command/motor_speed</commandSubTopic>
+d      <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>6</motorNumber>
       <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
       <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
