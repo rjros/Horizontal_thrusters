@@ -170,7 +170,7 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 	switch (vectoring_att_mode) {
 
 
-		case 1:
+	case 1:
 		_single_positionControl(dt,_yaw_sp);
 		_single_velocityControl(dt,_yaw_sp);
 		//  PX4_INFO("combined planar");
@@ -179,8 +179,8 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 
 	case 2:
 
-		_combined_positionControl(dt,_yaw_sp);
-		_combined_velocityControl(dt,_yaw_sp);
+		_planar_positionControl(dt,_yaw_sp);
+		_planar_velocityControl(dt,_yaw_sp);
 		// PX4_INFO("combined planar");
 		break;
 	case 3:

@@ -444,30 +444,6 @@ ControlAllocator::Run()
 		// Set control setpoint vector(s)
 		matrix::Vector<float, NUM_AXES> c[ActuatorEffectiveness::MAX_NUM_MATRICES];
 
-		c[0](0) = _torque_sp(0);
-		c[0](1) = _torque_sp(1);
-		c[0](2) = _torque_sp(2);
-		c[0](3) = _thrust_sp(0);
-		c[0](4) = _thrust_sp(1);
-		c[0](5) = _thrust_sp(2);
-
-		if (_num_control_allocation > 1) {
-			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
-			c[1](0) = vehicle_torque_setpoint.xyz[0];
-			c[1](1) = vehicle_torque_setpoint.xyz[1];
-			c[1](2) = vehicle_torque_setpoint.xyz[2];
-			}
-
-		if (_vehicle_thrust_setpoint1_sub.copy(&vehicle_thrust_setpoint)) {
-			c[1](3) = vehicle_thrust_setpoint.xyz[0];
-			c[1](4) = vehicle_thrust_setpoint.xyz[1];
-			c[1](5) = vehicle_thrust_setpoint.xyz[2];
-			}
-
-
-
-
-
 		// Set the control setpoints depending on the current mode
 		// add condition to stop from controller
 
@@ -483,19 +459,21 @@ ControlAllocator::Run()
 		// 	prev_angle_sp=angle_sp;
 		// }
 		///// CUSTOM END /////
+		//Torque and Thrust Commands
+		c[0](0) = _torque_sp(0);
+		c[0](1) = _torque_sp(1);
+		c[0](2) = _torque_sp(2);
+		c[0](3) = _thrust_sp(0);
+		c[0](4) = _thrust_sp(1);
+		c[0](5) = _thrust_sp(2);
 
-		if (source == EffectivenessSource::THRUST_VECTORING_MC &&
-			_num_control_allocation >1 )
+		// Check if the vehicle type
+		if (source == EffectivenessSource::THRUST_VECTORING_MC)
 		{
 
-			//Torque and Thrust Commands
-			c[0](0) = _torque_sp(0);
-			c[0](1) = _torque_sp(1);
-			c[0](2) = _torque_sp(2);
-			c[0](3) = _thrust_sp(0);
-			c[0](4) = _thrust_sp(1);
-			c[0](5) = _thrust_sp(2);
 
+
+			// Second allocation matrix
 			//TORQUE SETPOiNT XYZ
 			c[1](0) = 0.0;//_torque_sp(0);
 			c[1](1) = 0.0;//_torque_sp(1);
@@ -505,8 +483,7 @@ ControlAllocator::Run()
 			c[1](4) = _thrust_sp(1);//0.0;//_thrust_vector(1);
 			c[1](5) = 0.0;//_thrust_vector(2);//_thrust_vector(2);//_thrust_sp(2);
 
-			// // PX4_INFO("CA thrust vectors: %f  %f  %f \n", double(thrust_vector(0)),double(thrust_vector(1)),double(thrust_vector(2)));
-
+			// PX4_INFO("CA thrust vectors: %f  %f  %f \n", double(_thrust_sp(0)),double(_thrust_sp(1)),double(_thrust_sp(2)));
 
 			//Do allocation
 			_control_allocation[0]->setControlSetpoint(c[0]);
@@ -546,28 +523,33 @@ ControlAllocator::Run()
 
 			_control_allocation[0]->clipActuatorSetpoint();
 			_control_allocation[1]->clipActuatorSetpoint();
-
 		}
+		else {
+			c[0](0) = _torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
 
-
-			for (int i = 0; i < _num_control_allocation; ++i) {
-
-				_control_allocation[i]->setControlSetpoint(c[i]);
-
-				// Do allocation
-				_control_allocation[i]->allocate();
-				_actuator_effectiveness->allocateAuxilaryControls(dt, i, _control_allocation[i]->_actuator_sp); //flaps and spoilers
-				_actuator_effectiveness->updateSetpoint(c[i], i, _control_allocation[i]->_actuator_sp,
-									_control_allocation[i]->getActuatorMin(), _control_allocation[i]->getActuatorMax());
-
-				if (_has_slew_rate) {
-					_control_allocation[i]->applySlewRateLimit(dt);
+			if (_num_control_allocation > 1) {
+				if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
+				c[1](0) = vehicle_torque_setpoint.xyz[0];
+				c[1](1) = vehicle_torque_setpoint.xyz[1];
+				c[1](2) = vehicle_torque_setpoint.xyz[2];
 				}
 
-				_control_allocation[i]->clipActuatorSetpoint();
+			if (_vehicle_thrust_setpoint1_sub.copy(&vehicle_thrust_setpoint)) {
+				c[1](3) = vehicle_thrust_setpoint.xyz[0];
+				c[1](4) = vehicle_thrust_setpoint.xyz[1];
+				c[1](5) = vehicle_thrust_setpoint.xyz[2];
+				}
+
 			}
 
 		}
+
+
 
 		// if(_planar_control_mode)
 		// {
