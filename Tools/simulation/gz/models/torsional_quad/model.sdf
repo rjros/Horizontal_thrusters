@@ -88,12 +88,15 @@
         </geometry>
       </visual>
       <collision name="torsional_manipulator_collision">
-        <pose>0 0 0 0 0 0 </pose>
+        <pose>0 0 -0.05 0 0 0 </pose>
         <geometry>
-          <mesh>
+          <box>
+            <size>0.50 0.50 0.1 </size>
+          </box>
+          <!-- <mesh>
             <scale>1 1 1</scale>
             <uri>model://torsional_quad/meshes/torsional_quad_manipulator.dae</uri>
-          </mesh>
+          </mesh> -->
         </geometry>
         <surface>
           <contact>
@@ -423,7 +426,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 -0.365049533 0.025  0 0 2.35619</pose>
+        <pose> 0.365049533 -0.365049533 0.025  0 1.57 2.35619</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -433,7 +436,7 @@
             </inertia>
         </inertial>
        <visual name="rotor_4_visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0 0 -1.57 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -465,7 +468,7 @@
       <parent>edf_0_body</parent>
       <child>rotor_4</child>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -541,7 +544,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 0.365049533 0.025  0 0 -2.35619 </pose>
+        <pose> 0.365049533 0.365049533 0.025  0 1.57 -2.35619 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -551,7 +554,7 @@
             </inertia>
         </inertial>
        <visual name="rotor_5_visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0 0 -1.57 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -583,7 +586,7 @@
       <parent>edf_1_body</parent>
       <child>rotor_5</child>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -659,7 +662,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.516258 0 0.025 0 0 0</pose>
+        <pose>-0.516258 0 0.025 0 1.57 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -669,7 +672,7 @@
             </inertia>
         </inertial>
        <visual name="rotor_6_visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0 0 -1.57 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -701,7 +704,7 @@
       <parent>edf_2_body</parent>
       <child>rotor_6</child>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
