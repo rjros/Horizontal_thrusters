@@ -308,7 +308,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.0985 0 0.031 0 -1.57 0</pose>
+        <pose> 0.200 0 0.031 0 -1.57 0</pose>
        <inertial>
           <mass>0.016076923076923075</mass>
           <inertia>
@@ -366,7 +366,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.0985 0 0.031 0 1.57 0 </pose>
+        <pose> -0.200 0 0.031 0 1.57 0 </pose>
         <inertial>
           <mass>0.016076923076923075</mass>
           <inertia>
