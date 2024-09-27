@@ -328,11 +328,12 @@
           </mesh>
         </geometry>
       </visual>
+      <!-- Correct the collision to be simple box -->
       <collision name="thrusters_frame_collision">
-        <pose> -0.207 0 0 0 0 0 </pose>
+        <pose> 0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.444 0.009 0.009 </size>
+            <size>0.250 0.009 0.009 </size>
           </box>
         </geometry>
         <surface>
@@ -348,7 +349,7 @@
         </surface>
       </collision>
     </link>
-
+    <!-- Correct the collision to be simple box -->
     <joint name="thrusters_frame_joint" type="fixed">
       <parent>base_link</parent>
       <child>thrusters_frame</child>
@@ -356,6 +357,126 @@
 
 <!-- EDF Frame 200 END -->
 
+
+<link name="edf_1_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.200 0 -0.002 0 0 0 </pose>
+        <inertial>
+            <mass>0.016076923076923075</mass>
+            <inertia>
+              <ixx>3.8464910483993325e-07</ixx>
+              <iyy>2.6115851691700804e-05</iyy>
+              <izz>2.649858234714004e-05</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_200/meshes/edf_housing.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_1_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_1_joint" type="revolute">
+      <parent>thrusters_frame</parent>
+      <child>edf_1_body</child>
+      <pose> 0 0 0 0 0 0 </pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
+        </limit>
+        <dynamics>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="edf_2_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.200 0 -0.002  0 0 3.14159 </pose>
+        <inertial>
+            <mass>0.016076923076923075</mass>
+            <inertia>
+              <ixx>3.8464910483993325e-07</ixx>
+              <iyy>2.6115851691700804e-05</iyy>
+              <izz>2.649858234714004e-05</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_200/meshes/edf_housing.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_2_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_2_joint" type="revolute">
+      <parent>thrusters_frame</parent>
+      <child>edf_2_body</child>
+      <pose> 0 0 0 0 0 0 </pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
+        </limit>
+        <dynamics>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
 
 
 
