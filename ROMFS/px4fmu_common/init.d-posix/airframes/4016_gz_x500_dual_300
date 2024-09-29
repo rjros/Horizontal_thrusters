@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# @name Gazebo x500 Dual 200
+# @name Gazebo x500 Dual 300
 #
 # @type Quadrotor
 #
@@ -9,7 +9,7 @@
 
 PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
 PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
-PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_dual_200}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_dual_300}
 
 param set-default SIM_GZ_EN 1
 
@@ -40,7 +40,7 @@ param set-default CA_ROTOR3_KM -0.05
 param set-default CA_ROTOR4_PX -0.25
 param set-default CA_ROTOR4_PY 0.00
 param set-default CA_ROTOR4_KM 0.00
-param set-default CA_ROTOR4_AX 1.0
+param set-default CA_ROTOR4_AX -1.0
 param set-default CA_ROTOR4_AY 0.0
 param set-default CA_ROTOR4_AZ 0.0
 #### Back fan, pushes front END ####
@@ -49,7 +49,7 @@ param set-default CA_ROTOR4_AZ 0.0
 param set-default CA_ROTOR5_PX 0.25
 param set-default CA_ROTOR5_PY 0.00
 param set-default CA_ROTOR5_KM 0.00
-param set-default CA_ROTOR5_AX -1.0
+param set-default CA_ROTOR5_AX 1.0
 param set-default CA_ROTOR5_AY 0.0
 param set-default CA_ROTOR5_AZ 0.0
 #### Front fan, pushes back END ####

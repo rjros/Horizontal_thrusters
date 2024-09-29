@@ -100,7 +100,10 @@ px4_add_romfs_files(
 	4012_gz_holybro_x500_dual
 	4013_gz_torsional_uav
 	4014_gz_torsional_quad
-	4012_gz_x500_dual_200
+	4015_gz_x500_dual_200
+	4016_gz_x500_dual_300
+	4017_gz_x500_dual_400
+	4018_gz_x500_dual_500
 	## CUSTOM GZ models ##
 
 	## CUSTOM gazebo ##
