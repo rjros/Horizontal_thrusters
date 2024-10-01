@@ -60,7 +60,7 @@
       </inertial>
       <gravity>true</gravity>
       <velocity_decay/>
-      <visual name="uav_frame_visual">
+      <visual name="base_link_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -70,7 +70,7 @@
         </geometry>
       </visual>
       <!-- Collision definition -->
-      <collision name="uav_frame_collision">
+      <collision name="base_link_collision">
         <pose> 0 0 0 0 0 0</pose>
         <geometry>
           <box>
