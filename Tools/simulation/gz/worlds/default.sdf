@@ -12,7 +12,7 @@
     <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
     <plugin name='gz::sim::systems::AirPressure' filename='gz-sim-air-pressure-system'/>
     <!-- Force sensor plugin -->
-    <!-- <plugin name='gz::sim::systems::ForceTorque' filename='gz-sim-forcetorque-system'/> -->
+    <plugin name='gz::sim::systems::ForceTorque' filename='gz-sim-forcetorque-system'/>
     <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
       <render_engine>ogre2</render_engine>
     </plugin>

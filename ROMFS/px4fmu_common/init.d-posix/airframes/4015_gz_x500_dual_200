@@ -23,25 +23,25 @@ param set-default CA_ROTOR_COUNT 6
 param set-default CA_ROTOR0_PX 0.13
 param set-default CA_ROTOR0_PY 0.22
 param set-default CA_ROTOR0_KM  0.05
-param set-default CA_ROTOR0_CT  0.00
+# param set-default CA_ROTOR0_CT  0.00
 
 
 param set-default CA_ROTOR1_PX -0.13
 param set-default CA_ROTOR1_PY -0.20
 param set-default CA_ROTOR1_KM  0.05
-param set-default CA_ROTOR1_CT  0.00
+# param set-default CA_ROTOR1_CT  0.00
 
 
 param set-default CA_ROTOR2_PX 0.13
 param set-default CA_ROTOR2_PY -0.22
 param set-default CA_ROTOR2_KM -0.05
-param set-default CA_ROTOR2_CT  0.00
+# param set-default CA_ROTOR2_CT  0.00
 
 
 param set-default CA_ROTOR3_PX -0.13
 param set-default CA_ROTOR3_PY 0.20
 param set-default CA_ROTOR3_KM -0.05
-param set-default CA_ROTOR3_CT  0.00
+# param set-default CA_ROTOR3_CT  0.00
 
 
 # Back fan, pushes front ####

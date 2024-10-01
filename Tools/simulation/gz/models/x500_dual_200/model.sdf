@@ -3,21 +3,21 @@
   <model name='x500_dual_200'>
     <pose>0 0 0 0 0 0</pose>
     <static>false</static>
-    <link name="base_link">
+    <link name="sensor_link">
      <inertial>
         <!-- <pose>0 0 -0.07 0 0 0</pose> -->
         <pose>0 0 0 0 0 0</pose>
-        <mass>2.5</mass>
+        <mass>500</mass>
         <inertia>
           <ixx>0.0411</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
           <iyy>0.0411</iyy>
           <iyz>0</iyz>
-          <izz>0.05</izz>
+          <izz>0.0411</izz>
         </inertia>
       </inertial>
-      <visual name="base_link_visual">
+      <visual name="sensor_link_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -27,7 +27,7 @@
         </geometry>
       </visual>
       <!-- Collision definition -->
-      <collision name="base_link_collision">
+      <collision name="sensor_link_collision">
         <pose> 0 0 0 0 0 0</pose>
          <geometry>
           <mesh>
@@ -36,32 +36,17 @@
           </mesh>
         </geometry>
       </collision>
+      </link>
 
-      <sensor name="air_pressure_sensor" type="air_pressure">
-        <always_on>1</always_on>
-        <update_rate>50</update_rate>
-        <air_pressure>
-          <pressure>
-            <noise type="gaussian">
-              <mean>0</mean>
-              <stddev>0.01</stddev>
-            </noise>
-          </pressure>
-        </air_pressure>
-      </sensor>
 
-      <sensor name="imu_sensor" type="imu">
-        <always_on>1</always_on>
-        <update_rate>250</update_rate>
-      </sensor>
 <!-- Flight Sensors  -->
-<!-- Collision definition END-->
-    </link>
-    <link name="uav_frame">
+<!-- Sensors and main frame END -->
+
+    <link name="base_link">
       <gravity>true</gravity>
       <self_collide>false</self_collide>
       <velocity_decay/>
-      <pose>0 0 0.400 0 0 1.57</pose>
+      <pose>0 0 0.395 0 0 1.57</pose>
      <inertial>
         <mass>2.5</mass>
         <inertia>
@@ -104,12 +89,32 @@
           </friction>
         </surface>
       </collision>
+
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
+
+      <sensor name="imu_sensor" type="imu">
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+      </sensor>
     </link>
+
+    <!-- Sensors and main frame END -->
     <joint name="uav_frame_joint" type="fixed">
-      <parent>base_link</parent>
-      <child>uav_frame</child>
-      <pose> 0 0 0 0 0 0 </pose>
-        <sensor name= 'forcetorque' type='force_torque'>
+      <parent>sensor_link</parent>
+      <child>base_link</child>
+      <pose> 0 0 -0.016 0 0 0 </pose>
+        <sensor name= 'force_sensor' type='force_torque'>
             <always_on>true</always_on>
             <update_rate>100.0</update_rate>
             <visualize>true</visualize>
@@ -117,15 +122,17 @@
                 <frame>sensor</frame>
                 <measure_direction>child_to_parent</measure_direction>
             </force_torque>
-            <topic>leptrino_force_sensor/sensor_wrench</topic>
+            <topic>/wrench</topic>
         </sensor>
     </joint>
+
+
 <!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0.176876 -0.176876 0.510 0 0 0</pose>
+        <pose>0.176876 -0.176876 0.450 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -164,7 +171,7 @@
       </collision>
     </link>
     <joint name="rotor_0_joint" type="revolute">
-      <parent>uav_frame</parent>
+      <parent>base_link</parent>
       <child>rotor_0</child>
       <axis>
         <xyz>0 0 1</xyz>
@@ -183,7 +190,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.176876 0.176876 0.51 0 0 0</pose>
+        <pose>-0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -222,7 +229,7 @@
       </collision>
     </link>
     <joint name="rotor_1_joint" type="revolute">
-      <parent>uav_frame</parent>
+      <parent>base_link</parent>
       <child>rotor_1</child>
       <axis>
         <xyz>0 0 1</xyz>
@@ -241,7 +248,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.176876 0.176876 0.51 0 0 0</pose>
+        <pose> 0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -280,7 +287,7 @@
       </collision>
     </link>
     <joint name="rotor_2_joint" type="revolute">
-      <parent>uav_frame</parent>
+      <parent>base_link</parent>
       <child>rotor_2</child>
       <axis>
         <xyz>0 0 1</xyz>
@@ -299,7 +306,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.176876 -0.176876 0.51 0 0 0 </pose>
+        <pose> -0.176876 -0.176876 0.450 0 0 0 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -338,7 +345,7 @@
       </collision>
     </link>
     <joint name="rotor_3_joint" type="revolute">
-      <parent>uav_frame</parent>
+      <parent>base_link</parent>
       <child>rotor_3</child>
       <axis>
         <xyz>0 0 1</xyz>
@@ -361,7 +368,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.0 0 0.350 0 0 0 </pose>
+        <pose> 0.0 0 0.395 0 0 0 </pose>
         <inertial>
           <pose> -0.207 0 0 0 0 0</pose>
           <mass>0.16</mass>
@@ -403,7 +410,7 @@
     </link>
     <!-- Correct the collision to be simple box -->
     <joint name="thrusters_frame_joint" type="fixed">
-      <parent>uav_frame</parent>
+      <parent>base_link</parent>
       <child>thrusters_frame</child>
     </joint>
 
@@ -412,7 +419,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.200 0 0.466 0 0 0 </pose>
+        <pose> 0.200 0 0.411  0 0 0 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -472,7 +479,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.200 0 0.466  0 0 3.14159 </pose>
+        <pose> -0.200 0 0.411  0 0 3.14159 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -532,7 +539,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.200 0.0  0.466  0.0 1.5708 3.145159</pose>
+        <pose> 0.200 0.0  0.411  0.0 1.5708 3.145159</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -592,7 +599,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.200 0.0  0.466  0.0 1.5708 0.0</pose>
+        <pose> -0.200 0.0  0.411  0.0 1.5708 0.0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
