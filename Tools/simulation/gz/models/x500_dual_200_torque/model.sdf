@@ -370,12 +370,12 @@
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
         <inertial>
-          <pose> -0.207 0 0 0 0 0</pose>
-          <mass>0.16</mass>
+          <pose> 0 0 0 0 0 0</pose>
+          <mass>0.359</mass>
           <inertia>
             <ixx>1.8727e-05</ixx>
-            <iyy>1.8727e-05</iyy>
-            <izz>1.8727e-05</izz>
+            <iyy>0.0048</iyy>
+            <izz>0.0048</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">
