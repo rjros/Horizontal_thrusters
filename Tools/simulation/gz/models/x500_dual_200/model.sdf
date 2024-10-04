@@ -25,7 +25,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/uav_frame_x500.dae</uri>
+            <uri>model://x500_dual_200/meshes/uav_frame_x500_cpu.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -133,7 +133,7 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose>-0.176876 0.176876 0.06 0 0 0</pose>
-         <inertial>
+        <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.064</mass>
             <inertia>
@@ -251,7 +251,7 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
-        <inertial>
+         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.064</mass>
             <inertia>
@@ -259,7 +259,7 @@
               <iyy>7.536e-06</iyy>
               <izz>6.407e-06</izz>
             </inertia>
-        </inertial>>
+        </inertial>
        <visual name="rotor_3_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
@@ -314,13 +314,13 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> 0.0 0 0 0 0 0 </pose>
-        <inertial>
-          <pose> -0.207 0 0 0 0 0</pose>
-          <mass>0.16</mass>
+         <inertial>
+          <pose> 0 0 0.016 0 0 0</pose>
+          <mass>0.359</mass>
           <inertia>
-            <ixx>1.8727e-05</ixx>
-            <iyy>1.8727e-05</iyy>
-            <izz>1.8727e-05</izz>
+            <ixx>0.0001</ixx>
+            <iyy>0.0049</iyy>
+            <izz>0.0049</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">
@@ -366,11 +366,11 @@
         <velocity_decay/>
         <pose> 0.200 0 0.016 0 0 0 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.16</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>9.734e-05</ixx>
+              <iyy>9.734e-05</iyy>
+              <izz>9.734e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -426,11 +426,11 @@
         <velocity_decay/>
         <pose> -0.200 0 0.016 0 0 3.14159 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.16</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>9.734e-05</ixx>
+              <iyy>9.734e-05</iyy>
+              <izz>9.734e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">

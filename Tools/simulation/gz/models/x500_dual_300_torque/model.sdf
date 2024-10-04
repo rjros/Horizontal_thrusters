@@ -60,7 +60,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/uav_frame_x500.dae</uri>
+            <uri>model://x500_dual_300/meshes/uav_frame_x500.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -123,6 +123,7 @@
 <!-- UAV FRAME END -->
 
 
+
 <!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
@@ -130,11 +131,12 @@
         <velocity_decay/>
         <pose>0.176876 -0.176876 0.450 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_0_visual">
@@ -142,7 +144,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_300/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -188,11 +190,12 @@
         <velocity_decay/>
         <pose>-0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_1_visual">
@@ -200,7 +203,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_300/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -246,11 +249,12 @@
         <velocity_decay/>
         <pose> 0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_2_visual">
@@ -258,7 +262,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_300/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -304,11 +308,12 @@
         <velocity_decay/>
         <pose> -0.176876 -0.176876 0.450 0 0 0 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_3_visual">
@@ -316,7 +321,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_300/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -366,13 +371,13 @@
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
         <inertial>
-          <!-- <pose> -0.207 0 0 0 0 0</pose> -->
-          <mass>0.16</mass>
-          <inertia>
-            <ixx>1.8727e-05</ixx>
-            <iyy>0.0027</iyy>
-            <izz>0.0027</izz>
-        </inertia>
+          <pose> 0 0 0.016 0 0 0</pose>
+          <mass>0.460</mass>
+            <inertia>
+              <ixx>0.0001</ixx>
+              <iyy>0.0139</iyy>
+              <izz>0.0138</izz>
+          </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -417,11 +422,11 @@
         <velocity_decay/>
         <pose> 0.300 0 0.411  0 0 0 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.16</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>9.734e-05</ixx>
+              <iyy>9.734e-05</iyy>
+              <izz>9.734e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -477,11 +482,11 @@
         <velocity_decay/>
         <pose> -0.300 0 0.411  0 0 3.14159 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.16</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>9.734e-05</ixx>
+              <iyy>9.734e-05</iyy>
+              <izz>9.734e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">
