@@ -5,16 +5,13 @@
     <self_collide>false</self_collide>
     <static>false</static>
     <link name="base_link">
-      <inertial>
+     <inertial>
         <pose>0 0 0 0 0 0</pose>
-        <mass>1.5</mass>
+        <mass>2.0</mass>
         <inertia>
-          <ixx>0.02166666666666667</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.02166666666666667</iyy>
-          <iyz>0</iyz>
-          <izz>0.04000000000000001</izz>
+          <ixx>0.0013</ixx>
+          <iyy>0.0013</iyy>
+          <izz>0.0025</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -83,7 +80,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/torsional_quad_manipulator.dae</uri>
+            <uri>model://torsional_quad/meshes/manipulator_base.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -91,7 +88,7 @@
         <pose>0 0 -0.05 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.50 0.50 0.1 </size>
+            <size>0.26 0.26 0.1 </size>
           </box>
           <!-- <mesh>
             <scale>1 1 1</scale>
@@ -114,31 +111,22 @@
     <joint name="torsional_manipulator_joint" type="fixed">
       <parent>base_link</parent>
       <child>torsional_manipulator</child>
-      <pose> 0 0 -0.0375 0 0 0 </pose>
-        <sensor name= 'forcetorque' type='force_torque'>
-            <always_on>true</always_on>
-            <update_rate>100.0</update_rate>
-            <visualize>true</visualize>
-            <force_torque>
-                <frame>sensor</frame>
-                <measure_direction>child_to_parent</measure_direction>
-            </force_torque>
-            <topic>leptrino_force_sensor/sensor_wrench</topic>
-        </sensor>
+      <pose> 0 0 0 0 0 0 </pose>
     </joint>
 
-<!-- ROTORS   -->
+<!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_0_visual">
@@ -146,7 +134,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -192,11 +180,12 @@
         <velocity_decay/>
         <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_1_visual">
@@ -204,7 +193,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -250,11 +239,12 @@
         <velocity_decay/>
         <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_2_visual">
@@ -262,7 +252,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -306,13 +296,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.176876 -0.176876 0.06 0 0 0</pose>
-        <inertial>
-            <mass>0.016076923076923075</mass>
+        <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
+         <inertial>
+            <pose>0 0 -0.02 0 0 0</pose>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_3_visual">
@@ -320,7 +311,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -359,20 +350,20 @@
         </dynamics>
       </axis>
     </joint>
-    <!-- ROTOR END -->
+<!-- Propellers definition END-->
 
     <!-- EDF -->
    <link name="edf_0_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 -0.365049533 0.025  0 0 2.35619 </pose>
+        <pose> 0.37512 -0.37512 0.025  0 0 -0.785398 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.15</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>4.688e-05</ixx>
+              <iyy>8.8824e-05</iyy>
+              <izz>8.8824e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_0_visual">
@@ -380,7 +371,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -407,7 +398,7 @@
     <joint name="edf_0_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_0_body</child>
-      <pose>-0.014217 0 0 0 0 0 </pose>
+      <pose>0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -426,7 +417,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 -0.365049533 0.025  0 1.57 2.35619</pose>
+        <pose> 0.37512 -0.37512 0.025  0 1.57 2.35619</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -436,11 +427,11 @@
             </inertia>
         </inertial>
        <visual name="rotor_4_visual">
-        <pose>0 0 0 0 -1.57 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -484,13 +475,13 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 0.365049533 0.025  0 0 -2.35619 </pose>
+        <pose> 0.375120 0.37512 0.025  0 0 0.785398 </pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.15</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>4.688e-05</ixx>
+              <iyy>8.8824e-05</iyy>
+              <izz>8.8824e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -498,7 +489,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -525,7 +516,7 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_1_body</child>
-      <pose>-0.014217 0 0 0 0 0 </pose>
+      <pose>0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -544,7 +535,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.365049533 0.365049533 0.025  0 1.57 -2.35619 </pose>
+        <pose> 0.37512 0.37512 0.025  0 1.57 -2.35619 </pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -554,11 +545,11 @@
             </inertia>
         </inertial>
        <visual name="rotor_5_visual">
-        <pose>0 0 0 0 -1.57 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -602,13 +593,13 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.516258 0 0.025 0 0 0</pose>
+        <pose>-0.53050 0 0.025 0 0 3.14159</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
+            <mass>0.15</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>4.688e-05</ixx>
+              <iyy>8.8824e-05</iyy>
+              <izz>8.8824e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">
@@ -616,7 +607,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/torsional_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -643,7 +634,7 @@
     <joint name="edf_2_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_2_body</child>
-      <pose>-0.014217 0 0 0 0 0 </pose>
+      <pose> 0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -662,7 +653,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.516258 0 0.025 0 1.57 0</pose>
+        <pose>-0.53050 0 0.025 0 1.57 0</pose>
         <inertial>
             <mass>0.016076923076923075</mass>
             <inertia>
@@ -672,11 +663,11 @@
             </inertia>
         </inertial>
        <visual name="rotor_6_visual">
-        <pose>0 0 0 0 -1.57 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://torsional_quad/meshes/impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
