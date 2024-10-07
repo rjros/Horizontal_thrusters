@@ -62,17 +62,19 @@
       </sensor>
     </link>
 
+<!-- Torsional Manipulator -->
     <link name="torsional_manipulator">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0 0 0 3.14159</pose>
         <inertial>
-            <mass>0.5</mass>
+            <pose>0 0 -0.020 0 0 0</pose>
+            <mass>0.194</mass>
             <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
+              <ixx>8.7628e-04</ixx>
+              <iyy>8.7628e-04</iyy>
+              <izz>0.0017</izz>
             </inertia>
         </inertial>
        <visual name="torsional_manipulator_visual">
@@ -113,6 +115,161 @@
       <child>torsional_manipulator</child>
       <pose> 0 0 0 0 0 0 </pose>
     </joint>
+<!-- Torsional Manipulator END -->
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_1">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>0.37512 -0.37512 0.0 0 0 2.35619</pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_1_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_arm_1_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_1</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_2">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.37512 0.37512 0.00  0 0 -2.35619 </pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_2_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_arm_2_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_2</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
+
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_3">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>-0.53050 0 0.0 0 0 0.0</pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_3_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_arm_3_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_3</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
 
 <!-- Propellers definition -->
     <link name="rotor_0">
@@ -359,11 +516,11 @@
         <velocity_decay/>
         <pose> 0.37512 -0.37512 0.025  0 0 -0.785398 </pose>
         <inertial>
-            <mass>0.15</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>4.688e-05</ixx>
-              <iyy>8.8824e-05</iyy>
-              <izz>8.8824e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_0_visual">
@@ -477,11 +634,11 @@
         <velocity_decay/>
         <pose> 0.375120 0.37512 0.025  0 0 0.785398 </pose>
         <inertial>
-            <mass>0.15</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>4.688e-05</ixx>
-              <iyy>8.8824e-05</iyy>
-              <izz>8.8824e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -595,11 +752,11 @@
         <velocity_decay/>
         <pose>-0.53050 0 0.025 0 0 3.14159</pose>
         <inertial>
-            <mass>0.15</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>4.688e-05</ixx>
-              <iyy>8.8824e-05</iyy>
-              <izz>8.8824e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">

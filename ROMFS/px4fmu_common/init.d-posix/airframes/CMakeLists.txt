@@ -108,6 +108,8 @@ px4_add_romfs_files(
 	4020_gz_x500_dual_300_torque
 	4021_gz_x500_dual_400_torque
 	4022_gz_x500_dual_500_torque
+	4023_gz_torsional_quad_torque
+
 	## CUSTOM GZ models ##
 
 	## CUSTOM gazebo ##

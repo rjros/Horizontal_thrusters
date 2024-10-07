@@ -1,0 +1,112 @@
+#!/bin/sh
+#
+# @name Gazebo Torsional UAV
+#
+# @type Quadrotor
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=torsional_quad_torque}
+
+param set-default SIM_GZ_EN 1
+
+param set-default SENS_EN_GPSSIM 1
+param set-default SENS_EN_BAROSIM 0
+param set-default SENS_EN_MAGSIM 1
+
+param set-default CA_AIRFRAME 11
+param set-default CA_ROTOR_COUNT 7
+
+param set CA_INDEX 4
+param set CA_SV_TL_COUNT 3
+
+param set-default CA_ROTOR0_PX  0.18
+param set-default CA_ROTOR0_PY  0.18
+param set-default CA_ROTOR0_KM  0.05
+
+param set-default CA_ROTOR1_PX -0.18
+param set-default CA_ROTOR1_PY -0.18
+param set-default CA_ROTOR1_KM  0.05
+
+param set-default CA_ROTOR2_PX  0.18
+param set-default CA_ROTOR2_PY -0.18
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.18
+param set-default CA_ROTOR3_PY  0.18
+param set-default CA_ROTOR3_KM -0.05
+
+#### Horizontal Thrusters ####
+param set-default CA_ROTOR4_PX  0.37
+param set-default CA_ROTOR4_PY  0.37
+param set-default CA_ROTOR4_KM  0.00
+# param set-default CA_ROTOR4_CT  4.00
+
+## THRUST VECTOR DIRECTION 4 ###
+param set-default CA_ROTOR4_AX -0.71
+param set-default CA_ROTOR4_AY -0.71
+param set-default CA_ROTOR4_AZ  0.00
+
+param set-default CA_ROTOR5_PX  0.37
+param set-default CA_ROTOR5_PY -0.37
+param set-default CA_ROTOR5_KM  0.00
+# param set-default CA_ROTOR5_CT  4.00
+
+## THRUST VECTOR DIRECTION  5 ###
+param set-default CA_ROTOR5_AX -0.71
+param set-default CA_ROTOR5_AY  0.71
+param set-default CA_ROTOR5_AZ  0.00
+
+
+## THRUST VECTOR DIRECTION 6 ###
+param set-default CA_ROTOR6_PX -0.52
+param set-default CA_ROTOR6_PY  0.00
+param set-default CA_ROTOR6_KM  0.00
+# param set-default CA_ROTOR6_CT  4.00
+
+
+param set-default CA_ROTOR6_AX  1.00
+param set-default CA_ROTOR6_AY  0.00
+param set-default CA_ROTOR6_AZ  0.00
+
+#### Horizontal Thrusters END ####
+
+
+param set-default SIM_GZ_EC_FUNC1 101
+param set-default SIM_GZ_EC_FUNC2 102
+param set-default SIM_GZ_EC_FUNC3 103
+param set-default SIM_GZ_EC_FUNC4 104
+param set-default SIM_GZ_EC_FUNC5 105
+param set-default SIM_GZ_EC_FUNC6 106
+param set-default SIM_GZ_EC_FUNC7 107
+
+
+#### Servo functions #####
+param set-default SIM_GZ_SV_FUNC1 201
+param set-default SIM_GZ_SV_FUNC2 202
+param set-default SIM_GZ_SV_FUNC3 203
+
+
+param set-default SIM_GZ_EC_MIN1 150
+param set-default SIM_GZ_EC_MIN2 150
+param set-default SIM_GZ_EC_MIN3 150
+param set-default SIM_GZ_EC_MIN4 150
+param set-default SIM_GZ_EC_MIN5 150
+param set-default SIM_GZ_EC_MIN6 150
+param set-default SIM_GZ_EC_MIN7 150
+
+
+param set-default SIM_GZ_EC_MAX1 1000
+param set-default SIM_GZ_EC_MAX2 1000
+param set-default SIM_GZ_EC_MAX3 1000
+param set-default SIM_GZ_EC_MAX4 1000
+param set-default SIM_GZ_EC_MAX5 1000
+param set-default SIM_GZ_EC_MAX6 1000
+param set-default SIM_GZ_EC_MAX7 1000
+
+
+
+param set-default MPC_THR_HOVER 0.60

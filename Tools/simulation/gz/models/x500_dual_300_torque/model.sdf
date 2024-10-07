@@ -420,11 +420,11 @@
         <velocity_decay/>
         <pose> 0.300 0 0.411  0 0 0 </pose>
         <inertial>
-            <mass>0.16</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>9.734e-05</ixx>
-              <iyy>9.734e-05</iyy>
-              <izz>9.734e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -480,11 +480,11 @@
         <velocity_decay/>
         <pose> -0.300 0 0.411  0 0 3.14159 </pose>
         <inertial>
-            <mass>0.16</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>9.734e-05</ixx>
-              <iyy>9.734e-05</iyy>
-              <izz>9.734e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">
