@@ -479,5 +479,106 @@ PARAM_DEFINE_FLOAT(MC_IXZ, 0.000f);
  */
 PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
 
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_ROLL_P, 0.95f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_PITCH_P, 0.95f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_YAW_P, 0.95f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_ROLL_I, 0.00f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_PITCH_I, 0.00f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_YAW_I, 0.00f);
+
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_ROLL_RATE_D, 0.00f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_PITCH_RATE_D, 0.00f);
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEO_YAW_RATE_D, 0.00f);
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT END MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////

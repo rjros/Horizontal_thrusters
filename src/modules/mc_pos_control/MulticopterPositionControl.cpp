@@ -631,7 +631,7 @@ void MulticopterPositionControl::Run()
 
 			thrust_vectoring_setpoint_status_s thrust_vec_status;
 
-			//Get the the attitude setpoint with the omni parameters
+			//Get the the attitude setpoint with the planar attitude mode
 			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
 

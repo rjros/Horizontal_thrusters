@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='holybro_x500'>
+  <model name='custom_x500'>
     <pose>0 0 0 0 0 0</pose>
     <self_collide>false</self_collide>
     <static>false</static>
@@ -24,7 +24,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_x500_frame.dae</uri>
+            <uri>model://custom_x500/meshes/custom_x500_frame.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -234,7 +234,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -243,7 +243,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_motor.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_motor.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -300,7 +300,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -309,7 +309,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_motor.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_motor.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -366,7 +366,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -375,7 +375,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_motor.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_motor.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -432,7 +432,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -441,7 +441,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500/meshes/holybro_motor.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_motor.dae</uri>
           </mesh>
         </geometry>
       </visual>

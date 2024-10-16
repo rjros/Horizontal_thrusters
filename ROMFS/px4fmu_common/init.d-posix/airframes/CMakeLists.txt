@@ -96,7 +96,9 @@ px4_add_romfs_files(
 	17002_flightgear_tf-g2
 
 	## CUSTOM GZ models ##
-	4011_gz_holybro_x500
+	4011_gz_custom_x500
+	4012_gz_custom_x500_dual
+
 
 	4013_gz_torsional_uav
 	4014_gz_torsional_quad
@@ -109,7 +111,7 @@ px4_add_romfs_files(
 	4021_gz_x500_dual_400_torque
 	4022_gz_x500_dual_500_torque
 	4023_gz_torsional_quad_torque
-
+	4024_gz_custom_x500_torque
 	## CUSTOM GZ models ##
 
 	## CUSTOM gazebo ##
