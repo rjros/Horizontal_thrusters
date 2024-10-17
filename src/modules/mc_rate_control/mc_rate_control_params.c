@@ -489,7 +489,7 @@ PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_ROLL_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_ROLL_P, 0.95f);
 
 // Controller Gains
 /**
@@ -500,7 +500,7 @@ PARAM_DEFINE_FLOAT(GEO_ROLL_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_PITCH_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_PITCH_P, 0.95f);
 
 // Controller Gains
 /**
@@ -511,7 +511,7 @@ PARAM_DEFINE_FLOAT(GEO_PITCH_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_YAW_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_YAW_P, 0.95f);
 
 // Controller Gains
 /**
@@ -522,7 +522,7 @@ PARAM_DEFINE_FLOAT(GEO_YAW_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_ROLL_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_ROLL_I, 0.00f);
 
 // Controller Gains
 /**
@@ -533,7 +533,7 @@ PARAM_DEFINE_FLOAT(GEO_ROLL_I, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_PITCH_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_PITCH_I, 0.00f);
 
 // Controller Gains
 /**
@@ -544,7 +544,7 @@ PARAM_DEFINE_FLOAT(GEO_PITCH_I, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_YAW_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_YAW_I, 0.00f);
 
 
 // Controller Gains
@@ -556,7 +556,7 @@ PARAM_DEFINE_FLOAT(GEO_YAW_I, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_ROLL_RATE_D, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_ROLL_RATE_D, 0.00f);
 
 // Controller Gains
 /**
@@ -567,7 +567,7 @@ PARAM_DEFINE_FLOAT(GEO_ROLL_RATE_D, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_PITCH_RATE_D, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_PTCH_RTE_D, 0.00f);
 
 // Controller Gains
 /**
@@ -578,7 +578,43 @@ PARAM_DEFINE_FLOAT(GEO_PITCH_RATE_D, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_YAW_RATE_D, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_YAW_RTE_D, 0.00f);
+
+/**
+ * Maximum collective torque in the z axis for thrusters mode
+ *
+ * @unit Nm
+ * @min 0.00
+ * @max 20
+ * @decimal 2
+ * @increment 0.01
+ * @group Thrusters Attitude Control
+ */
+PARAM_DEFINE_FLOAT(X_TORQUE_MAX, 4.29f);
+
+/**
+ * Maximum collective torque in the y axis for thrusters mode
+ *
+ * @unit Nm
+ * @min 0.00
+ * @max 20
+ * @decimal 2
+ * @increment 0.01
+ * @group Thrusters Attitude Control
+ */
+PARAM_DEFINE_FLOAT(Y_TORQUE_MAX, 4.29f);
+
+/**
+ * Maximum collective torque in the z axis  for thrusters mode
+ *
+ * @unit Nm
+ * @min 0.00
+ * @max 20
+ * @decimal 2
+ * @increment 0.01
+ * @group Thrusters Attitude Control
+ */
+PARAM_DEFINE_FLOAT(Z_TORQUE_MAX, 0.378f);
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT END MODE ////
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -1115,7 +1115,19 @@ PARAM_DEFINE_FLOAT(MAX_HOR_THR, 8.55f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_XY_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_X_P, 0.95f);
+
+
+// Controller Gains
+/**
+ * Proportional gain for Thrusters horizontal position error
+ *
+ * @min 0.0
+ * @max 10.0
+ * @decimal 2
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEOM_Y_P, 0.95f);
 
 /**
  * Integral gain for horizontal velocity error
@@ -1124,7 +1136,16 @@ PARAM_DEFINE_FLOAT(GEO_XY_P, 0.95f);
  * @decimal 3
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_XY_I, 0.4f);
+PARAM_DEFINE_FLOAT(GEOM_X_I, 0.4f);
+
+/**
+ * Integral gain for horizontal velocity error
+ * @min 0.0
+ * @max 10.0
+ * @decimal 3
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEOM_Y_I, 0.4f);
 
 /**
  * Differential gain for horizontal velocity error.
@@ -1134,7 +1155,18 @@ PARAM_DEFINE_FLOAT(GEO_XY_I, 0.4f);
  * @decimal 3
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_XY_D, 0.2f);
+PARAM_DEFINE_FLOAT(GEOM_X_D, 0.2f);
+
+/**
+ * Differential gain for horizontal velocity error.
+ *
+ * @min 0.1
+ * @max 10.0
+ * @decimal 3
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(GEOM_Y_D, 0.2f);
+
 
 
 /**
@@ -1147,7 +1179,7 @@ PARAM_DEFINE_FLOAT(GEO_XY_D, 0.2f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_Z_P, 1.0f);
+PARAM_DEFINE_FLOAT(GEOM_Z_P, 1.0f);
 
 
 /**
@@ -1157,7 +1189,7 @@ PARAM_DEFINE_FLOAT(GEO_Z_P, 1.0f);
  * @decimal 3
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_Z_I, 0.0f);
+PARAM_DEFINE_FLOAT(GEOM_Z_I, 0.0f);
 
 /**
  * Differential gain for vertical velocity error
@@ -1166,7 +1198,7 @@ PARAM_DEFINE_FLOAT(GEO_Z_I, 0.0f);
  * @decimal 3
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEO_Z_D, 0.5f);
+PARAM_DEFINE_FLOAT(GEOM_Z_D, 0.5f);
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 ///////////////////////////////////////////////////////////////////////////////////////

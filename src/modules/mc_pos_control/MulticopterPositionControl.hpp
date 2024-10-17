@@ -249,8 +249,23 @@ private:
 		(ParamInt<px4::params::RC_SIM>) _param_rc_sim_mode,
 		(ParamInt<px4::params::VECT_ATT_MODE>) _param_planar_att_mode,
 		//Control mode with RC
-		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw
+		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw,
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+		(ParamFloat<px4::params::MAX_VERT_THR>)    _param_mpc_max_ver_thr,
+		(ParamFloat<px4::params::MAX_HOR_THR>)    _param_mpc_max_hor_thr,
+
+		(ParamFloat<px4::params::GEOM_X_P>)    _param_mpc_geom_x_p,
+		(ParamFloat<px4::params::GEOM_Y_P>)    _param_mpc_geom_y_p,
+		(ParamFloat<px4::params::GEOM_Z_P>)    _param_mpc_geom_z_p,
+
+		(ParamFloat<px4::params::GEOM_X_I>)    _param_mpc_geom_x_i,
+		(ParamFloat<px4::params::GEOM_Y_I>)    _param_mpc_geom_y_i,
+		(ParamFloat<px4::params::GEOM_Z_I>)    _param_mpc_geom_z_i,
+
+		(ParamFloat<px4::params::GEOM_X_D>)    _param_mpc_geom_x_d,
+		(ParamFloat<px4::params::GEOM_Y_D>)    _param_mpc_geom_y_d,
+		(ParamFloat<px4::params::GEOM_Z_D>)    _param_mpc_geom_z_d
+
 
 	);
 

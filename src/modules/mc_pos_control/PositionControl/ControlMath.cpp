@@ -363,6 +363,7 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	}
 
 	body_z.normalize();
+	// body_z.print();
 
 	// vector of desired yaw direction in XY plane, rotated by PI/2
 	const Vector3f y_C{-sinf(yaw_sp), cosf(yaw_sp), 0.f};
@@ -546,6 +547,37 @@ void setZeroIfNanVector3f(Vector3f &vector)
 {
 	// Adding zero vector overwrites elements that are NaN with zero
 	addIfNotNanVector3f(vector, Vector3f());
+}
+
+
+void addIfNotNanVector4f(Vector4f &setpoint, const Vector4f &addition)
+{
+	for (int i = 0; i < 4; i++) {
+		addIfNotNan(setpoint(i), addition(i));
+	}
+}
+
+void setZeroIfNanVector4f(Vector4f &vector)
+{
+	// Adding zero vector overwrites elements that are NaN with zero
+	addIfNotNanVector4f(vector, Vector4f());
+}
+
+void deriv_unit_vector( const Vector3f &A, const Vector3f &A_dot, const Vector3f &A_ddot, \
+    Vector3f &q, Vector3f &q_dot, Vector3f &q_ddot )
+{
+    float nA = A.norm();
+    float nA3 = nA * nA * nA; //pow(nA, 3.0);
+    float nA5 = nA3 * nA * nA; //pow(nA, 5.0);
+
+    q = A / nA;
+    q_dot = A_dot / nA \
+        - A * A.dot(A_dot) / nA3;
+
+    q_ddot = A_ddot / nA \
+        - A_dot / nA3 * (2 * A.dot(A_dot)) \
+        - A / nA3 * (A_dot.dot(A_dot) + A.dot(A_ddot)) \
+        + 3.0f * A / nA5 * A.dot(A_dot) * A.dot(A_dot); //pow(A.dot(A_dot), 2.0);
 }
 
 } // ControlMath

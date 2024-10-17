@@ -44,6 +44,12 @@
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
 
+// Custom msgs for the thrust vectoring vehicle
+// Move to a separate module
+#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+
+
+
 class RateControl
 {
 public:
@@ -87,15 +93,11 @@ public:
 	void setNegativeSaturationFlag(size_t axis, bool is_saturated);
 
 	/**
-	 * Run one control loop cycle calculation
-	 * @param rate estimation of the current vehicle angular rate
-	 * @param Inertia inertia matrix
-	 * @param rate_sp desired vehicle angular rate setpoint
+	 * Run one control loop cycle calculationS
 	 * @param dt desired vehicle angular rate setpoint
 	 * @return [-1,1] normalized torque vector to apply to the vehicle
 	 */
-	matrix::Vector3f update_mc(const matrix::Vector3f &rate, const matrix::SquareMatrix <float,3> &Inertia ,const matrix::Vector3f &rate_sp,
-				const matrix::Vector3f &angular_accel, const float dt, const bool landed);
+	matrix::Vector3f update_mc(const float dt);
 
 	/**
 	 * Run one control loop cycle calculation
@@ -118,8 +120,50 @@ public:
 	 */
 	void getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status);
 
+
+	//// GEOMETRIC CONTROLLER ////
+	/**
+	 * Set the inertia matrix of the uav w.r.t to the Body frame
+	 * @param inertia 3x3 inertial tensor matrix [kg.m2]
+	*/
+	void setInertiaMatrix(const matrix::Matrix3f &inertia);
+
+	/**
+	 * Set the attitude control gains
+	 * @param P 3D vector of proportional gains for roll, pitch yaw
+	 * @param I 3D vector of integral gains
+	 * @param D 3D vector of derivative gains roll_rate, pitch_rate, yaw_rate
+	 */
+	void setGeometricAttitudeGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+
+	/**
+	 * Set the thrust vectoring setpoint \
+	 * @param thrust_vectoring_sepoint custom message with setpoint
+	*/
+	void setAttitudeSetpoint(const thrust_vectoring_setpoint_status_s &thrust_vectoring_setpoint);
+
+	/**
+	 * Set the torque limit in each axis of rotation
+	 * @param x_torque_max [N m] Torque in the wrt to the x axis
+	 * @param y_torque_max [N m] Torque wrt to the y axis
+	 * @param z_torque_max [N m] Torque wrt to the z axis
+	*/
+	void setTorqueLimit(const float X_TORQUE_MAX, const float Y_TORQUE_MAX, const float Z_TORQUE_MAX);
+
+	/**
+	 * @param dt Rate of change
+	*/
+
+	void setAttitudeStates(const matrix::Quaternionf &attitude, const matrix::Vector3f &rates,const matrix::Vector3f &angular_accel);
+
+
+
+
 private:
+
+	void geometricController(const float dt);
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
+	void torqueNormalization();
 
 	// Gains
 	matrix::Vector3f _gain_p; ///< rate control proportional gain for all axes x, y, z
@@ -134,4 +178,29 @@ private:
 	// Feedback from control allocation
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
+
+	//// GEOMETRIC CONTROLLER ////
+	float _x_torque_max{0.f};
+	float _y_torque_max{0.f};
+	float _z_torque_max{0.f};
+
+	matrix::Vector3f _gain_geom_p; ///< Position control proportional gain
+	matrix::Vector3f _gain_geom_i; ///< Velocity control proportional gain
+	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
+	float _c2 {0.0f};
+	matrix::Vector3f _geom_int;
+
+	matrix::Dcmf _Rw;
+	matrix::Vector3f _rates;
+	matrix::Vector3f _angular_acceleration;
+
+
+	matrix::Matrix3f _Rd; /* Rotation matrix*/
+	matrix::Vector3f _Wd; /* Angular velocity*/
+	matrix::Vector3f _Wd_dot; /* Angular accelertion */
+
+	matrix::Vector3f _torque; /* Angular accelertion */
+	matrix::Matrix3f _Ib; /* Rotation matrix*/
+
+
 };

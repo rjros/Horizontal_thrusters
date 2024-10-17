@@ -579,7 +579,16 @@ void MulticopterPositionControl::Run()
 			}
 
 			_control.setState(states);
+
+			//// GEOMETRIC GAINS ////
 			_control.setMass(_param_mpc_total_mass.get());
+			_control.setGeometricThrustLimits(_param_mpc_max_hor_thr.get(),_param_mpc_max_hor_thr.get(),_param_mpc_max_ver_thr.get());
+			_control.setGeometricPositionGains(
+			Vector3f(_param_mpc_geom_x_p.get(), _param_mpc_geom_y_p.get(), _param_mpc_geom_z_p.get()),
+			Vector3f(_param_mpc_geom_x_i.get(), _param_mpc_geom_y_i.get(), _param_mpc_geom_z_i.get()),
+			Vector3f(_param_mpc_geom_x_d.get(), _param_mpc_geom_y_d.get(), _param_mpc_geom_z_d.get()));
+
+
 
 			// _control.setPlanarPositionGains(Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_pxy_pos_p_vel.get(), _param_mpc_z_p.get()));
 			_control.setPlanarPositionGains(
@@ -635,6 +644,10 @@ void MulticopterPositionControl::Run()
 			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
 
+			// thrust vectoring setpoint
+			_control.getThrustVectoringSetpoint(thrust_vec_status);
+
+
 			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
 
 
@@ -662,6 +675,8 @@ void MulticopterPositionControl::Run()
 			_planar_attitude_status_pub.publish(planar_status);
 
 			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
+
+			// PX4_INFO("Force vector %f %f %f ", double(thrust_vec_status.force[0]),double(thrust_vec_status.force[1]),double(thrust_vec_status.force[2]));
 
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);

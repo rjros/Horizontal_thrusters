@@ -46,6 +46,7 @@
 #include <uORB/topics/vehicle_local_position_setpoint.h>
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 #include <uORB/topics/planar_attitude_status.h>
+#include <uORB/topics/thrust_vectoring_setpoint_status.h>
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 
@@ -106,7 +107,6 @@ public:
 	 */
 	void setPlanarPositionGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
-
 
 	/**
 	 * Set the velocity control gains
@@ -180,14 +180,6 @@ public:
 	 */
 	void setState(const PositionControlStates &states);
 
-
-	/**
-	 * Pass the current vehicle state to the controller
-	 * @param vehicle_mass total mass of the uav, for model dependent controller
-	 */
-	void setMass(const float vehicle_mass);
-
-
 	/**
 	 * Pass the desired setpoints
 	 * Note: NAN value means no feed forward/leave state uncontrolled if there's no higher order setpoint.
@@ -234,13 +226,44 @@ public:
 					planar_attitude_status_s &thrust_vectoring_status) const;
 
 
-
-
-
 	/**
 	 * All setpoints are set to NAN (uncontrolled). Timestampt zero.
 	 */
 	static const trajectory_setpoint_s empty_trajectory_setpoint;
+
+	//// GEOEMETRIC CONTROLLER FUNCTIONS ////
+	/**
+	 * Pass the current vehicle state to the controller
+	 * @param vehicle_mass total mass of the uav, for model dependent controller
+	 */
+	void setMass(const float vehicle_mass);
+
+	/**
+	 * Set the maximum vertical and horizontal thrust values wrt to the body frame in [N]
+	 * @param x_thrust_max  maximum horizontal thrust in the x axis  [N]
+	 * @param y_thrust_max  maximum horizontal thrust in the y axis  [N]
+	 * @param z_thrust_max  maximum horizontal thrust in the z axis  [N]
+	*/
+	void setGeometricThrustLimits(const float x_thrust_max,const float y_thrust_max,const float z_thrust_max);
+
+	/**
+	 * Set the velocity control gains
+	 * @param P 3D vector of proportional gains for x,y,z axis
+	 * @param I 3D vector of integral gains
+	 * @param D 3D vector of derivative gains
+	 */
+	void setGeometricPositionGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+
+	/**
+	 * Get the controllers output thrust vectoring setpoint
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.
+	 * @param vectoring_setpoint reference to struct to fill up
+	 */
+	void getThrustVectoringSetpoint(thrust_vectoring_setpoint_status_s &vectoring_setpoint) const;
+
+
+
 
 private:
 	// The range limits of the hover thrust configuration/estimate
@@ -267,6 +290,12 @@ private:
 	void _combined_positionControl(const float dt,const float yaw_sp);// planar proportional position control
 	void _combined_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
 	void _combined_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
+
+
+	//Gains for the planar controller/
+	void _geometricControl(const float dt); ///< Position proportional control
+	void _normalization();
+
 
 
 	// Gains
@@ -304,7 +333,6 @@ private:
 
 	float _hover_thrust{}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
 
-	float _mass{0}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
 
 
 	// States
@@ -328,7 +356,26 @@ private:
 	float _yawspeed_sp{}; /** desired yaw-speed */
 
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
+	float _yaw_ddot_sp{}; /**desired yaw-accel*/
 	bool planar_flag=false;
+
+
+	//// GEOEMETRIC CONTROLLER FUNCTIONS ////
+	float _mass{0}; ///< Thrust [HOVER_THRUST_MIN, HOVER_THRUST_MAX] with which the vehicle hovers not accelerating down or up with level orientation
+	float _max_thrust_x {0}; ///< Force in [N]
+	float _max_thrust_y {0};  ///< Force in [N]
+	float _max_thrust_z {0};  ///< Force in [N]
+
+	// Gains for geometric controller
+	matrix::Vector3f _gain_geom_p; ///< Position control proportional gain
+	matrix::Vector3f _gain_geom_i; ///< Velocity control proportional gain
+	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
+	matrix::Vector3f _geom_int;
+
+
+	matrix::Matrix3f _Rd; /* Rotation matrix*/
+	matrix::Vector3f _Wd; /* Angular velocity*/
+	matrix::Vector3f _Wd_dot; /* Angular accelertion */
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 };

@@ -72,6 +72,14 @@ MulticopterRateControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+	if (!_vehicle_attitude_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
+	if (!_thrust_vectoring_setpoint_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
 
 	return true;
 }
@@ -120,6 +128,8 @@ MulticopterRateControl::Run()
 {
 	if (should_exit()) {
 		_vehicle_angular_velocity_sub.unregisterCallback();
+		_thrust_vectoring_setpoint_sub.unregisterCallback();
+		_vehicle_attitude_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
@@ -138,6 +148,8 @@ MulticopterRateControl::Run()
 
 	/* run controller on gyro changes */
 	vehicle_angular_velocity_s angular_velocity;
+	vehicle_attitude_s _vehicle_attitude;
+	thrust_vectoring_setpoint_status_s thrust_vect_sp;
 
 	if (_vehicle_angular_velocity_sub.update(&angular_velocity)) {
 
@@ -232,9 +244,33 @@ MulticopterRateControl::Run()
 			}
 
 			// run rate controller
-			// const Vector3f att_control = _rate_control.update_mc(rates, _inertia_body, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
-			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+			Vector3f att_control = {0.0f,0.0f,0.0f};
+			_vehicle_attitude_sub.update(&_vehicle_attitude);
+			_thrust_vectoring_setpoint_sub.update(&thrust_vect_sp);
+			_attitude = Quaternionf(_vehicle_attitude.q);
 
+			// Depeding on the mode change the controller
+			if (_param_vect_att_mode.get() == int(2) ) {
+
+				_rate_control.setInertiaMatrix(_inertia_body);
+				_rate_control.setTorqueLimit(_param_mpc_x_torque_max.get(),_param_mpc_y_torque_max.get(),_param_mpc_z_torque_max.get());
+				_rate_control.setGeometricAttitudeGains(
+				Vector3f(_param_mpc_geom_r_p.get(), _param_mpc_geom_p_p.get(), _param_mpc_geom_y_p.get()),
+				Vector3f(_param_mpc_geom_r_i.get(), _param_mpc_geom_p_i.get(), _param_mpc_geom_y_i.get()),
+				Vector3f(_param_mpc_geom_rr_d.get(), _param_mpc_geom_pr_d.get(), _param_mpc_geom_yr_d.get()));
+
+				_rate_control.setAttitudeStates(_attitude,rates,_angular_acceleration);
+				_rate_control.setAttitudeSetpoint(thrust_vect_sp);
+				att_control = _rate_control.update_mc(dt);
+				_thrust_setpoint = Vector3f(thrust_vect_sp.force);
+				_thrust_setpoint.print();
+				att_control.print();
+
+			}
+			else {
+				att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+
+			}
 			// publish rate controller status
 			rate_ctrl_status_s rate_ctrl_status{};
 			_rate_control.getRateControlStatus(rate_ctrl_status);
@@ -245,7 +281,10 @@ MulticopterRateControl::Run()
 			vehicle_thrust_setpoint_s vehicle_thrust_setpoint{};
 			vehicle_torque_setpoint_s vehicle_torque_setpoint{};
 
+
 			_thrust_setpoint.copyTo(vehicle_thrust_setpoint.xyz);
+
+
 			vehicle_torque_setpoint.xyz[0] = PX4_ISFINITE(att_control(0)) ? att_control(0) : 0.f;
 			vehicle_torque_setpoint.xyz[1] = PX4_ISFINITE(att_control(1)) ? att_control(1) : 0.f;
 			vehicle_torque_setpoint.xyz[2] = PX4_ISFINITE(att_control(2)) ? att_control(2) : 0.f;

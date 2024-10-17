@@ -154,4 +154,21 @@ void addIfNotNanVector3f(matrix::Vector3f &setpoint, const matrix::Vector3f &add
  * @param vector possibly containing NAN elements
  */
 void setZeroIfNanVector3f(matrix::Vector3f &vector);
+
+
+////CUSTOM Functions////
+/**
+ * _addIfNotNan for Vector4f treating each element individually
+ * @see _addIfNotNan
+ */
+void addIfNotNanVector4f(matrix::Vector4f &setpoint, const matrix::Vector4f &addition);
+
+/**
+ * Overwrites elements of a Vector4f which are NaN with zero
+ * @param vector possibly containing NAN elements
+ */
+void setZeroIfNanVector4f(matrix::Vector4f &vector);
+
+void deriv_unit_vector( const matrix::Vector3f &A, const matrix::Vector3f &A_dot, const matrix::Vector3f &A_ddot, \
+    matrix::Vector3f &q, matrix::Vector3f &q_dot, matrix::Vector3f &q_ddot );
 }

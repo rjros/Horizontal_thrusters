@@ -60,6 +60,11 @@
 #include <uORB/topics/vehicle_thrust_setpoint.h>
 #include <uORB/topics/vehicle_torque_setpoint.h>
 
+// GEOMETRIC CONTROLLER CUSTOM MSGS
+#include <uORB/topics/vehicle_attitude.h>
+#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+
+
 using namespace time_literals;
 
 
@@ -104,6 +109,11 @@ private:
 
 	uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
 
+	/// GEOMETRIC ////
+	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
+	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_setpoint_sub{this, ORB_ID(thrust_vectoring_setpoint_status)};
+
+
 	uORB::Publication<actuator_controls_status_s>	_actuator_controls_status_pub{ORB_ID(actuator_controls_status_0)};
 	uORB::PublicationMulti<rate_ctrl_status_s>	_controller_status_pub{ORB_ID(rate_ctrl_status)};
 	uORB::Publication<vehicle_rates_setpoint_s>	_vehicle_rates_setpoint_pub{ORB_ID(vehicle_rates_setpoint)};
@@ -129,6 +139,10 @@ private:
 
 	// Inertial Body matrix
 	matrix::SquareMatrix <float,3> _inertia_body= matrix::eye <float,3>();
+	matrix::Quaternionf _attitude;
+	matrix::Vector3f _angular_acceleration;
+
+
 
 
 	float _energy_integration_time{0.0f};
@@ -166,12 +180,30 @@ private:
 
 		(ParamBool<px4::params::MC_BAT_SCALE_EN>) _param_mc_bat_scale_en,
 
-		(ParamFloat<px4::params::MC_IXX>) _param_mc_ixx,                        	/**< Ixx component of the inertial tensor */
-		(ParamFloat<px4::params::MC_IYY>) _param_mc_iyy,                        	/**< Iyy component of the inertial tensor */
-		(ParamFloat<px4::params::MC_IZZ>) _param_mc_izz,                        	/**< Izz component of the inertial tensor */
-		(ParamFloat<px4::params::MC_IXY>) _param_mc_ixy,                        	/**< Ixy component of the inertial tensor */
-		(ParamFloat<px4::params::MC_IXZ>) _param_mc_ixz,                        	/**< Ixz component of the inertial tensor */
-		(ParamFloat<px4::params::MC_IYZ>) _param_mc_iyz    				/**< Ixz component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IXX>) 		_param_mc_ixx,                        	/**< Ixx component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IYY>) 		_param_mc_iyy,                        	/**< Iyy component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IZZ>) 		_param_mc_izz,                        	/**< Izz component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IXY>) 		_param_mc_ixy,                        	/**< Ixy component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IXZ>) 		_param_mc_ixz,                        	/**< Ixz component of the inertial tensor */
+		(ParamFloat<px4::params::MC_IYZ>) 		_param_mc_iyz,    			/**< Ixz component of the inertial tensor */
+		(ParamInt<px4::params::VECT_ATT_MODE>) 		_param_vect_att_mode,			/**< Attitude mode parameter */
 
+
+
+		(ParamFloat<px4::params::GEOM_ROLL_P>)    	_param_mpc_geom_r_p,
+		(ParamFloat<px4::params::GEOM_PITCH_P>)    	_param_mpc_geom_p_p,
+		(ParamFloat<px4::params::GEOM_YAW_P>)    	_param_mpc_geom_y_p,
+
+		(ParamFloat<px4::params::GEOM_ROLL_I>)    	_param_mpc_geom_r_i,
+		(ParamFloat<px4::params::GEOM_PITCH_I>)    	_param_mpc_geom_p_i,
+		(ParamFloat<px4::params::GEOM_YAW_I>)    	_param_mpc_geom_y_i,
+
+		(ParamFloat<px4::params::GEOM_ROLL_RATE_D>)   	_param_mpc_geom_rr_d,
+		(ParamFloat<px4::params::GEOM_PTCH_RTE_D>)    	_param_mpc_geom_pr_d,
+		(ParamFloat<px4::params::GEOM_YAW_RTE_D>)    	_param_mpc_geom_yr_d,
+
+		(ParamFloat<px4::params::X_TORQUE_MAX>)    	_param_mpc_x_torque_max,
+		(ParamFloat<px4::params::Y_TORQUE_MAX>)    	_param_mpc_y_torque_max,
+		(ParamFloat<px4::params::Z_TORQUE_MAX>)    	_param_mpc_z_torque_max
 	)
 };
