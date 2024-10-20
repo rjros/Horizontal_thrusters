@@ -47,6 +47,8 @@
 // Custom msgs for the thrust vectoring vehicle
 // Move to a separate module
 #include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/geometric_setpoint.h>
+
 
 
 
@@ -97,7 +99,7 @@ public:
 	 * @param dt desired vehicle angular rate setpoint
 	 * @return [-1,1] normalized torque vector to apply to the vehicle
 	 */
-	matrix::Vector3f update_mc(const float dt);
+	matrix::Vector3f update_mc(const float dt,const bool landed);
 
 	/**
 	 * Run one control loop cycle calculation
@@ -112,7 +114,7 @@ public:
 	 * Set the integral term to 0 to prevent windup
 	 * @see _rate_int
 	 */
-	void resetIntegral() { _rate_int.zero(); }
+	void resetIntegral() { _rate_int.zero(),_geom_int.zero(); }
 
 	/**
 	 * Get status message of controller for logging/debugging
@@ -140,7 +142,7 @@ public:
 	 * Set the thrust vectoring setpoint \
 	 * @param thrust_vectoring_sepoint custom message with setpoint
 	*/
-	void setAttitudeSetpoint(const thrust_vectoring_setpoint_status_s &thrust_vectoring_setpoint);
+	void setAttitudeSetpoint(const geometric_setpoint_s &thrust_vectoring_setpoint);
 
 	/**
 	 * Set the torque limit in each axis of rotation
@@ -159,10 +161,14 @@ public:
 
 
 
+
+
 private:
 
-	void geometricController(const float dt);
+	void geometricController(const float dt,const bool landed);
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
+
+	void updateIntegralGeometric(matrix::Vector3f &att_error, matrix::Vector3f &rate_error, const float dt);
 	void torqueNormalization();
 
 	// Gains
@@ -190,7 +196,7 @@ private:
 	float _c2 {0.0f};
 	matrix::Vector3f _geom_int;
 
-	matrix::Dcmf _Rw;
+	matrix::Dcmf _R;
 	matrix::Vector3f _rates;
 	matrix::Vector3f _angular_acceleration;
 

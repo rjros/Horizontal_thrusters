@@ -24,7 +24,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500/meshes/custom_x500_frame.dae</uri>
+            <uri>model://custom_x500/meshes/holybro_x500_frame.dae</uri>
           </mesh>
         </geometry>
       </visual>

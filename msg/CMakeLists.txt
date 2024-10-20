@@ -90,6 +90,9 @@ set(msg_files
 	FollowTargetStatus.msg
 	GeneratorStatus.msg
 	GeofenceResult.msg
+	###CUSTOM###
+	GeometricSetpoint.msg
+	###CUSTOM END ####
 	GimbalDeviceAttitudeStatus.msg
 	GimbalDeviceInformation.msg
 	GimbalDeviceSetAttitude.msg

@@ -47,6 +47,8 @@
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 #include <uORB/topics/planar_attitude_status.h>
 #include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/geometric_setpoint.h>
+
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 
@@ -260,7 +262,7 @@ public:
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.
 	 * @param vectoring_setpoint reference to struct to fill up
 	 */
-	void getThrustVectoringSetpoint(thrust_vectoring_setpoint_status_s &vectoring_setpoint) const;
+	void getThrustVectoringSetpoint(geometric_setpoint_s &vectoring_setpoint) const;
 
 
 
@@ -371,6 +373,8 @@ private:
 	matrix::Vector3f _gain_geom_i; ///< Velocity control proportional gain
 	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
 	matrix::Vector3f _geom_int;
+	matrix::Vector3f _thrust_sp; /**< desired thrust */
+
 
 
 	matrix::Matrix3f _Rd; /* Rotation matrix*/

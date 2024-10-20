@@ -76,7 +76,7 @@ MulticopterRateControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
-	if (!_thrust_vectoring_setpoint_sub.registerCallback()) {
+	if (!_geometric_setpoint_sub.registerCallback()) {
 		PX4_ERR("callback registration failed");
 		return false;
 	}
@@ -128,7 +128,7 @@ MulticopterRateControl::Run()
 {
 	if (should_exit()) {
 		_vehicle_angular_velocity_sub.unregisterCallback();
-		_thrust_vectoring_setpoint_sub.unregisterCallback();
+		_geometric_setpoint_sub.unregisterCallback();
 		_vehicle_attitude_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
@@ -149,7 +149,7 @@ MulticopterRateControl::Run()
 	/* run controller on gyro changes */
 	vehicle_angular_velocity_s angular_velocity;
 	vehicle_attitude_s _vehicle_attitude;
-	thrust_vectoring_setpoint_status_s thrust_vect_sp;
+	geometric_setpoint_s thrust_vect_sp;
 
 	if (_vehicle_angular_velocity_sub.update(&angular_velocity)) {
 
@@ -244,9 +244,12 @@ MulticopterRateControl::Run()
 			}
 
 			// run rate controller
-			Vector3f att_control = {0.0f,0.0f,0.0f};
+
+			Vector3f att_control= {0.0f,0.0f,0.0f};
+			// Vector3f thrust_setpoint = {0.0f,0.0f,0.0f};
+
 			_vehicle_attitude_sub.update(&_vehicle_attitude);
-			_thrust_vectoring_setpoint_sub.update(&thrust_vect_sp);
+			_geometric_setpoint_sub.copy(&thrust_vect_sp);
 			_attitude = Quaternionf(_vehicle_attitude.q);
 
 			// Depeding on the mode change the controller
@@ -259,16 +262,22 @@ MulticopterRateControl::Run()
 				Vector3f(_param_mpc_geom_r_i.get(), _param_mpc_geom_p_i.get(), _param_mpc_geom_y_i.get()),
 				Vector3f(_param_mpc_geom_rr_d.get(), _param_mpc_geom_pr_d.get(), _param_mpc_geom_yr_d.get()));
 
-				_rate_control.setAttitudeStates(_attitude,rates,_angular_acceleration);
+				_rate_control.setAttitudeStates(_attitude,rates,angular_accel);
 				_rate_control.setAttitudeSetpoint(thrust_vect_sp);
-				att_control = _rate_control.update_mc(dt);
-				_thrust_setpoint = Vector3f(thrust_vect_sp.force);
-				_thrust_setpoint.print();
-				att_control.print();
+				// att_control_vec = _rate_control.update_mc(dt);
+				att_control = _rate_control.update_mc(dt,_maybe_landed || _landed);
+
+
+				_thrust_setpoint = Vector3f(thrust_vect_sp.thrust);
+				// _thrust_setpoint.print();
+				// PX4_INFO("Torque %f %f %f", double(att_control_vec(0)),double(att_control_vec(1)),double(att_control_vec(2)));
+				// _attitude.print();
+				// att_control.print();
 
 			}
 			else {
 				att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+				// PX4_INFO("Torque default %f %f %f", double(att_control(0)),double(att_control(1)),double(att_control(2)));
 
 			}
 			// publish rate controller status

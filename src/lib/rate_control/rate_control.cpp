@@ -134,10 +134,11 @@ void RateControl::setInertiaMatrix(const matrix::Matrix3f &Inertia)
 
 }
 
-void RateControl::setAttitudeSetpoint(const thrust_vectoring_setpoint_status_s &thrust_vect_sp)
+void RateControl::setAttitudeSetpoint(const geometric_setpoint_s &thrust_vect_sp)
 {
 	_Rd = Matrix3f(thrust_vect_sp.rd);
 	_Wd = Vector3f(thrust_vect_sp.wd);
+	// _Wd.print();
 	_Wd_dot = Vector3f(thrust_vect_sp.wd_dot);
 
 }
@@ -164,8 +165,9 @@ void RateControl::setTorqueLimit(const float x_torque_max, const float y_torque_
 
 void RateControl::setAttitudeStates(const matrix::Quaternionf &attitude, const matrix::Vector3f &rates,const matrix::Vector3f &angular_accel)
 {
-	_Rw = attitude; // Rotation matrix of the Body frame
+	_R = attitude;
 	_rates = rates;
+	// _rates.print();
 	_angular_acceleration = angular_accel;
 
 }
@@ -201,39 +203,86 @@ void RateControl::setAttitudeStates(const matrix::Quaternionf &attitude, const m
 // 	return torque;
 // }
 
-Vector3f RateControl::update_mc(const float dt)
+Vector3f RateControl::update_mc(const float dt, const bool landed)
 {
-	geometricController(dt);
+	geometricController(dt,landed);
 	torqueNormalization();
 	return _torque;
 
 }
 
-void RateControl::geometricController(const float dt)
+void RateControl::geometricController(const float dt,const bool landed)
 {
-	Dcmf RdtR = _Rd.transpose() * _Rw;
+
+	// Everything in the world frame
+
+	_Wd(0) = PX4_ISFINITE(_Wd(0) ) ?_Wd(0)  : _rates(0);
+	_Wd(1) = PX4_ISFINITE(_Wd(1)) ?_Wd(1)  : _rates(1);
+	_Wd(2) = PX4_ISFINITE(_Wd(2))  ?_Wd(2)  : _rates(2);
+
+	_Wd_dot(0) = PX4_ISFINITE(_Wd_dot(0) ) ?_Wd_dot(0)  : _angular_acceleration(0);
+	_Wd_dot(1) = PX4_ISFINITE(_Wd_dot(1)) ? _Wd_dot(1)  : _angular_acceleration(1);
+	_Wd_dot(2) = PX4_ISFINITE(_Wd_dot(2))  ?_Wd_dot(2)  : _angular_acceleration(2);
+
+
+
+	Dcmf RdtR = _Rd.transpose() * _R;
 	Vector3f e_R = 0.5f * Dcmf(RdtR-RdtR.transpose()).vee();
-	Vector3f e_W = _rates - _Rw.transpose()*_Rd*_Wd;
+	Vector3f e_W = _rates - _R.transpose()*_Rd*_Wd;
+	_c2=1.0f;
 
-	_geom_int += (e_W + _c2 * e_R) * dt;
 
-	// include and anti windup, maybe based on the total allowed tilt, or torque
-
-	_torque= -e_R.emult(_gain_geom_p) - e_W.emult(_gain_geom_d) - _geom_int.emult(_gain_geom_i) \
-		+ Vector3f(_Rw.transpose()*_Rd*_angular_acceleration).hat()*_Ib*_Rw.transpose()*_Rd*_Wd \
-		+ _Ib* _Rw.transpose()*_Rd*_Wd;
-
+	_torque = -e_R.emult(_gain_geom_p) - e_W.emult(_gain_geom_d) - _geom_int\
+		+ Vector3f(_R.transpose()*_Rd*_Wd).hat()*_Ib*_R.transpose()*_Rd*_Wd \
+		+ _Ib* _R.transpose()*_Rd*_Wd_dot;
 	// update integral only if we are not landed
-	// Inertia.print();
+	// _torque.print();
+	// update integral only if we are not landed
+	if (!landed) {
+		updateIntegralGeometric(e_R,e_W ,dt);
+	}
 	torqueNormalization();
 
+}
+
+
+void RateControl::updateIntegralGeometric(Vector3f &att_error, Vector3f &rate_error, const float dt)
+{
+	for (int i = 0; i < 3; i++) {
+		// prevent further positive control saturation
+		if (_control_allocator_saturation_positive(i)) {
+			rate_error(i) = math::min(rate_error(i), 0.f);
+		}
+
+		// prevent further negative control saturation
+		if (_control_allocator_saturation_negative(i)) {
+			rate_error(i) = math::max(rate_error(i), 0.f);
+		}
+
+		// I term factor: reduce the I gain with increasing rate error.
+		// This counteracts a non-linear effect where the integral builds up quickly upon a large setpoint
+		// change (noticeable in a bounce-back effect after a flip).
+		// The formula leads to a gradual decrease w/o steps, while only affecting the cases where it should:
+		// with the parameter set to 400 degrees, up to 100 deg rate error, i_factor is almost 1 (having no effect),
+		// and up to 200 deg error leads to <25% reduction of I.
+		float i_factor = rate_error(i) / math::radians(400.f);
+		i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
+
+		// Perform the integration using a first order method
+		float rate_i = rate_error(i) + i_factor * _gain_geom_i(i) *att_error(i)*dt;
+
+		// do not propagate the result if out of range or invalid
+		if (PX4_ISFINITE(rate_i)) {
+			_geom_int(i) = math::constrain(rate_i, -_lim_int(i), _lim_int(i));
+		}
+	}
 }
 
 
 void RateControl::torqueNormalization()
 {
 	// Toque setpoint normalization
-	_torque(0) = PX4_ISFINITE(_torque(0))?  _torque(0) / _x_torque_max : 0.0f;
+	_torque(0) = PX4_ISFINITE(_torque(0)) ?  _torque(0) / _x_torque_max : 0.0f;
 	_torque(1) = PX4_ISFINITE(_torque(1)) ? _torque(1) / _y_torque_max : 0.0f;
 	_torque(2) = PX4_ISFINITE(_torque(2)) ? _torque(2) / _z_torque_max : 0.0f;
 

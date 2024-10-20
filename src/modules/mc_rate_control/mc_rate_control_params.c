@@ -485,7 +485,7 @@ PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -496,7 +496,7 @@ PARAM_DEFINE_FLOAT(GEOM_ROLL_P, 0.95f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -507,7 +507,7 @@ PARAM_DEFINE_FLOAT(GEOM_PITCH_P, 0.95f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -518,7 +518,7 @@ PARAM_DEFINE_FLOAT(GEOM_YAW_P, 0.95f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -529,7 +529,7 @@ PARAM_DEFINE_FLOAT(GEOM_ROLL_I, 0.00f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -540,7 +540,7 @@ PARAM_DEFINE_FLOAT(GEOM_PITCH_I, 0.00f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -552,7 +552,7 @@ PARAM_DEFINE_FLOAT(GEOM_YAW_I, 0.00f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -563,7 +563,7 @@ PARAM_DEFINE_FLOAT(GEOM_ROLL_RATE_D, 0.00f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */
@@ -574,7 +574,7 @@ PARAM_DEFINE_FLOAT(GEOM_PTCH_RTE_D, 0.00f);
  * Proportional gain for Thrusters horizontal position error
  *
  * @min 0.0
- * @max 10.0
+ * @max 20.0
  * @decimal 2
  * @group Thrusters Position Control
  */

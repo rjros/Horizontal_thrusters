@@ -604,6 +604,9 @@ void MulticopterPositionControl::Run()
 
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 			if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
+
+
+				PX4_INFO("Error");
 				// Failsafe
 				_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
 
@@ -634,18 +637,25 @@ void MulticopterPositionControl::Run()
 			//_control.getAttitudeSetpoint(attitude_setpoint);
 			attitude_setpoint.timestamp = hrt_absolute_time();
 
+
 			// Thrust planar parameters, changed by rc or by the QGroundControl
 			planar_attitude_status_s planar_status{};
 			planar_status.timestamp = _time_stamp_last_loop;
 
 			thrust_vectoring_setpoint_status_s thrust_vec_status;
+			geometric_setpoint_s geometric_sp;
+			geometric_sp.timestamp =hrt_absolute_time();
 
 			//Get the the attitude setpoint with the planar attitude mode
 			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
 
+
 			// thrust vectoring setpoint
-			_control.getThrustVectoringSetpoint(thrust_vec_status);
+
+			_control.getThrustVectoringSetpoint(geometric_sp);
+			// PX4_INFO("Thrust %f",double(geometric_sp.thrust[2]));
+
 
 
 			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
@@ -675,10 +685,9 @@ void MulticopterPositionControl::Run()
 			_planar_attitude_status_pub.publish(planar_status);
 
 			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
+			_geometric_setpoint_pub.publish(geometric_sp);
 
-			// PX4_INFO("Force vector %f %f %f ", double(thrust_vec_status.force[0]),double(thrust_vec_status.force[1]),double(thrust_vec_status.force[2]));
-
-			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
+			// Here place the new attitude setpoint
 			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
 
 		} else {

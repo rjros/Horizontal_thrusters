@@ -63,6 +63,9 @@
 // GEOMETRIC CONTROLLER CUSTOM MSGS
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/geometric_setpoint.h>
+
+
 
 
 using namespace time_literals;
@@ -111,7 +114,7 @@ private:
 
 	/// GEOMETRIC ////
 	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
-	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_setpoint_sub{this, ORB_ID(thrust_vectoring_setpoint_status)};
+	uORB::SubscriptionCallbackWorkItem _geometric_setpoint_sub{this,ORB_ID(geometric_setpoint)};
 
 
 	uORB::Publication<actuator_controls_status_s>	_actuator_controls_status_pub{ORB_ID(actuator_controls_status_0)};
@@ -140,7 +143,6 @@ private:
 	// Inertial Body matrix
 	matrix::SquareMatrix <float,3> _inertia_body= matrix::eye <float,3>();
 	matrix::Quaternionf _attitude;
-	matrix::Vector3f _angular_acceleration;
 
 
 
