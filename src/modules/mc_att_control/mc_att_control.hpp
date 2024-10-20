@@ -56,6 +56,9 @@
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 
 #include <AttitudeControl.hpp>
+// GEOMETRIC CONTROLLER
+#include <uORB/topics/geometric_setpoint.h>
+
 
 using namespace time_literals;
 
@@ -102,6 +105,10 @@ private:
 	uORB::Subscription _vehicle_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	uORB::Subscription _vehicle_local_position_sub{ORB_ID(vehicle_local_position)};
 	uORB::Subscription _vehicle_status_sub{ORB_ID(vehicle_status)};
+
+	//for logging purposes
+	uORB::SubscriptionCallbackWorkItem _geometric_setpoint_sub{this,ORB_ID(geometric_setpoint)};
+
 
 	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
 
@@ -152,7 +159,9 @@ private:
 		(ParamFloat<px4::params::MPC_MANTHR_MIN>)   _param_mpc_manthr_min,      /**< minimum throttle for stabilized */
 		(ParamFloat<px4::params::MPC_THR_MAX>)      _param_mpc_thr_max,         /**< maximum throttle for stabilized */
 		(ParamFloat<px4::params::MPC_THR_HOVER>)    _param_mpc_thr_hover,       /**< throttle at stationary hover */
-		(ParamInt<px4::params::MPC_THR_CURVE>)      _param_mpc_thr_curve        /**< throttle curve behavior */
+		(ParamInt<px4::params::MPC_THR_CURVE>)      _param_mpc_thr_curve,        /**< throttle curve behavior */
+		(ParamInt<px4::params::VECT_ATT_MODE>)      _param_vect_att_mode
+
 	)
 };
 

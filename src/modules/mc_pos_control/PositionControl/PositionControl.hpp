@@ -358,7 +358,7 @@ private:
 	float _yawspeed_sp{}; /** desired yaw-speed */
 
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
-	float _yaw_ddot_sp{}; /**desired yaw-accel*/
+	float _yaw_ddot_sp{0}; /**desired yaw-accel*/
 	bool planar_flag=false;
 
 

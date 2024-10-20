@@ -156,7 +156,14 @@ void addIfNotNanVector3f(matrix::Vector3f &setpoint, const matrix::Vector3f &add
 void setZeroIfNanVector3f(matrix::Vector3f &vector);
 
 
-////CUSTOM Functions////
+//// Geometric Controller CUSTOM Functions ////
+
+/**
+ * _addIfNotNan for Vector4f treating each element individually
+ * @see _addIfNotNan
+ */
+void GeometricAttitude(matrix::Vector3f &_thrust_sp, const float yaw_sp, const matrix::Quatf &att);
+
 /**
  * _addIfNotNan for Vector4f treating each element individually
  * @see _addIfNotNan
@@ -164,10 +171,10 @@ void setZeroIfNanVector3f(matrix::Vector3f &vector);
 void addIfNotNanVector4f(matrix::Vector4f &setpoint, const matrix::Vector4f &addition);
 
 /**
- * Overwrites elements of a Vector4f which are NaN with zero
+ * Calculates the attitude and thrust setpoints for the geometric controllers
  * @param vector possibly containing NAN elements
  */
-void setZeroIfNanVector4f(matrix::Vector4f &vector);
+void setZeroIfNanVector4f(matrix::Vector3f & thrust_sp,const float yaw_sp, const matrix::Quatf &att);
 
 void deriv_unit_vector( const matrix::Vector3f &A, const matrix::Vector3f &A_dot, const matrix::Vector3f &A_ddot, \
     matrix::Vector3f &q, matrix::Vector3f &q_dot, matrix::Vector3f &q_ddot );

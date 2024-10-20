@@ -76,6 +76,11 @@ MulticopterAttitudeControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+	if (!_geometric_setpoint_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
+
 
 	return true;
 }
@@ -194,6 +199,7 @@ MulticopterAttitudeControl::Run()
 {
 	if (should_exit()) {
 		_vehicle_attitude_sub.unregisterCallback();
+		_geometric_setpoint_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
@@ -315,11 +321,27 @@ MulticopterAttitudeControl::Run()
 			// publish rate setpoint
 			// Thrust calculation should be solved here
 			vehicle_rates_setpoint_s rates_setpoint{};
-			rates_setpoint.roll = rates_sp(0);
-			rates_setpoint.pitch = rates_sp(1);
-			rates_setpoint.yaw = rates_sp(2);
-			_thrust_setpoint_body.copyTo(rates_setpoint.thrust_body);
-			rates_setpoint.timestamp = hrt_absolute_time();
+			geometric_setpoint_s thrust_vect_sp{};
+
+			_geometric_setpoint_sub.copy(&thrust_vect_sp);
+
+			if (_param_vect_att_mode.get() == int(2) )
+			{
+				rates_setpoint.roll = thrust_vect_sp.wd[0];
+				rates_setpoint.pitch = thrust_vect_sp.wd[1];
+				rates_setpoint.yaw = thrust_vect_sp.wd[2];
+				Vector3f(thrust_vect_sp.thrust).copyTo(rates_setpoint.thrust_body);
+				rates_setpoint.timestamp = hrt_absolute_time();
+			}
+			else
+			{
+				rates_setpoint.roll = rates_sp(0);
+				rates_setpoint.pitch = rates_sp(1);
+				rates_setpoint.yaw = rates_sp(2);
+				_thrust_setpoint_body.copyTo(rates_setpoint.thrust_body);
+				rates_setpoint.timestamp = hrt_absolute_time();
+
+			}
 
 			_vehicle_rates_setpoint_pub.publish(rates_setpoint);
 		}

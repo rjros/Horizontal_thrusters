@@ -123,6 +123,11 @@ void thrustToZeroTiltAttitude(const Vector3f &thr_sp, const float yaw_sp, const 
 
 	Dcmf R_sp;
 
+	// const Eulerf euler{R_sp};
+
+	// euler.print();
+
+
 	// fill rotation matrix
 	for (int i = 0; i < 3; i++) {
 		R_sp(i, 0) = body_x(i);
@@ -407,8 +412,17 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
 
+	euler.print();
+
 
 }
+///// GEOMETRIC CONTROLLER FUNCTIONS /////
+
+
+///// GEOMETRIC CONTROLLER FUNCTIONS END  /////
+
+
+
 
 Vector2f constrainXY(const Vector2f &v0, const Vector2f &v1, const float &max)
 {

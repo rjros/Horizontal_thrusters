@@ -215,10 +215,13 @@ void RateControl::geometricController(const float dt,const bool landed)
 {
 
 	// Everything in the world frame
-
 	_Wd(0) = PX4_ISFINITE(_Wd(0) ) ?_Wd(0)  : _rates(0);
 	_Wd(1) = PX4_ISFINITE(_Wd(1)) ?_Wd(1)  : _rates(1);
 	_Wd(2) = PX4_ISFINITE(_Wd(2))  ?_Wd(2)  : _rates(2);
+
+	// _Wd.print();
+
+
 
 	_Wd_dot(0) = PX4_ISFINITE(_Wd_dot(0) ) ?_Wd_dot(0)  : _angular_acceleration(0);
 	_Wd_dot(1) = PX4_ISFINITE(_Wd_dot(1)) ? _Wd_dot(1)  : _angular_acceleration(1);
@@ -229,7 +232,6 @@ void RateControl::geometricController(const float dt,const bool landed)
 	Dcmf RdtR = _Rd.transpose() * _R;
 	Vector3f e_R = 0.5f * Dcmf(RdtR-RdtR.transpose()).vee();
 	Vector3f e_W = _rates - _R.transpose()*_Rd*_Wd;
-	_c2=1.0f;
 
 
 	_torque = -e_R.emult(_gain_geom_p) - e_W.emult(_gain_geom_d) - _geom_int\
@@ -265,11 +267,11 @@ void RateControl::updateIntegralGeometric(Vector3f &att_error, Vector3f &rate_er
 		// The formula leads to a gradual decrease w/o steps, while only affecting the cases where it should:
 		// with the parameter set to 400 degrees, up to 100 deg rate error, i_factor is almost 1 (having no effect),
 		// and up to 200 deg error leads to <25% reduction of I.
-		float i_factor = rate_error(i) / math::radians(400.f);
-		i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
+		// float i_factor = rate_error(i) / math::radians(400.f);
+		// i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
 
 		// Perform the integration using a first order method
-		float rate_i = rate_error(i) + i_factor * _gain_geom_i(i) *att_error(i)*dt;
+		float rate_i = rate_error(i) + _c2 * _gain_geom_i(i) *att_error(i)*dt;
 
 		// do not propagate the result if out of range or invalid
 		if (PX4_ISFINITE(rate_i)) {

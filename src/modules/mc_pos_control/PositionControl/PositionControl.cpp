@@ -176,9 +176,10 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 	if (valid) {
 
 
-
 	_yawspeed_sp = PX4_ISFINITE(_yawspeed_sp) ? _yawspeed_sp : 0.f;
 	_yaw_sp = PX4_ISFINITE(_yaw_sp) ? _yaw_sp : _yaw;
+	PX4_INFO("Yaw %f ", double(_yaw_sp));
+
 	//check value for the switch
 
 	bool distance_flag=false;
@@ -258,14 +259,12 @@ void PositionControl::_velocityControl(const float dt)
 	Vector3f vel_error = _vel_sp - _vel;
 	Vector3f acc_sp_velocity = vel_error.emult(_gain_vel_p) + _vel_int - _vel_dot.emult(_gain_vel_d);
 
-	PX4_INFO("Error %f %f ",(double)vel_error(2),(double)_vel_int(2));
 
 
 	// PX4_INFO("Velocity Estimate x %f and y %f  ",(double)_vel_dot(0),(double)_vel_dot(1));
 
 	// No control input from setpoints or corresponding states which are NAN
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_sp_velocity);
-	_acc_sp.print();
 	_accelerationControl();
 
 	// Integrator anti-windup in vertical direction
@@ -348,6 +347,7 @@ void PositionControl::_geometricControl(const float dt)
 
 	Vector3f position_sp= _pos_sp;
 	Vector3f velocity_sp = _vel_sp;
+	// Vector3f acceleration_sp= _acc_sp;
 
 	// PX4_INFO("Position %f velocity %f acceleration %f", double(_pos_sp(2)),double(_vel_sp(2)),double(_acc_sp(2)));
 
@@ -361,7 +361,7 @@ void PositionControl::_geometricControl(const float dt)
 
 	// pos_error.print();
 	float c1 = 1.0f;
-	float sigma = 5.0f;
+	float sigma = 2.0f;
 
 	Vector3f f_w(0.0f, 0.0f, 0.0f);
 
@@ -384,9 +384,9 @@ void PositionControl::_geometricControl(const float dt)
 	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d) \
 		-constrain(_geom_int,-sigma,sigma).emult(_gain_geom_i);
 
-	PX4_INFO("Position");
-	pos_error.print();
-	PX4_INFO("Velocity");
+	// PX4_INFO("Position");
+	// pos_error.print();
+	// PX4_INFO("Velocity");
 
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
@@ -408,11 +408,11 @@ void PositionControl::_geometricControl(const float dt)
 
 	//Intermidiate terms for rotational errors
 	// acceleration already consider in the force calculation
-	Vector3f ea = CONSTANTS_ONE_G*Vector3f(0.0f,0.0f,1)-f_total/_mass * b3;
+	Vector3f ea = Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)-f_total/_mass * b3;//-_acc_sp;
 
 	Vector3f A_dot = -vel_error.emult(_gain_geom_p) - ea.emult(_gain_geom_d);
 
-	float f_dot = -A_dot.dot(b3)-A.dot(b3_dot);
+	float f_dot = -A_dot*b3 - A * b3_dot;
 	Vector3f eb = -f_dot / _mass * b3 - f_total / _mass * b3_dot;// ... - jerk_sp
    	Vector3f A_ddot = -ea.emult(_gain_geom_p)-eb.emult(_gain_geom_d);//...+_mass*(snap/jounce)
 
@@ -422,15 +422,25 @@ void PositionControl::_geometricControl(const float dt)
 	ControlMath::deriv_unit_vector(-A, -A_dot, -A_ddot, b3c, b3c_dot, b3c_ddot);
 
 	//limit the tilt using the users parameters
-	ControlMath::limitTilt(b3c, Vector3f(0, 0, 1), _lim_tilt);
+	// ControlMath::limitTilt(b3c, Vector3f(0, 0, 1), _lim_tilt);
 
 	Vector3f b1d;
-
 	b1d = Vector3f(cos(_yaw_sp),sin(_yaw_sp),0.0f);
-	//Vector3f b1d_ddot(0.0f, 0.0f, 0.0f);
+	// // following math control
+	// // b1d.normalize();
+	// b1d.print();
+
+	// Vector3f b1d_ddot(0.0f, 0.0f, 0.0f);
+
 	Vector3f b1d_dot(-sin(_yaw_sp),cos(_yaw_sp),0.0f);
 	b1d_dot *= _yawspeed_sp;
 	Vector3f b1d_ddot(0.0f, 0.0f, _yaw_ddot_sp);
+
+
+	// Vector3f b1d_dot(0.0f,0.0f,0.0f);
+	// Vector3f b1d_ddot(0.0f, 0.0f,0.0f);
+
+
 
 	Vector3f A2 = -b1d.hat() * b3c;
 	Vector3f A2_dot = -b1d_dot.hat() * b3c - b1d.hat() * b3c_dot;
@@ -454,7 +464,11 @@ void PositionControl::_geometricControl(const float dt)
 	_Rd.setCol(0, b1c);
 	_Rd.setCol(1, b2c);
 	_Rd.setCol(2, b3c);
-	// _Rd.print();
+
+	Eulerf euler{_Rd};
+	euler.print();
+
+
 
 	Rd_dot.setCol(0, b1c_dot);
 	Rd_dot.setCol(1, b2c_dot);
@@ -469,6 +483,7 @@ void PositionControl::_geometricControl(const float dt)
 
 	_Wd_dot = Dcmf(_Rd.transpose() * Rd_ddot \
         		- _Wd.hat() * _Wd.hat()).vee();
+
 }
 
 
@@ -1092,8 +1107,42 @@ void PositionControl::getAttitudeSetpoint(const matrix::Quatf &att, const int ve
 					vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status)
 					const
 {
-	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint, planar_status,true);
-	attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
+
+
+
+	switch (vectoring_att_mode) {
+
+		case 1:
+			ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint, planar_status,true);
+			attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
+			break;//here
+
+		case 2:
+			{Quatf q_sp{_Rd};
+			q_sp.copyTo(attitude_setpoint.q_d);
+			Eulerf euler{_Rd};
+			attitude_setpoint.roll_body = euler.phi();
+			attitude_setpoint.pitch_body = euler.theta();
+			attitude_setpoint.yaw_body = euler.psi();
+
+			_thrust_sp.copyTo(attitude_setpoint.thrust_body);
+			attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
+			}
+			break;
+		case 3:
+			ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint, planar_status,true);
+			attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
+			break;//here
+
+		default:
+			ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint, planar_status,true);
+			attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
+			break;//here
+	}
+
+
+
+
 }
 
 

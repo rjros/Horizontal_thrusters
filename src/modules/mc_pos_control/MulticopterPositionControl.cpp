@@ -646,6 +646,7 @@ void MulticopterPositionControl::Run()
 			geometric_setpoint_s geometric_sp;
 			geometric_sp.timestamp =hrt_absolute_time();
 
+
 			//Get the the attitude setpoint with the planar attitude mode
 			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
@@ -684,6 +685,7 @@ void MulticopterPositionControl::Run()
 			planar_status.att_mode = _param_planar_att_mode.get();
 			_planar_attitude_status_pub.publish(planar_status);
 
+			//publish the attitude
 			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
 			_geometric_setpoint_pub.publish(geometric_sp);
 
