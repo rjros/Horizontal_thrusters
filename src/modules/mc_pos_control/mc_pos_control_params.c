@@ -1063,6 +1063,20 @@ PARAM_DEFINE_FLOAT(MPC_PTH_MAX, 1.0f);
  */
 PARAM_DEFINE_FLOAT(PLANAR_TH, 0.10f);
 
+
+////// GEOMETRIC CONTROLLER /////
+
+/**
+ * Geometric controller Enable/Disabled
+ *
+ * Set false to use the default PX4 controller and its corresponding parameters
+ * Set true to use geometric controllerand its corresponding parameters.
+ *
+ * @boolean
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MPC_GEOM_CTRL, 0);
+
 /**
  * Total weight of the uav in [kg].
  *
@@ -1116,7 +1130,6 @@ PARAM_DEFINE_FLOAT(MAX_HOR_THR, 8.55f);
  * @group Thrusters Position Control
  */
 PARAM_DEFINE_FLOAT(GEOM_X_P, 0.95f);
-
 
 // Controller Gains
 /**
