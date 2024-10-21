@@ -185,7 +185,7 @@ Vector3f RateControl::update_geom(const matrix::Vector3f &rate,const matrix::Vec
 
 	// PID control with feed forward
 	//Multiply the inertia tensor
-	const Vector3f rate_accel_pid =_gain_geom_p.emult(rate_error) + _rate_int - _gain_geom_d.emult(angular_accel);//+ _gain_ff.emult(rate_sp);
+	const Vector3f rate_accel_pid =_gain_geom_p.emult(rate_error) + _geom_int -_gain_geom_d.emult(angular_accel);//+ _gain_ff.emult(rate_sp);
 
 	Vector3f torque = _Ib*rate_accel_pid + rate.hat()*_Ib*rate;
 
@@ -197,7 +197,7 @@ Vector3f RateControl::update_geom(const matrix::Vector3f &rate,const matrix::Vec
 	}
 	// Inertia.print();
 	torqueNormalization(torque);
-	torque.print();
+	// torque.print();
 	return torque;
 }
 
@@ -247,17 +247,18 @@ void RateControl::updateIntegralGeometric(Vector3f &rate_error, const float dt)
 		// The formula leads to a gradual decrease w/o steps, while only affecting the cases where it should:
 		// with the parameter set to 400 degrees, up to 100 deg rate error, i_factor is almost 1 (having no effect),
 		// and up to 200 deg error leads to <25% reduction of I.
-		// float i_factor = rate_error(i) / math::radians(400.f);
-		// i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
+		float i_factor = rate_error(i) / math::radians(400.f);
+		i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
 
 		// Perform the integration using a first order method
-		float rate_i = _rate_int(i) + _c2 * _gain_geom_i(i) * rate_error(i) * dt;
+		float rate_i = _geom_int(i) + _c2 * _gain_geom_i(i) * rate_error(i) * dt;
 
 		// do not propagate the result if out of range or invalid
 		if (PX4_ISFINITE(rate_i)) {
 			_geom_int(i) = math::constrain(rate_i, -_lim_int(i), _lim_int(i));
 		}
 	}
+
 }
 
 
