@@ -194,8 +194,6 @@ void MulticopterPositionControl::parameters_update(bool force)
 		//Control Gains fot the planar control
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
-
-
 		// Check that the design parameters are inside the absolute maximum constraints
 		if (_param_mpc_xy_cruise.get() > _param_mpc_xy_vel_max.get()) {
 			_param_mpc_xy_cruise.set(_param_mpc_xy_vel_max.get());
@@ -606,8 +604,6 @@ void MulticopterPositionControl::Run()
 			if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
 
 
-				PX4_INFO("Error");
-				// Failsafe
 				_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
 
 				_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
@@ -648,16 +644,25 @@ void MulticopterPositionControl::Run()
 
 
 			//Get the the attitude setpoint with the planar attitude mode
-			_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
+			if (_param_mpc_geom_ctrl.get())
+			{
+				_control.getGeometricAttitudeSetpoint(attitude_setpoint);
+
+			}
+			else{
+
+				_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
 							attitude_setpoint, planar_status);
+
+			}
+
+
 
 
 			// thrust vectoring setpoint
 
-			_control.getThrustVectoringSetpoint(geometric_sp);
+			// _control.getThrustVectoringSetpoint(geometric_sp);
 			// PX4_INFO("Thrust %f",double(geometric_sp.thrust[2]));
-
-
 
 			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
 

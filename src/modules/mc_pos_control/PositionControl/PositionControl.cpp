@@ -178,7 +178,6 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 
 	_yawspeed_sp = PX4_ISFINITE(_yawspeed_sp) ? _yawspeed_sp : 0.f;
 	_yaw_sp = PX4_ISFINITE(_yaw_sp) ? _yaw_sp : _yaw;
-	PX4_INFO("Yaw %f ", double(_yaw_sp));
 
 	//check value for the switch
 
@@ -204,12 +203,13 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 
 	case 2:
 		_geometricControl(dt);
-		_normalization();
 		acc_valid = _thrust_sp.isAllFinite();
 		break;
 	case 3:
 		_positionControl();
 		_velocityControl(dt);
+		_geometricControl(dt);
+
 		acc_valid = (_acc_sp.isAllFinite() && _thr_sp.isAllFinite());
 
 		// _geometricControl(dt);
@@ -312,6 +312,8 @@ void PositionControl::_velocityControl(const float dt)
 	_vel_int += vel_error.emult(_gain_vel_i) * dt;
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
+	_vel_int.print();
+	// _thr_sp.print();
 	// _vel_int.print();
 	// PX4_INFO("Thrust  %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
 }
@@ -337,154 +339,117 @@ void PositionControl::_accelerationControl()
 /////Simple controller/////
 void PositionControl::_geometricControl(const float dt)
 {
-
 	//Normal UAV flight using the geometric controller
-	Dcmf R_w =_attitude; // Rotation matrix of the Body frame
-	SquareMatrix<float,3> S_wb=_rates.hat();
 
 	// Constrain the velocities  (pos-pos)
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
 
-	Vector3f position_sp= _pos_sp;
-	Vector3f velocity_sp = _vel_sp;
 	// Vector3f acceleration_sp= _acc_sp;
 
-	// PX4_INFO("Position %f velocity %f acceleration %f", double(_pos_sp(2)),double(_vel_sp(2)),double(_acc_sp(2)));
-
-
-	Vector3f pos_error = (_pos-position_sp);
-	Vector3f vel_error = (_vel-velocity_sp);
-
+	Vector3f pos_error = (_pos-_pos_sp);
+	Vector3f vel_error = (_vel-_vel_sp);
 
 	ControlMath::setZeroIfNanVector3f(pos_error);
 	ControlMath::setZeroIfNanVector3f(vel_error);
 
-	// pos_error.print();
-	float c1 = 1.0f;
-	float sigma = 2.0f;
+	// for(int i=0; i<3; i++){
+	// 	float deltaI = (vel_error(i) + c1 * pos_error(i)) * dt;
 
-	Vector3f f_w(0.0f, 0.0f, 0.0f);
+	// 		if(PX4_ISFINITE(deltaI)){
+	// 			if( (_geom_int(i) <= -sigma && deltaI < 0.0f) ||
+	// 					(_geom_int(i) >= sigma && deltaI > 0.0f) ){
+	// 				deltaI = 0.0f;
+	// 			}
 
-	for(int i=0; i<3; i++){
-	float deltaI = (vel_error(i) + c1 * pos_error(i)) * dt;
+	// 			_geom_int(i) += deltaI;
+	// 		}
+	// 	}
 
-		if(PX4_ISFINITE(deltaI)){
-			if( (_geom_int(i) <= -sigma && deltaI < 0.0f) ||
-					(_geom_int(i) >= sigma && deltaI > 0.0f) ){
-				deltaI = 0.0f;
-			}
-
-			_geom_int(i) += deltaI;
-		}
-	}
 	ControlMath::setZeroIfNanVector3f(_geom_int);
 
 	// Constrain the velocity vectors to follow constrants
-
 	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d) \
-		-constrain(_geom_int,-sigma,sigma).emult(_gain_geom_i);
+		-_geom_int;
 
-	// PX4_INFO("Position");
-	// pos_error.print();
-	// PX4_INFO("Velocity");
-
-
+	// Allows takeoff
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
-	f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
+	_f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
-	Vector3f A = f_w;
+	_geom_int += vel_error.emult(_geom_int) * dt;
+	_geom_int(2) = math::min(fabsf(_geom_int(2)), CONSTANTS_ONE_G) * sign(_geom_int(2));
+	_geom_int.print();
 
-	Vector3f b3 = R_w.col(2);
-	Matrix3f R_dot = R_w*S_wb;
-	Vector3f b3_dot = R_dot.col(2);
-
-	// limit the tilt based on the desired attitude
-	_thrust_sp(0) = _thrust_sp(1) = 0.0f;
-	_thrust_sp(2) = f_w.dot(b3);
-
-	// _thrust_sp.print();
-	float f_total = -f_w.dot(b3);
-
-	//Intermidiate terms for rotational errors
-	// acceleration already consider in the force calculation
-	Vector3f ea = Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)-f_total/_mass * b3;//-_acc_sp;
-
-	Vector3f A_dot = -vel_error.emult(_gain_geom_p) - ea.emult(_gain_geom_d);
-
-	float f_dot = -A_dot*b3 - A * b3_dot;
-	Vector3f eb = -f_dot / _mass * b3 - f_total / _mass * b3_dot;// ... - jerk_sp
-   	Vector3f A_ddot = -ea.emult(_gain_geom_p)-eb.emult(_gain_geom_d);//...+_mass*(snap/jounce)
-
-	//Attitude  Calculation for SO3 decoupled yaw
-	Vector3f b3c,b3c_dot,b3c_ddot;
-
-	ControlMath::deriv_unit_vector(-A, -A_dot, -A_ddot, b3c, b3c_dot, b3c_ddot);
-
-	//limit the tilt using the users parameters
-	// ControlMath::limitTilt(b3c, Vector3f(0, 0, 1), _lim_tilt);
-
-	Vector3f b1d;
-	b1d = Vector3f(cos(_yaw_sp),sin(_yaw_sp),0.0f);
-	// // following math control
-	// // b1d.normalize();
-	// b1d.print();
-
-	// Vector3f b1d_ddot(0.0f, 0.0f, 0.0f);
-
-	Vector3f b1d_dot(-sin(_yaw_sp),cos(_yaw_sp),0.0f);
-	b1d_dot *= _yawspeed_sp;
-	Vector3f b1d_ddot(0.0f, 0.0f, _yaw_ddot_sp);
-
-
-	// Vector3f b1d_dot(0.0f,0.0f,0.0f);
-	// Vector3f b1d_ddot(0.0f, 0.0f,0.0f);
-
-
-
-	Vector3f A2 = -b1d.hat() * b3c;
-	Vector3f A2_dot = -b1d_dot.hat() * b3c - b1d.hat() * b3c_dot;
-	Vector3f A2_ddot = -b1d_ddot.hat() * b3c \
-		- 2.0f * b1d_dot.hat() * b3c_dot \
-		- b1d.hat() * b3c_ddot;
-
-	Vector3f b2c, b2c_dot, b2c_ddot;
-	ControlMath::deriv_unit_vector(A2, A2_dot, A2_ddot, b2c, b2c_dot, b2c_ddot);
-
-	Vector3f b1c = b2c.hat() * b3c;
-	Vector3f b1c_dot = b2c_dot.hat() * b3c + b2c.hat() * b3c_dot;
-	Vector3f b1c_ddot = b2c_ddot.hat() * b3c \
-		+ 2.0f * b2c_dot.hat() * b3c_dot \
-		+ b2c.hat() * b3c_ddot;
-
-	Matrix3f Rd_dot, Rd_ddot;
-
-	//_lim_tilt
-
-	_Rd.setCol(0, b1c);
-	_Rd.setCol(1, b2c);
-	_Rd.setCol(2, b3c);
-
-	Eulerf euler{_Rd};
-	euler.print();
-
-
-
-	Rd_dot.setCol(0, b1c_dot);
-	Rd_dot.setCol(1, b2c_dot);
-	Rd_dot.setCol(2, b3c_dot);
-
-	Rd_ddot.setCol(0, b1c_ddot);
-	Rd_ddot.setCol(1, b2c_ddot);
-	Rd_ddot.setCol(2, b3c_ddot);
-
-
-	_Wd = Dcmf(_Rd.transpose() * Rd_dot).vee();
-
-	_Wd_dot = Dcmf(_Rd.transpose() * Rd_ddot \
-        		- _Wd.hat() * _Wd.hat()).vee();
 
 }
+
+void PositionControl::getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &att_sp)
+{
+
+	Dcmf _R =_attitude; // Rotation matrix of the Body frame
+
+	Vector3f body_z = -_f_w/_f_w.norm();
+
+	if (body_z.norm_squared() < FLT_EPSILON) {
+		body_z(2) = 1.f;
+	}
+
+	body_z.normalize();
+
+	// vector of desired yaw direction in XY plane, rotated by PI/2
+	const Vector3f y_C{-sinf(_yaw_sp), cosf(_yaw_sp), 0.f};
+
+	// desired body_x axis, orthogonal to body_z
+	Vector3f body_x = y_C % body_z;
+
+	// keep nose to front while inverted upside down
+	if (body_z(2) < 0.0f) {
+		body_x = -body_x;
+	}
+
+	if (fabsf(body_z(2)) < 0.000001f) {
+		// desired thrust is in XY plane, set X downside to construct correct matrix,
+		// but yaw component will not be used actually
+		body_x.zero();
+		body_x(2) = 1.0f;
+	}
+
+	body_x.normalize();
+
+	// desired body_y axis
+	const Vector3f body_y = body_z % body_x;
+
+	Dcmf R_sp;
+
+	// fill rotation matrix
+	for (int i = 0; i < 3; i++) {
+		R_sp(i, 0) = body_x(i);
+		R_sp(i, 1) = body_y(i);
+		R_sp(i, 2) = body_z(i);
+	}
+
+	// copy quaternion setpoint to attitude setpoint topic
+	const Quatf q_sp{R_sp};
+	q_sp.copyTo(att_sp.q_d);
+
+	// calculate euler angles, for logging only, must not be used for control
+	const Eulerf euler{R_sp};
+	att_sp.roll_body = euler.phi();
+	att_sp.pitch_body = euler.theta();
+	att_sp.yaw_body = euler.psi();
+
+	// use for the 3d thrust
+	Vector3f _f_b = _R.transpose() *_f_w;
+
+	_normalization(_f_b);
+	// _f_b.print();
+	Vector3f(0.0f,0.0f,_f_b(2)).copyTo(att_sp.thrust_body);
+	att_sp.yaw_sp_move_rate = _yawspeed_sp;
+
+
+}
+
+
 
 
 void PositionControl::getThrustVectoringSetpoint(geometric_setpoint_s &thrust_vectoring_setpoint)const
@@ -515,7 +480,7 @@ void PositionControl::getThrustVectoringSetpoint(geometric_setpoint_s &thrust_ve
 
 
 
-void PositionControl::_normalization()
+void PositionControl::_normalization(matrix::Vector3f &thrust_sp)
 {
 	//Thrust Setpoint normalization
 	// _thr_sp(0) = PX4_ISFINITE(_thr_sp(0))? _thr_sp(0) / _max_thrust_x : 0.0f;
@@ -526,14 +491,13 @@ void PositionControl::_normalization()
 	// _thr_sp(1) = math::constrain(_thr_sp(1), -1.0f, 1.0f);
 	// _thr_sp(2) = math::constrain(_thr_sp(2), -1.0f, 1.0f);
 
+	thrust_sp(0) = PX4_ISFINITE(thrust_sp(0))? thrust_sp(0) / _max_thrust_x : 0.0f;
+	thrust_sp(1) = PX4_ISFINITE(thrust_sp(1)) ? thrust_sp(1) / _max_thrust_y : 0.0f;
+	thrust_sp(2) = PX4_ISFINITE(thrust_sp(2)) ? thrust_sp(2) / _max_thrust_z : 0.0f;
 
-	_thrust_sp(0) = PX4_ISFINITE(_thrust_sp(0))? _thrust_sp(0) / _max_thrust_x : 0.0f;
-	_thrust_sp(1) = PX4_ISFINITE(_thrust_sp(1)) ? _thrust_sp(1) / _max_thrust_y : 0.0f;
-	_thrust_sp(2) = PX4_ISFINITE(_thrust_sp(2)) ? _thrust_sp(2) / _max_thrust_z : 0.0f;
-
-	_thrust_sp(0) = math::constrain(_thrust_sp(0), -1.0f, 1.0f);
-	_thrust_sp(1) = math::constrain(_thrust_sp(1), -1.0f, 1.0f);
-	_thrust_sp(2) = math::constrain(_thrust_sp(2), -1.0f, 1.0f);
+	thrust_sp(0) = math::constrain(thrust_sp(0), -1.0f, 1.0f);
+	thrust_sp(1) = math::constrain(thrust_sp(1), -1.0f, 1.0f);
+	thrust_sp(2) = math::constrain(thrust_sp(2), -1.0f, 1.0f);
 }
 
 

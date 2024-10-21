@@ -99,7 +99,8 @@ public:
 	 * @param dt desired vehicle angular rate setpoint
 	 * @return [-1,1] normalized torque vector to apply to the vehicle
 	 */
-	matrix::Vector3f update_mc(const float dt,const bool landed);
+	matrix::Vector3f update_geom(const matrix::Vector3f &rate,const matrix::Vector3f &rate_sp,
+				const matrix::Vector3f &angular_accel, const float dt, const bool landed);
 
 	/**
 	 * Run one control loop cycle calculation
@@ -168,8 +169,8 @@ private:
 	void geometricController(const float dt,const bool landed);
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
 
-	void updateIntegralGeometric(matrix::Vector3f &att_error, matrix::Vector3f &rate_error, const float dt);
-	void torqueNormalization();
+	void updateIntegralGeometric(matrix::Vector3f &rate_error, const float dt);
+	void torqueNormalization(matrix::Vector3f &torque);
 
 	// Gains
 	matrix::Vector3f _gain_p; ///< rate control proportional gain for all axes x, y, z

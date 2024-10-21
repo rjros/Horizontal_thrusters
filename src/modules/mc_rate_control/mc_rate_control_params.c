@@ -489,7 +489,7 @@ PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_ROLL_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_ROLLR_P, 0.95f);
 
 // Controller Gains
 /**
@@ -500,7 +500,7 @@ PARAM_DEFINE_FLOAT(GEOM_ROLL_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_PITCH_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_PITCHR_P, 0.95f);
 
 // Controller Gains
 /**
@@ -511,7 +511,7 @@ PARAM_DEFINE_FLOAT(GEOM_PITCH_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_YAW_P, 0.95f);
+PARAM_DEFINE_FLOAT(GEOM_YAWR_P, 0.95f);
 
 // Controller Gains
 /**
@@ -522,7 +522,7 @@ PARAM_DEFINE_FLOAT(GEOM_YAW_P, 0.95f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_ROLL_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_ROLLR_I, 0.00f);
 
 // Controller Gains
 /**
@@ -533,7 +533,7 @@ PARAM_DEFINE_FLOAT(GEOM_ROLL_I, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_PITCH_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_PITCHR_I, 0.00f);
 
 // Controller Gains
 /**
@@ -544,7 +544,7 @@ PARAM_DEFINE_FLOAT(GEOM_PITCH_I, 0.00f);
  * @decimal 2
  * @group Thrusters Position Control
  */
-PARAM_DEFINE_FLOAT(GEOM_YAW_I, 0.00f);
+PARAM_DEFINE_FLOAT(GEOM_YAWR_I, 0.00f);
 
 
 // Controller Gains

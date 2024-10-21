@@ -264,6 +264,15 @@ public:
 	 */
 	void getThrustVectoringSetpoint(geometric_setpoint_s &vectoring_setpoint) const;
 
+	/**
+	 * Get the controllers output attitude setpoint
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
+	void getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_setpoint) ;
+
+
+
+
 
 
 
@@ -296,7 +305,8 @@ private:
 
 	//Gains for the planar controller/
 	void _geometricControl(const float dt); ///< Position proportional control
-	void _normalization();
+	void _normalization(matrix::Vector3f &thrust_sp);
+
 
 
 
@@ -373,6 +383,8 @@ private:
 	matrix::Vector3f _gain_geom_i; ///< Velocity control proportional gain
 	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
 	matrix::Vector3f _geom_int;
+	matrix::Vector3f _f_w{};
+
 	matrix::Vector3f _thrust_sp; /**< desired thrust */
 
 

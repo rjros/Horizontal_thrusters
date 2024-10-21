@@ -160,7 +160,12 @@ private:
 		(ParamFloat<px4::params::MPC_THR_MAX>)      _param_mpc_thr_max,         /**< maximum throttle for stabilized */
 		(ParamFloat<px4::params::MPC_THR_HOVER>)    _param_mpc_thr_hover,       /**< throttle at stationary hover */
 		(ParamInt<px4::params::MPC_THR_CURVE>)      _param_mpc_thr_curve,        /**< throttle curve behavior */
-		(ParamInt<px4::params::VECT_ATT_MODE>)      _param_vect_att_mode
+
+		(ParamBool<px4::params::MPC_GEOM_CTRL>)     _param_mpc_geom_ctrl,
+		(ParamInt<px4::params::VECT_ATT_MODE>)      _param_vect_att_mode,
+		(ParamFloat<px4::params::GEOM_ROLL_P>)      _param_mpc_geom_r_p,
+		(ParamFloat<px4::params::GEOM_PITCH_P>)     _param_mpc_geom_p_p,
+		(ParamFloat<px4::params::GEOM_YAW_P>)       _param_mpc_geom_y_p
 
 	)
 };

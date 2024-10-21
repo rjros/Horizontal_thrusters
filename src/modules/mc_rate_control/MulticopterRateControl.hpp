@@ -182,6 +182,8 @@ private:
 
 		(ParamBool<px4::params::MC_BAT_SCALE_EN>) _param_mc_bat_scale_en,
 
+		///// GEOMETRIC CONTROLLER ////
+		(ParamBool<px4::params::MPC_GEOM_CTRL>)   _param_mpc_geom_ctrl,
 		(ParamFloat<px4::params::MC_IXX>) 		_param_mc_ixx,                        	/**< Ixx component of the inertial tensor */
 		(ParamFloat<px4::params::MC_IYY>) 		_param_mc_iyy,                        	/**< Iyy component of the inertial tensor */
 		(ParamFloat<px4::params::MC_IZZ>) 		_param_mc_izz,                        	/**< Izz component of the inertial tensor */
@@ -191,14 +193,13 @@ private:
 		(ParamInt<px4::params::VECT_ATT_MODE>) 		_param_vect_att_mode,			/**< Attitude mode parameter */
 
 
+		(ParamFloat<px4::params::GEOM_ROLLR_P>)    	_param_mpc_geom_rr_p,
+		(ParamFloat<px4::params::GEOM_PITCHR_P>)    	_param_mpc_geom_pr_p,
+		(ParamFloat<px4::params::GEOM_YAWR_P>)    	_param_mpc_geom_yr_p,
 
-		(ParamFloat<px4::params::GEOM_ROLL_P>)    	_param_mpc_geom_r_p,
-		(ParamFloat<px4::params::GEOM_PITCH_P>)    	_param_mpc_geom_p_p,
-		(ParamFloat<px4::params::GEOM_YAW_P>)    	_param_mpc_geom_y_p,
-
-		(ParamFloat<px4::params::GEOM_ROLL_I>)    	_param_mpc_geom_r_i,
-		(ParamFloat<px4::params::GEOM_PITCH_I>)    	_param_mpc_geom_p_i,
-		(ParamFloat<px4::params::GEOM_YAW_I>)    	_param_mpc_geom_y_i,
+		(ParamFloat<px4::params::GEOM_ROLLR_I>)    	_param_mpc_geom_rr_i,
+		(ParamFloat<px4::params::GEOM_PITCHR_I>)    	_param_mpc_geom_pr_i,
+		(ParamFloat<px4::params::GEOM_YAWR_I>)    	_param_mpc_geom_yr_i,
 
 		(ParamFloat<px4::params::GEOM_ROLL_RATE_D>)   	_param_mpc_geom_rr_d,
 		(ParamFloat<px4::params::GEOM_PTCH_RTE_D>)    	_param_mpc_geom_pr_d,

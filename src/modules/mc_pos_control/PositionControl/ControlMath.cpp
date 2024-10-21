@@ -412,7 +412,9 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
 
-	euler.print();
+	// Vector3f zd = R_sp.col(2);
+	// zd.print();
+	// euler.print();
 
 
 }

@@ -149,7 +149,7 @@ MulticopterRateControl::Run()
 	/* run controller on gyro changes */
 	vehicle_angular_velocity_s angular_velocity;
 	vehicle_attitude_s _vehicle_attitude;
-	geometric_setpoint_s thrust_vect_sp;
+	// geometric_setpoint_s thrust_vect_sp;
 
 	if (_vehicle_angular_velocity_sub.update(&angular_velocity)) {
 
@@ -249,30 +249,24 @@ MulticopterRateControl::Run()
 			// Vector3f thrust_setpoint = {0.0f,0.0f,0.0f};
 
 			_vehicle_attitude_sub.update(&_vehicle_attitude);
-			_geometric_setpoint_sub.copy(&thrust_vect_sp);
 			_attitude = Quaternionf(_vehicle_attitude.q);
 
 			// Depeding on the mode change the controller
-			if (_param_vect_att_mode.get() == int(2) ) {
+
+			// att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+
+			if (_param_mpc_geom_ctrl.get())  {
 
 				_rate_control.setInertiaMatrix(_inertia_body);
 				_rate_control.setTorqueLimit(_param_mpc_x_torque_max.get(),_param_mpc_y_torque_max.get(),_param_mpc_z_torque_max.get());
 				_rate_control.setGeometricAttitudeGains(
-				Vector3f(_param_mpc_geom_r_p.get(), _param_mpc_geom_p_p.get(), _param_mpc_geom_y_p.get()),
-				Vector3f(_param_mpc_geom_r_i.get(), _param_mpc_geom_p_i.get(), _param_mpc_geom_y_i.get()),
+				Vector3f(_param_mpc_geom_rr_p.get(), _param_mpc_geom_pr_p.get(), _param_mpc_geom_yr_p.get()),
+				Vector3f(_param_mpc_geom_rr_i.get(), _param_mpc_geom_pr_i.get(), _param_mpc_geom_yr_i.get()),
 				Vector3f(_param_mpc_geom_rr_d.get(), _param_mpc_geom_pr_d.get(), _param_mpc_geom_yr_d.get()));
 
 				_rate_control.setAttitudeStates(_attitude,rates,angular_accel);
-				_rate_control.setAttitudeSetpoint(thrust_vect_sp);
 				// att_control_vec = _rate_control.update_mc(dt);
-				att_control = _rate_control.update_mc(dt,_maybe_landed || _landed);
-
-
-				_thrust_setpoint = Vector3f(thrust_vect_sp.thrust);
-				// _thrust_setpoint.print();
-				// PX4_INFO("Torque %f %f %f", double(att_control_vec(0)),double(att_control_vec(1)),double(att_control_vec(2)));
-				// _attitude.print();
-				// att_control.print();
+				att_control = _rate_control.update_geom(rates,_rates_setpoint,angular_accel,dt,_maybe_landed || _landed);
 
 			}
 			else {
