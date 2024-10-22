@@ -315,11 +315,11 @@
         <pose> 0.0 0 0 0 0 0 </pose>
         <inertial>
           <pose> 0 0 0.016 0 0 0</pose>
-          <mass>0.560</mass>
+          <mass>0.314</mass>
           <inertia>
             <ixx>0.0001</ixx>
-            <iyy>0.0300</iyy>
-            <izz>0.0300</izz>
+            <iyy>0.0168</iyy>
+            <izz>0.0167</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">

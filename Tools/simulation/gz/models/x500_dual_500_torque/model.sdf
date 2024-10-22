@@ -366,13 +366,13 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
-        <inertial>
+          <inertial>
           <pose> 0 0 0.016 0 0 0</pose>
-          <mass>0.661</mass>
+          <mass>0.348</mass>
             <inertia>
               <ixx>0.0001</ixx>
-              <iyy>0.0552</iyy>
-              <izz>0.0552</izz>
+              <iyy>0.0291</iyy>
+              <izz>0.0290</izz>
           </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">

@@ -376,8 +376,8 @@
           <mass>0.359</mass>
           <inertia>
             <ixx>0.0001</ixx>
-            <iyy>0.0049</iyy>
-            <izz>0.0049</izz>
+            <iyy>0.0033</iyy>
+            <izz>0.0033</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_visual">
