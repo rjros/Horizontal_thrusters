@@ -82,7 +82,6 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	if (!landed) {
 		updateIntegral(rate_error, dt);
 	}
-	torque.print();
 
 	return torque;
 }

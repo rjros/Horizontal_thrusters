@@ -125,6 +125,8 @@ void PositionControl::setState(const PositionControlStates &states)
 	_vel_dot = states.acceleration;
 	_rates = states.rates;
 	_attitude = states.attitude;
+	_R =_attitude; // Rotation matrix of the Body frame
+
 }
 
 
@@ -312,7 +314,7 @@ void PositionControl::_velocityControl(const float dt)
 	_vel_int += vel_error.emult(_gain_vel_i) * dt;
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
-	_vel_int.print();
+	// _vel_int.print();
 	// _thr_sp.print();
 	// _vel_int.print();
 	// PX4_INFO("Thrust  %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
@@ -342,7 +344,10 @@ void PositionControl::_geometricControl(const float dt)
 	//Normal UAV flight using the geometric controller
 
 	// Constrain the velocities  (pos-pos)
+	// _vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
+	// _vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
+
 
 	// Vector3f acceleration_sp= _acc_sp;
 
@@ -351,19 +356,8 @@ void PositionControl::_geometricControl(const float dt)
 
 	ControlMath::setZeroIfNanVector3f(pos_error);
 	ControlMath::setZeroIfNanVector3f(vel_error);
+	// vel_error.print();
 
-	// for(int i=0; i<3; i++){
-	// 	float deltaI = (vel_error(i) + c1 * pos_error(i)) * dt;
-
-	// 		if(PX4_ISFINITE(deltaI)){
-	// 			if( (_geom_int(i) <= -sigma && deltaI < 0.0f) ||
-	// 					(_geom_int(i) >= sigma && deltaI > 0.0f) ){
-	// 				deltaI = 0.0f;
-	// 			}
-
-	// 			_geom_int(i) += deltaI;
-	// 		}
-	// 	}
 
 	ControlMath::setZeroIfNanVector3f(_geom_int);
 
@@ -372,13 +366,19 @@ void PositionControl::_geometricControl(const float dt)
 		-_geom_int;
 
 	// Allows takeoff
+	// _acc_sp.print();
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
-
 	_f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
-	_geom_int += vel_error.emult(_geom_int) * dt;
+	// if ((_f_w(2) >= (-_lim_thr_min*_max_thrust_z) && vel_error(2) >= 0.0f) ||
+	// (_f_w(2) <= (-_lim_thr_max*_max_thrust_z) && vel_error(2) <= 0.0f)) {
+	// vel_error(2) = 0.f;
+	// }
+
+	// _f_w.print();
+	_geom_int += vel_error.emult(_gain_geom_i)* dt;
 	_geom_int(2) = math::min(fabsf(_geom_int(2)), CONSTANTS_ONE_G) * sign(_geom_int(2));
-	_geom_int.print();
+	// _geom_int.print();
 
 
 }
@@ -386,7 +386,7 @@ void PositionControl::_geometricControl(const float dt)
 void PositionControl::getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &att_sp)
 {
 
-	Dcmf _R =_attitude; // Rotation matrix of the Body frame
+	// Dcmf _R =_attitude; // Rotation matrix of the Body frame
 
 	Vector3f body_z = -_f_w/_f_w.norm();
 
@@ -445,6 +445,7 @@ void PositionControl::getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &
 	// _f_b.print();
 	Vector3f(0.0f,0.0f,_f_b(2)).copyTo(att_sp.thrust_body);
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
+
 
 
 }
@@ -865,7 +866,7 @@ void PositionControl::_single_velocityControl(const float dt, const float yaw_sp
 {
 	// PID velocity control
 	Vector3f vel_error = _vel_sp - _vel;
-	vel_error.print();
+	// vel_error.print();
 	//gains are the same as the ones used in the tilting mode, this should be adjusted by the user
 	//The parametes should be gain_vel_p and gain_vel_d
 	Vector3f acc_sp_velocity = vel_error.emult(_gain_planar_vel_p) + _vel_int - _vel_dot.emult(_gain_planar_vel_d);

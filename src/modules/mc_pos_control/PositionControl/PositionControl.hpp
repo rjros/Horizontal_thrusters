@@ -377,6 +377,8 @@ private:
 	float _max_thrust_x {0}; ///< Force in [N]
 	float _max_thrust_y {0};  ///< Force in [N]
 	float _max_thrust_z {0};  ///< Force in [N]
+	matrix::Dcmf _R ; // Rotation matrix of the Body frame
+
 
 	// Gains for geometric controller
 	matrix::Vector3f _gain_geom_p; ///< Position control proportional gain
