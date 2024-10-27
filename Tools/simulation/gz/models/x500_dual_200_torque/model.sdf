@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
   <model name='x500_dual_200_torque'>
-    <pose>0 0 0 0 0 0</pose>
+    <pose>0 0 0 0 0 1.57</pose>
     <static>false</static>
     <link name="sensor_link">
      <inertial>
@@ -46,14 +46,17 @@
       <gravity>true</gravity>
       <self_collide>false</self_collide>
       <velocity_decay/>
-      <pose>0 0 0.395 0 0 1.57</pose>
-     <inertial>
-        <pose>0 0 0 0 0 0</pose>
-        <mass>2.0</mass>
+      <pose>0 0 0.395 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0.015702 0 0 0</pose>
+        <mass>2.17</mass>
         <inertia>
-          <ixx>0.0013</ixx>
-          <iyy>0.0013</iyy>
-          <izz>0.0025</izz>
+          <ixx>0.0037</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0037</iyy>
+          <iyz>0</iyz>
+          <izz>0.0061</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -133,11 +136,11 @@
         <pose>0.176876 -0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_0_visual">
@@ -192,11 +195,11 @@
         <pose>-0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_1_visual">
@@ -251,11 +254,11 @@
         <pose> 0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_2_visual">
@@ -310,11 +313,11 @@
         <pose> -0.176876 -0.176876 0.450 0 0 0 </pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_3_visual">
@@ -366,31 +369,31 @@
 <!-- EDF Frame 200  -->
 
 <!-- Manipulator arm  -->
-    <link name="thrusters_frame">
+    <link name="thrusters_frame_top">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
-        <inertial>
-          <pose> 0 0 0.016 0 0 0</pose>
-          <mass>0.359</mass>
+         <inertial>
+          <pose> 0 0 0.062 0 0 0</pose>
+          <mass>0.053</mass>
           <inertia>
-            <ixx>0.0001</ixx>
-            <iyy>0.0033</iyy>
-            <izz>0.0033</izz>
-        </inertia>
+              <ixx>8.6125e-07</ixx>
+              <iyy>7.0710e-04</iyy>
+              <izz>7.0710e-04</izz>
+          </inertia>
         </inertial>
-       <visual name="thrusters_frame_visual">
+       <visual name="thrusters_frame_top_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/thrusters_frame_200.dae</uri>
+            <uri>model://x500_dual_200/meshes/thrusters_frame_200_top.dae</uri>
           </mesh>
         </geometry>
       </visual>
       <!-- Correct the collision to be simple box -->
-      <collision name="thrusters_frame_collision">
+      <collision name="thrusters_frame_top_collision">
         <pose> 0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -411,9 +414,60 @@
       </collision>
     </link>
     <!-- Correct the collision to be simple box -->
-    <joint name="thrusters_frame_joint" type="fixed">
+    <joint name="thrusters_frame_top_joint" type="fixed">
       <parent>base_link</parent>
-      <child>thrusters_frame</child>
+      <child>thrusters_frame_top</child>
+    </joint>
+
+<!-- Manipulator arm  -->
+    <link name="thrusters_frame_low">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.0 0 0.395 0 0 0 </pose>
+        <inertial>
+          <pose> 0 0 -0.030596 0 0 0</pose>
+          <mass>0.081</mass>
+          <inertia>
+              <ixx>1.3162e-06</ixx>
+              <iyy>0.0011</iyy>
+              <izz>0.0011</izz>
+          </inertia>
+        </inertial>
+       <visual name="thrusters_frame_low_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_200/meshes/thrusters_frame_200_low.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- Correct the collision to be simple box -->
+      <collision name="thrusters_frame_low_collision">
+        <pose> 0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <!-- Correct the collision to be simple box -->
+    <joint name="thrusters_frame_low_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>thrusters_frame_low</child>
     </joint>
 
 <!-- EDF Frame 200 END -->
@@ -423,11 +477,12 @@
         <velocity_decay/>
         <pose> 0.200 0 0.411  0 0 0 </pose>
         <inertial>
-            <mass>0.260</mass>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+            <mass>0.175</mass>
             <inertia>
-              <ixx>8.13e-05</ixx>
-              <iyy>15.29e-05</iyy>
-              <izz>15.29e-05</izz>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -460,7 +515,7 @@
       </collision>
     </link>
     <joint name="edf_1_joint" type="revolute">
-      <parent>thrusters_frame</parent>
+      <parent>thrusters_frame_low</parent>
       <child>edf_1_body</child>
       <pose> 0 0 0 0 0 0 </pose>
       <axis>
@@ -483,11 +538,12 @@
         <velocity_decay/>
         <pose> -0.200 0 0.411  0 0 3.14159 </pose>
         <inertial>
-            <mass>0.260</mass>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+            <mass>0.175</mass>
             <inertia>
-              <ixx>8.13e-05</ixx>
-              <iyy>15.29e-05</iyy>
-              <izz>15.29e-05</izz>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">
@@ -520,7 +576,7 @@
       </collision>
     </link>
     <joint name="edf_2_joint" type="revolute">
-      <parent>thrusters_frame</parent>
+      <parent>thrusters_frame_low</parent>
       <child>edf_2_body</child>
       <pose> 0 0 0 0 0 0 </pose>
       <axis>

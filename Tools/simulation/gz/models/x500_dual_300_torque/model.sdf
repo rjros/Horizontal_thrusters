@@ -2,7 +2,7 @@
 <sdf version='1.9'>
   <model name='x500_dual_300_torque'>
 <!-- FORCE SENSOR BASE -->
-   <pose>0 0 0 0 0 0</pose>
+   <pose>0 0 0 0 0 1.57</pose>
     <static>false</static>
     <link name="sensor_link">
      <inertial>
@@ -41,7 +41,7 @@
       <gravity>true</gravity>
       <self_collide>false</self_collide>
       <velocity_decay/>
-      <pose>0 0 0.395 0 0 1.57</pose>
+      <pose>0 0 0.395 0 0 0</pose>
      <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>2.0</mass>
@@ -363,7 +363,7 @@
 <!-- EDF Frame 300  -->
 
 <!-- Manipulator arm  -->
-    <link name="thrusters_frame">
+    <link name="thrusters_frame_top">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
@@ -377,17 +377,17 @@
               <izz>0.0084</izz>
           </inertia>
         </inertial>
-       <visual name="thrusters_frame_visual">
+       <visual name="thrusters_frame_top_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_300/meshes/thrusters_frame_300.dae</uri>
+            <uri>model://x500_dual_300/meshes/thrusters_frame_300_top.dae</uri>
           </mesh>
         </geometry>
       </visual>
       <!-- Correct the collision to be simple box -->
-      <collision name="thrusters_frame_collision">
+      <collision name="thrusters_frame_top_collision">
         <pose> 0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -408,10 +408,62 @@
       </collision>
     </link>
     <!-- Correct the collision to be simple box -->
-    <joint name="thrusters_frame_joint" type="fixed">
+    <joint name="thrusters_frame_top_joint" type="fixed">
       <parent>base_link</parent>
-      <child>thrusters_frame</child>
+      <child>thrusters_frame_top</child>
     </joint>
+
+    <link name="thrusters_frame_low">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.0 0 0.395 0 0 0 </pose>
+        <inertial>
+          <pose> 0 0 0.016 0 0 0</pose>
+          <mass>0.279</mass>
+            <inertia>
+              <ixx>0.0001</ixx>
+              <iyy>0.0084</iyy>
+              <izz>0.0084</izz>
+          </inertia>
+        </inertial>
+       <visual name="thrusters_frame_low_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_300/meshes/thrusters_frame_300_low.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- Correct the collision to be simple box -->
+      <collision name="thrusters_frame_low_collision">
+        <pose> 0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.250 0.009 0.009 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <!-- Correct the collision to be simple box -->
+    <joint name="thrusters_frame_low_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>thrusters_frame_low</child>
+    </joint>
+
+
 
 <!-- EDF Frame 300 END -->
 <link name="edf_1_body">
@@ -457,7 +509,7 @@
       </collision>
     </link>
     <joint name="edf_1_joint" type="revolute">
-      <parent>thrusters_frame</parent>
+      <parent>thrusters_frame_lower</parent>
       <child>edf_1_body</child>
       <pose> 0 0 0 0 0 0 </pose>
       <axis>
@@ -517,7 +569,7 @@
       </collision>
     </link>
     <joint name="edf_2_joint" type="revolute">
-      <parent>thrusters_frame</parent>
+      <parent>thrusters_frame_top</parent>
       <child>edf_2_body</child>
       <pose> 0 0 0 0 0 0 </pose>
       <axis>
