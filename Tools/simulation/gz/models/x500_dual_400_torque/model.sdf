@@ -2,7 +2,7 @@
 <sdf version='1.9'>
   <model name='x500_dual_400_torque'>
 <!-- FORCE SENSOR BASE -->
-   <pose>0 0 0 0 0 0</pose>
+   <pose>0 0 0 0 0 1.57</pose>
     <static>false</static>
     <link name="sensor_link">
      <inertial>
@@ -41,14 +41,17 @@
       <gravity>true</gravity>
       <self_collide>false</self_collide>
       <velocity_decay/>
-      <pose>0 0 0.395 0 0 1.57</pose>
-     <inertial>
-        <pose>0 0 0 0 0 0</pose>
-        <mass>2.0</mass>
+      <pose>0 0 0.395 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0.015702 0 0 0</pose>
+        <mass>2.17</mass>
         <inertia>
-          <ixx>0.0013</ixx>
-          <iyy>0.0013</iyy>
-          <izz>0.0025</izz>
+          <ixx>0.0037</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0037</iyy>
+          <iyz>0</iyz>
+          <izz>0.0061</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -130,11 +133,11 @@
         <pose>0.176876 -0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_0_visual">
@@ -189,11 +192,11 @@
         <pose>-0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_1_visual">
@@ -248,11 +251,11 @@
         <pose> 0.176876 0.176876 0.450 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_2_visual">
@@ -307,11 +310,11 @@
         <pose> -0.176876 -0.176876 0.450 0 0 0 </pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.064</mass>
+            <mass>0.075</mass>
             <inertia>
-              <ixx>7.536e-06</ixx>
-              <iyy>7.536e-06</iyy>
-              <izz>6.407e-06</izz>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_3_visual">
@@ -369,12 +372,12 @@
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
         <inertial>
-          <pose> 0 0 0.016 0 0 0</pose>
-          <mass>0.314</mass>
+          <pose> 0 0 0.062 0 0 0</pose>
+          <mass>0.088</mass>
           <inertia>
-            <ixx>0.0001</ixx>
-            <iyy>0.0168</iyy>
-            <izz>0.0167</izz>
+            <ixx>1.4300e-06</ixx>
+            <iyy>0.0047</iyy>
+            <izz>0.0047</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_top_visual">
@@ -420,12 +423,12 @@
         <velocity_decay/>
         <pose> 0.0 0 0.395 0 0 0 </pose>
         <inertial>
-          <pose> 0 0 0.016 0 0 0</pose>
-          <mass>0.314</mass>
+          <pose> 0 0 -0.030596 0 0 0</pose>
+          <mass>0.116</mass>
           <inertia>
-            <ixx>0.0001</ixx>
-            <iyy>0.0168</iyy>
-            <izz>0.0167</izz>
+            <ixx>1.8850e-06</ixx>
+            <iyy>0.0062</iyy>
+            <izz>0.0062</izz>
         </inertia>
         </inertial>
        <visual name="thrusters_frame_low_visual">
@@ -470,11 +473,12 @@
         <velocity_decay/>
         <pose> 0.400 0 0.411 0 0 0 </pose>
         <inertial>
-            <mass>0.260</mass>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+            <mass>0.175</mass>
             <inertia>
-              <ixx>8.13e-05</ixx>
-              <iyy>15.29e-05</iyy>
-              <izz>15.29e-05</izz>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -530,11 +534,12 @@
         <velocity_decay/>
         <pose> -0.400 0 0.411 0 0 3.14159 </pose>
         <inertial>
-            <mass>0.260</mass>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+            <mass>0.175</mass>
             <inertia>
-              <ixx>8.13e-05</ixx>
-              <iyy>15.29e-05</iyy>
-              <izz>15.29e-05</izz>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_2_visual">
