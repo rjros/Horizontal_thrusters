@@ -409,10 +409,10 @@ PARAM_DEFINE_INT32(MC_BAT_SCALE_EN, 0);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 4
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXX, 1.000f);
+PARAM_DEFINE_FLOAT(MC_IXX, 0.0217f);
 
 /**
  * Iyy component of inertia
@@ -422,10 +422,10 @@ PARAM_DEFINE_FLOAT(MC_IXX, 1.000f);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 4
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IYY, 1.000f);
+PARAM_DEFINE_FLOAT(MC_IYY, 0.0217f);
 
 /**
  * Izz component of inertia
@@ -435,10 +435,10 @@ PARAM_DEFINE_FLOAT(MC_IYY, 1.000f);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 4
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IZZ, 1.000f);
+PARAM_DEFINE_FLOAT(MC_IZZ, 0.0400f);
 
 /**
  * Ixy component of inertia
@@ -448,10 +448,10 @@ PARAM_DEFINE_FLOAT(MC_IZZ, 1.000f);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 5
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXY, 0.000f);
+PARAM_DEFINE_FLOAT(MC_IXY, 0.0000f);
 
 /**
  * Ixz component of inertia
@@ -461,10 +461,10 @@ PARAM_DEFINE_FLOAT(MC_IXY, 0.000f);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 5
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IXZ, 0.000f);
+PARAM_DEFINE_FLOAT(MC_IXZ, 0.0000f);
 
 /**
  * Iyz component of inertia
@@ -474,109 +474,107 @@ PARAM_DEFINE_FLOAT(MC_IXZ, 0.000f);
  * @unit kg m^2
  * @min -2.000
  * @max 2.000
- * @decimal 3
+ * @decimal 4
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MC_IYZ, 0.000f);
+PARAM_DEFINE_FLOAT(MC_IYZ, 0.0000f);
 
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_ROLLR_P, 0.95f);
 
-// Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_PITCHR_P, 0.95f);
 
-// Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_YAWR_P, 0.95f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Integral gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_ROLLR_I, 0.00f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Integral gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_PITCHR_I, 0.00f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Integral gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_YAWR_I, 0.00f);
 
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Differential gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_ROLL_RATE_D, 0.00f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Differential gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_PTCH_RTE_D, 0.00f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Differential gain for Thrusters horizontal position error
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Rate Control
  */
 PARAM_DEFINE_FLOAT(GEOM_YAW_RTE_D, 0.00f);
 

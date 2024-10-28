@@ -163,34 +163,34 @@ PARAM_DEFINE_FLOAT(MC_MAN_TILT_TAU, 0.0f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Attitude Control
  */
 PARAM_DEFINE_FLOAT(GEOM_ROLL_P, 0.95f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Attitude Control
  */
 PARAM_DEFINE_FLOAT(GEOM_PITCH_P, 0.95f);
 
 // Controller Gains
 /**
- * Proportional gain for Thrusters horizontal position error
+ * Proportional gain for attitude geometric controller
  *
  * @min 0.0
  * @max 20.0
  * @decimal 2
- * @group Thrusters Position Control
+ * @group Thrusters Attitude Control
  */
 PARAM_DEFINE_FLOAT(GEOM_YAW_P, 0.95f);
 

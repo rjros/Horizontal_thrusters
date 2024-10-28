@@ -312,9 +312,9 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.100 0 0 0 0 0 </pose>
+        <pose> 0.100 0 -0.084 0 0 0 </pose>
         <inertial>
-            <pose> 0 0 0.031 0 0 0 </pose>
+            <pose> 0 0 0 0 0 0 </pose>
             <mass>0.175</mass>
             <inertia>
               <ixx>6.3787e-05</ixx>
@@ -327,7 +327,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_fixed.dae</uri>
+            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -374,9 +374,9 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.100 0 0 0 0 3.145159 </pose>
+        <pose> -0.100 0 -0.084  0 0 3.145159 </pose>
          <inertial>
-            <pose> 0 0 0.031 0 0 0 </pose>
+            <pose> 0 0 0 0 0 0 </pose>
             <mass>0.175</mass>
             <inertia>
               <ixx>6.3787e-05</ixx>
@@ -389,7 +389,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_fixed.dae</uri>
+            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
