@@ -99,7 +99,6 @@ px4_add_romfs_files(
 	4011_gz_custom_x500
 	4012_gz_custom_x500_dual
 
-
 	4013_gz_torsional_uav
 	4014_gz_torsional_quad
 	4015_gz_x500_dual_200
@@ -112,6 +111,17 @@ px4_add_romfs_files(
 	4022_gz_x500_dual_500_torque
 	4023_gz_torsional_quad_torque
 	4024_gz_custom_x500_torque
+
+	4025_gz_v500_dual_20
+	4026_gz_v500_dual_20_N
+	4027_gz_v500_dual_40
+	4028_gz_v500_dual_40_N
+	4029_gz_v500_dual_60
+	4030_gz_v500_dual_60_N
+	4031_gz_v500_dual_80
+	4032_gz_v500_dual_80_N
+	4033_gz_v500_dual_100
+	4034_gz_v500_dual_100_N
 	## CUSTOM GZ models ##
 
 	## CUSTOM gazebo ##

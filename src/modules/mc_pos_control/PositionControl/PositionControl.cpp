@@ -370,10 +370,7 @@ void PositionControl::_geometricControl(const float dt)
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 	_f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
-	// if ((_f_w(2) >= (-_lim_thr_min*_max_thrust_z) && vel_error(2) >= 0.0f) ||
-	// (_f_w(2) <= (-_lim_thr_max*_max_thrust_z) && vel_error(2) <= 0.0f)) {
-	// vel_error(2) = 0.f;
-	// }
+
 
 	// _f_w.print();
 	_geom_int += vel_error.emult(_gain_geom_i)* dt;
