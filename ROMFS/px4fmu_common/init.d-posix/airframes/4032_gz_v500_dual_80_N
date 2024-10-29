@@ -20,33 +20,27 @@ param set-default SENS_EN_MAGSIM 1
 param set-default CA_AIRFRAME 0
 param set-default CA_ROTOR_COUNT 6
 
-param set-default CA_ROTOR0_PX 0.13
-param set-default CA_ROTOR0_PY 0.22
+param set-default CA_ROTOR0_PX 0.177
+param set-default CA_ROTOR0_PY 0.177
 param set-default CA_ROTOR0_KM  0.05
-# param set-default CA_ROTOR0_CT  0.00
 
-
-param set-default CA_ROTOR1_PX -0.13
-param set-default CA_ROTOR1_PY -0.20
+param set-default CA_ROTOR1_PX -0.177
+param set-default CA_ROTOR1_PY -0.177
 param set-default CA_ROTOR1_KM  0.05
-# param set-default CA_ROTOR1_CT  0.00
 
-
-param set-default CA_ROTOR2_PX 0.13
-param set-default CA_ROTOR2_PY -0.22
+param set-default CA_ROTOR2_PX 	0.177
+param set-default CA_ROTOR2_PY -0.177
 param set-default CA_ROTOR2_KM -0.05
-# param set-default CA_ROTOR2_CT  0.00
 
-
-param set-default CA_ROTOR3_PX -0.13
-param set-default CA_ROTOR3_PY 0.20
+param set-default CA_ROTOR3_PX -0.177
+param set-default CA_ROTOR3_PY 	0.177
 param set-default CA_ROTOR3_KM -0.05
-# param set-default CA_ROTOR3_CT  0.00
 
 
 # Back fan, pushes front ####
-param set-default CA_ROTOR4_PX -0.25
+param set-default CA_ROTOR4_PX -0.100
 param set-default CA_ROTOR4_PY 0.00
+param set-default CA_ROTOR4_PZ 0.080
 param set-default CA_ROTOR4_KM 0.00
 param set-default CA_ROTOR4_AX -1.0
 param set-default CA_ROTOR4_AY 0.0
@@ -54,8 +48,9 @@ param set-default CA_ROTOR4_AZ 0.0
 #### Back fan, pushes front END ####
 
 #### Front fan, pushes back ####
-param set-default CA_ROTOR5_PX 0.25
+param set-default CA_ROTOR5_PX 0.100
 param set-default CA_ROTOR5_PY 0.00
+param set-default CA_ROTOR5_PZ 0.080
 param set-default CA_ROTOR5_KM 0.00
 param set-default CA_ROTOR5_AX 1.0
 param set-default CA_ROTOR5_AY 0.0
@@ -78,9 +73,6 @@ param set-default SIM_GZ_EC_MIN4 150
 param set-default SIM_GZ_EC_MIN5 150
 param set-default SIM_GZ_EC_MIN6 150
 
-
-param set-default SIM_GZ_SV_FUNC1 201
-param set-default SIM_GZ_SV_FUNC2 202
 
 param set-default SIM_GZ_EC_MAX1 1000
 param set-default SIM_GZ_EC_MAX2 1000

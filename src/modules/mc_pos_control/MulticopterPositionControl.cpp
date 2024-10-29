@@ -601,16 +601,36 @@ void MulticopterPositionControl::Run()
 			//Control Gains fot the planar control
 
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
-			if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
 
+			//Get the the attitude setpoint with the planar attitude mode
+			if (_param_mpc_geom_ctrl.get())
+			{
+				if (!_control.updateGeometric(dt,_param_planar_att_mode.get())) {
 
-				_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
-
-				_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
-				_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
-				_control.update(dt,_param_planar_att_mode.get(),planar_flight);
+					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
+					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
+					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
+					_control.updateGeometric(dt,_param_planar_att_mode.get());
+				}
 
 			}
+			else{
+
+
+				if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
+
+					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
+					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
+					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
+					_control.update(dt,_param_planar_att_mode.get(),planar_flight);
+
+				}
+
+
+			}
+
+
+
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
 
 

@@ -235,6 +235,17 @@ public:
 
 	//// GEOEMETRIC CONTROLLER FUNCTIONS ////
 	/**
+	 * Apply P-position and PID-velocity controller that updates the member
+	 * thrust, yaw- and yawspeed-setpoints.
+	 * @see _thr_sp
+	 * @see _yaw_sp
+	 * @see _yawspeed_sp
+	 * @param dt time in seconds since last iteration
+	 * @return true if update succeeded and output setpoint is executable, false if not
+	 */
+	bool updateGeometric(const float dt,const int att_mode);
+
+	/**
 	 * Pass the current vehicle state to the controller
 	 * @param vehicle_mass total mass of the uav, for model dependent controller
 	 */
@@ -269,6 +280,8 @@ public:
 	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
 	void getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_setpoint) ;
+
+
 
 
 

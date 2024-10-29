@@ -24,20 +24,20 @@ param set-default CA_ROTOR_COUNT 4 # Base model for Qu
 # param set VECT_ATT_MODE 3 # 0:UNKNOWN, 1:constant zero tilt, 2:fixed attitude, 3:tilted attitude
 param set RC_SIM 0 # 0:Simulation, 1:RC, 2:Offboard
 
-param set-default CA_ROTOR0_PX 0.188
-param set-default CA_ROTOR0_PY 0.188
+param set-default CA_ROTOR0_PX 0.177
+param set-default CA_ROTOR0_PY 0.177
 param set-default CA_ROTOR0_KM  0.05
 
-param set-default CA_ROTOR1_PX -0.188
-param set-default CA_ROTOR1_PY -0.188
+param set-default CA_ROTOR1_PX -0.177
+param set-default CA_ROTOR1_PY -0.177
 param set-default CA_ROTOR1_KM  0.05
 
-param set-default CA_ROTOR2_PX 0.188
-param set-default CA_ROTOR2_PY -0.188
+param set-default CA_ROTOR2_PX 	0.177
+param set-default CA_ROTOR2_PY -0.177
 param set-default CA_ROTOR2_KM -0.05
 
-param set-default CA_ROTOR3_PX -0.188
-param set-default CA_ROTOR3_PY 0.188
+param set-default CA_ROTOR3_PX -0.177
+param set-default CA_ROTOR3_PY 	0.177
 param set-default CA_ROTOR3_KM -0.05
 
 param set-default SIM_GZ_EC_FUNC1 101
