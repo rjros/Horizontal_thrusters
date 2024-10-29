@@ -80,6 +80,8 @@ public:
 		if (thrust_factor > 0.f && thrust_factor <= 1.f) {
 			// thrust factor
 			//  rel_thrust = factor * x^2 + (1-factor) * x,
+			// PX4_INFO("Thrust Factor  %f  ",(double)thrust_factor);
+
 			const float a = thrust_factor;
 			const float b = (1.f - thrust_factor);
 
@@ -112,7 +114,6 @@ public:
 
 				} else {
 					// remap from [0, 1] to [-1, 1]
-			// PX4_INFO("Actuator Test value of motors IDX %d M %f  ",i,(double)values[i]);
 
 					values[i] = values[i] * 2.f - 1.f;
 			// PX4_INFO("Actuator Test after value of motors IDX %d M %f  ",i,(double)values[i]);
