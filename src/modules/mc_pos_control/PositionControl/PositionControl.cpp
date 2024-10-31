@@ -669,12 +669,25 @@ void PositionControl::_planar_accelerationControl(const float yaw_sp)
 void PositionControl::_combined_positionControl(const float dt,const float yaw_sp)
 {
 	//Work in the body frame
+
+	// matrix::Dcmf _rotation;
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
 	_pos = _R.transpose()*_pos;
 	_pos_sp = _R.transpose()*_pos_sp;
 	_vel = _R.transpose()*_vel;
 	_vel_sp = _R.transpose()*_vel_sp;
 	_vel_dot = _R.transpose()*_vel_dot;
 	_acc_sp = _R.transpose() * _acc_sp;
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
+
+
+	// _pos = _rotation*_pos;
+	// _pos_sp = _rotation*_pos_sp;
+	// _vel = _rotation*_vel;
+	// _vel_sp = _rotation*_vel_sp;
+	// _vel_dot = _rotation*_vel_dot;
+	// _acc_sp = _rotation* _acc_sp;
+
 
 
 	// P-position controller
@@ -712,7 +725,9 @@ void PositionControl::_combined_positionControl(const float dt,const float yaw_s
 	// _vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
 
 	// the desired position setpoint over the feed-forward term.
-	_vel_sp.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
+	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
+	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
+
 	// Constrain velocity in z-direction.
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
 
@@ -768,13 +783,22 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 		_thr_sp(1) = thrust_sp_xy(1) / thrust_sp_xy_norm * thrust_max_xy;
 	}
 
-	//separate the thrust for each sign
-	// if ((th_body(0) >= _lim_planar_thr_max && vel_xy_error(0) >= 0.0f) ||
-	// (th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
-	// vel_xy_error(0) = 0.f;
-	// }
-	_thr_sp(0)=math::min(_thr_sp(0),_lim_planar_thr_max);
 
+	if(_thr_sp(0)>=0.0f)
+	{
+		if ((_thr_sp(0) >= _lim_planar_thr_max && vel_error(0) >= 0.0f) ||
+		(_thr_sp(0)<= _lim_planar_thr_min && vel_error(0) <= 0.0f)) {
+		vel_error(0) = 0.f;
+		}
+	}
+
+	else {
+		if ((_thr_sp(0) <= -_lim_planar_thr_max && vel_error(0) <= 0.0f) ||
+		(_thr_sp(0)>= -_lim_planar_thr_min && vel_error(0) >= 0.0f)) {
+		vel_error(0) = 0.f;
+		}
+
+	}
 
 
 	// Make sure integral doesn't get NAN
@@ -786,14 +810,21 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
 
 	// Back to the word frame
-	// _thr_sp= _R*_thr_sp;
+	matrix::Dcmf _rotation;
+	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	_thr_sp= _rotation*_thr_sp;
 
-	_pos = _R*_pos;
+
 	_pos_sp = _R*_pos_sp;
-	_vel = _R*_vel;
 	_vel_sp = _R*_vel_sp;
 	_vel_dot = _R*_vel_dot;
 	_acc_sp = _R* _acc_sp;
+	// _pos = _rotation*_pos;
+	// _pos_sp = _rotation*_pos_sp;
+	// _vel = _rotation*_vel;
+	// _vel_sp = _rotation*_vel_sp;
+	// _vel_dot = _rotation*_vel_dot;
+	// _acc_sp = _rotation* _acc_sp;
 
 
 }
