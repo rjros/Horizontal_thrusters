@@ -512,7 +512,9 @@ void PositionControl::_normalization(matrix::Vector3f &thrust_sp)
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 void PositionControl::_planar_positionControl(const float dt, const float yaw_sp)
 {
-	//position error
+
+
+
 	Vector3f pos_error = (_pos_sp - _pos);
 	Vector3f vel_sp_position = pos_error.emult(_gain_planar_pos_p) + _pos_int - _vel.emult(_gain_planar_pos_d);
 
@@ -666,13 +668,14 @@ void PositionControl::_planar_accelerationControl(const float yaw_sp)
 //// COMBINED POSITION CONTROL PID ////
 void PositionControl::_combined_positionControl(const float dt,const float yaw_sp)
 {
-	//could be calculated based on the current angle (tilt_angle)
-	//Based on this the system could determine when to tilt and when planar motion is accessible
-	//rotation_matrix(tilted-angle) * thrust_direction, check the planar locations -> @rjros
-	//position error
-	//check Velocity setpoint direction
-	//assume gains are for this mode only, although they could be based on the direction
-	// of the vel vector
+	//Work in the body frame
+	_pos = _R.transpose()*_pos;
+	_pos_sp = _R.transpose()*_pos_sp;
+	_vel = _R.transpose()*_vel;
+	_vel_sp = _R.transpose()*_vel_sp;
+	_vel_dot = _R.transpose()*_vel_dot;
+	_acc_sp = _R.transpose() * _acc_sp;
+
 
 	// P-position controller
 	Vector3f pos_error = _pos_sp - _pos;
@@ -693,20 +696,27 @@ void PositionControl::_combined_positionControl(const float dt,const float yaw_s
 
 	// Constrain horizontal velocity by prioritizing the velocity component along the
 	// the desired position setpoint over the feed-forward term.
-	matrix::Dcmf _rotation,_rotation2;
-	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
-	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
-	Vector3f vel_body_xy=_rotation * Vector3f{_vel_sp(0),_vel_sp(1),0};
+	// matrix::Dcmf _rotation,_rotation2;
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
+	// _rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
+	// Vector3f vel_body_xy=_rotation * Vector3f{_vel_sp(0),_vel_sp(1),0};
 
-	//Vel in X axis
-	vel_body_xy(0) = math::constrain(vel_body_xy(0), -_lim_vel_horizontal, _lim_vel_horizontal);
+	// //Vel in X axis
+	// // vel_body_xy(0) = math::constrain(vel_body_xy(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 
-	//Vel X and Y
-	vel_body_xy.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
+	// //Vel X and Y
+	// vel_body_xy.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
 
+	// _vel_sp.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
+	// // Constrain velocity in z-direction.
+	// _vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
+
+	// the desired position setpoint over the feed-forward term.
 	_vel_sp.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
 	// Constrain velocity in z-direction.
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
+
+
 
 }
 
@@ -729,12 +739,6 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 	vel_error(2) = 0.f;
 	}
 
-	//Planar and Tilted case
-	//Force in the X axis of the body frame must be separated from the acceleration sp.
-	matrix::Dcmf _rotation,_rotation2;
-	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
-	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
-	Vector3f th_body=_rotation*_thr_sp;
 
 	//////Compare the merit of using an anti windup
 	// // Use tracking Anti-Windup for horizontal direction: during saturation, the integrator is used to unsaturate the output
@@ -742,17 +746,17 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 	// Integrator anti-windup in vertical direction
 
 	//Thrust Z check the pitch effects in the thrust
-	Vector2f thrust_sp_xy(0,th_body(1));
+	Vector2f thrust_sp_xy(0,_thr_sp(1));
 	float thrust_sp_xy_norm = thrust_sp_xy.norm();
 	float thrust_max_squared = math::sq(_lim_thr_max);
 	float allocated_horizontal_thrust = math::min(thrust_sp_xy_norm, _lim_thr_xy_margin);
 	float thrust_z_max_squared = thrust_max_squared - math::sq(allocated_horizontal_thrust);
 
 	// Saturate maximal vertical thrust
-	th_body(2) = math::max(th_body(2), -sqrtf(thrust_z_max_squared));
+	_thr_sp(2) = math::max(_thr_sp(2), -sqrtf(thrust_z_max_squared));
 	// Determine how much horizontal thrust is left after prioritizing vertical control
 
-	float thrust_max_xy_squared = thrust_max_squared - math::sq(th_body(2));
+	float thrust_max_xy_squared = thrust_max_squared - math::sq(_thr_sp(2));
 	float thrust_max_xy = 0;
 
 	if (thrust_max_xy_squared > 0) {
@@ -761,61 +765,57 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 
 	// Saturate thrust in Y axis (roll)
 	if (thrust_sp_xy_norm > thrust_max_xy) {
-		th_body(1) = thrust_sp_xy(1) / thrust_sp_xy_norm * thrust_max_xy;
+		_thr_sp(1) = thrust_sp_xy(1) / thrust_sp_xy_norm * thrust_max_xy;
 	}
 
-	Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
-	if ((th_body(0) >= _lim_planar_thr_max && vel_xy_error(0) >= 0.0f) ||
-	(th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
-	vel_xy_error(0) = 0.f;
-	}
-	th_body(0)=math::min(th_body(0),_lim_planar_thr_max);
+	// if ((th_body(0) >= _lim_planar_thr_max && vel_xy_error(0) >= 0.0f) ||
+	// (th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
+	// vel_xy_error(0) = 0.f;
+	// }
+	_thr_sp(0)=math::min(_thr_sp(0),_lim_planar_thr_max);
 
-	vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
-	Vector3f th_new=_rotation2*th_body;
-	_thr_sp.xy()=th_new.xy();
-	vel_error.xy()=vel_xy_error.xy();
+
 
 	// Make sure integral doesn't get NAN
 	ControlMath::setZeroIfNanVector3f(vel_error);
 	// Update integral part of velocity control
-	_vel_int += vel_error.emult(_gain_vel_i) * dt;
+	_vel_int += vel_error.emult(_gain_planar_vel_i) * dt;
 
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
-	//THRUST IS SENT IN THE INERTIAL FRAME
-	// PX4_INFO("Thrust Body %f %f",(double)_thr_sp(0),(double)_thr_sp(1));
 
+	// Back to the word frame
+	// _thr_sp= _R*_thr_sp;
 
-
-
-	// PX4_INFO("Thrust  %f %f %f",(double)th_body(0),(double)th_body(1),(double)th_body(2));
-	// PX4_INFO("Thrust Body %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
-
+	_pos = _R*_pos;
+	_pos_sp = _R*_pos_sp;
+	_vel = _R*_vel;
+	_vel_sp = _R*_vel_sp;
+	_vel_dot = _R*_vel_dot;
+	_acc_sp = _R* _acc_sp;
 
 
 }
 void PositionControl::_combined_accelerationControl(const float yaw_sp)
 {
 	//Force in the X axis of the body frame must be separated from the acceleration sp.
-	matrix::Dcmf _rotation,_rotation2;
-	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
-	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
-	Vector3f body_accel_sp=_rotation*_acc_sp;
+	// matrix::Dcmf _rotation,_rotation2;
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
+	// _rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
 	Vector3f th_body=Vector3f{0.0,0.0,0.0};
 
 	//YZ
-	Vector3f body_z = Vector3f(0.0f, -body_accel_sp(1), CONSTANTS_ONE_G).normalized();
+	Vector3f body_z = Vector3f(0.0f, -_acc_sp(1), CONSTANTS_ONE_G).normalized();
 	ControlMath::limitTilt(body_z, Vector3f(0, 0, 1), _lim_tilt);
-	float collective_thrust = body_accel_sp(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
+	float collective_thrust = _acc_sp(2) * (_hover_thrust / CONSTANTS_ONE_G) - _hover_thrust;
 	collective_thrust /= (Vector3f(0, 0, 1).dot(body_z));
 	collective_thrust = math::min(collective_thrust, -_lim_thr_min);
 
 	//Thrust back to rotation
 	th_body=body_z * collective_thrust;
-	th_body(0)=body_accel_sp(0)*_hover_thrust;
-	_thr_sp=_rotation2*th_body;
+	th_body(0)=_acc_sp(0)*_hover_thrust;
+	_thr_sp=th_body;
 
 	// PX4_INFO("Desired pos x %.2f y %.2f z %.2f ",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
 	// PX4_INFO("Pos x %.2f y %.2f z %.2f ",(double)_pos(0),(double)_pos(1),(double)_pos(2));

@@ -183,14 +183,14 @@ void MulticopterPositionControl::parameters_update(bool force)
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 		_control.setPlanarPositionGains(
-			Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_pxy_pos_p_vel.get(), _param_mpc_z_p.get()),
-			Vector3f(_param_mpc_pxy_pos_i_vel.get(),_param_mpc_pxy_pos_i_vel.get(), 0.0f),
-			Vector3f(_param_mpc_pxy_pos_d_vel.get(),_param_mpc_pxy_pos_d_vel.get(), 0.0f));
+			Vector3f(_param_mpc_pxy_pos_p_vel.get(), _param_mpc_xy_p.get(),_param_mpc_z_p.get()),
+			Vector3f(_param_mpc_pxy_pos_i_vel.get(), 0.0f, 0.0f),
+			Vector3f(_param_mpc_pxy_pos_d_vel.get(), 0.0f, 0.0f));
 
 		_control.setPlanarVelocityGains(
-			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_pxy_vel_p_acc.get(), _param_mpc_z_vel_p_acc.get()),
-			Vector3f(_param_mpc_pxy_vel_i_acc.get(), _param_mpc_pxy_vel_i_acc.get(), _param_mpc_z_vel_i_acc.get()),
-			Vector3f(_param_mpc_pxy_vel_d_acc.get(), _param_mpc_pxy_vel_d_acc.get(), _param_mpc_z_vel_d_acc.get()));
+			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_xy_vel_p_acc.get(), _param_mpc_z_vel_p_acc.get()),
+			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_xy_vel_i_acc.get(), _param_mpc_z_vel_i_acc.get()),
+			Vector3f(_param_mpc_pxy_vel_p_acc.get(), _param_mpc_xy_vel_d_acc.get(), _param_mpc_z_vel_d_acc.get()));
 		//Control Gains fot the planar control
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
