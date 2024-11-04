@@ -965,7 +965,7 @@ PARAM_DEFINE_FLOAT(MPC_PXY_P, 1.0f);
  * @increment 0.1
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_PXY_I, 0.1f);
+PARAM_DEFINE_FLOAT(MPC_PXY_I, 0.0f);
 /**
  * Derivative gain for horizontal position error
  *
@@ -977,7 +977,7 @@ PARAM_DEFINE_FLOAT(MPC_PXY_I, 0.1f);
  * @increment 0.1
  * @group Multicopter Position Control
  */
-PARAM_DEFINE_FLOAT(MPC_PXY_D, 0.5f);
+PARAM_DEFINE_FLOAT(MPC_PXY_D, 0.0f);
 
 
 /**

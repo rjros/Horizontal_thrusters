@@ -222,6 +222,7 @@ int ActuatorEffectivenessVectoringRotors::computeEffectivenessMatrix(const Geome
 	// PX4_INFO("Compute effectiveness %d", geometry.tilting_index);
 	int num_actuators = 0;
 	//float factor=1;
+	//Type of rotation (in the axis Z direction)
 	matrix::Dcmf _rotation;
 	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, tilt_angle,0.f}};
 

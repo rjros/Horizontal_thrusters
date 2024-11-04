@@ -538,12 +538,12 @@
         <velocity_decay/>
         <pose> 0.500 0.0  0.016  0.0 1.5708 3.145159</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
-            <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
-            </inertia>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
         </inertial>
        <visual name="rotor_4_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -598,12 +598,12 @@
         <velocity_decay/>
         <pose> -0.500 0.0  0.016  0.0 1.5708 0.0</pose>
         <inertial>
-            <mass>0.016076923076923075</mass>
-            <inertia>
-              <ixx>3.8464910483993325e-07</ixx>
-              <iyy>2.6115851691700804e-05</iyy>
-              <izz>2.649858234714004e-05</izz>
-            </inertia>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
         </inertial>
        <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>

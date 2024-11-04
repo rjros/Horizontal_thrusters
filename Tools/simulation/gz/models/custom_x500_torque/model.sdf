@@ -5,14 +5,15 @@
     <static>false</static>
     <link name="sensor_link">
     <inertial>
-        <mass>2.17</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>500</mass>
         <inertia>
-          <ixx>0.0037</ixx>
+          <ixx>1.3542</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0037</iyy>
+          <iyy>1.3542</iyy>
           <iyz>0</iyz>
-          <izz>0.0061</izz>
+          <izz>2.500</izz>
         </inertia>
       </inertial>
       <visual name="sensor_link_visual">

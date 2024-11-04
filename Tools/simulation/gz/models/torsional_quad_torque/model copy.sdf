@@ -1,39 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='v500_dual_20'>
-    <pose>0 0 0.217 0 0 0</pose>
-    <self_collide>false</self_collide>
+  <model name='torsional_quad_torque'>
+   <pose>0 0 0 0 0 0</pose>
     <static>false</static>
-    <link name="base_link">
-    <inertial>
-        <pose>0 0 0.015702 0 0 0</pose>
-        <mass>2.17</mass>
+    <self_collide>false</self_collide>
+    <link name="sensor_link">
+     <inertial>
+        <!-- <pose>0 0 -0.07 0 0 0</pose> -->
+        <pose>0 0 0 0 0 0</pose>
+        <mass>500</mass>
         <inertia>
-          <ixx>0.0037</ixx>
+          <ixx>0.0411</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0037</iyy>
+          <iyy>0.0411</iyy>
           <iyz>0</iyz>
-          <izz>0.0061</izz>
+          <izz>0.0411</izz>
+        </inertia>
+      </inertial>
+      <visual name="sensor_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_200/meshes/sensor_base.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- Collision definition -->
+      <collision name="sensor_link_collision">
+        <pose> 0 0 0 0 0 0</pose>
+         <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_200/meshes/sensor_base.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+<!-- Flight Sensors  -->
+<!-- Torsional Manipulator -->
+    <link name="torsional_manipulator">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>0 0 0.350 0 0 3.14159</pose>
+        <inertial>
+            <pose>0 0 -0.020 0 0 0</pose>
+            <mass>0.194</mass>
+            <inertia>
+              <ixx>8.7628e-04</ixx>
+              <iyy>8.7628e-04</iyy>
+              <izz>0.0017</izz>
+            </inertia>
+        </inertial>
+       <visual name="torsional_manipulator_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/manipulator_base.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="torsional_manipulator_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+          <!-- <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/torsional_quad_manipulator.dae</uri>
+          </mesh> -->
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="torsional_manipulator_joint" type="fixed">
+      <parent>sensor_link</parent>
+      <child>torsional_manipulator</child>
+      <pose> 0 0 0 0 0 0 </pose>
+        <sensor name= 'force_sensor' type='force_torque'>
+            <always_on>true</always_on>
+            <update_rate>100.0</update_rate>
+            <visualize>true</visualize>
+            <force_torque>
+                <frame>sensor</frame>
+                <measure_direction>child_to_parent</measure_direction>
+            </force_torque>
+            <topic>/wrench</topic>
+        </sensor>
+    </joint>
+
+<!-- Torsional Manipulator END -->
+<!-- Sensors and main frame END -->
+    <link name="base_link">
+    <pose>0 0 0.350 0 0 0</pose>
+     <inertial>
+        <mass>2.0</mass>
+        <inertia>
+          <ixx>0.0013</ixx>
+          <iyy>0.0013</iyy>
+          <izz>0.0025</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
       <velocity_decay/>
       <visual name="base_link_visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 0 0  0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/uav_frame_x500_simple.dae</uri>
+            <uri>model://torsional_quad/meshes/x500_torsional.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <!-- Collision definition -->
-      <collision name="base_link_collision_0">
-        <pose> 0 0 -0.076276 0 0 0</pose>
+      <collision name="base_link_collision">
+        <pose> 0 0 0 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.40 0.40 0.278 </size>
+            <size>0.50 0.50 0.05 </size>
           </box>
         </geometry>
         <surface>
@@ -48,8 +147,6 @@
           </friction>
         </surface>
       </collision>
-<!-- Collision definition END-->
-<!-- Flight Sensors  -->
       <sensor name="air_pressure_sensor" type="air_pressure">
         <always_on>1</always_on>
         <update_rate>50</update_rate>
@@ -62,26 +159,185 @@
           </pressure>
         </air_pressure>
       </sensor>
-
       <sensor name="imu_sensor" type="imu">
         <always_on>1</always_on>
         <update_rate>250</update_rate>
       </sensor>
-<!-- Flight Sensors  -->
+      </link>
+
+    <joint name="uav_frame_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>base_link</child>
+    </joint>
+
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_1">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>0.37512 -0.37512 0.350 0 0 2.35619</pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_1_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
     </link>
+    <joint name="edf_arm_1_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_1</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_2">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.37512 0.37512 0.350  0 0 -2.35619 </pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_2_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_arm_2_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_2</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
+
+
+<!-- EDF ARMS  -->
+    <link name="edf_arm_3">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>-0.53050 0 0.350 0 0 0.0</pose>
+        <inertial>
+            <pose>0.2335 0 0.0 0 0 0.0</pose>
+            <mass>0.124</mass>
+            <inertia>
+              <ixx>2.015e-06</ixx>
+              <iyy>0.0023</iyy>
+              <izz>0.0023</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_arm_3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_frame_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_arm_3_collision">
+        <pose>0 0 -0.05 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.26 0.26 0.1 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_arm_3_joint" type="fixed">
+      <parent>torsional_manipulator</parent>
+      <child>edf_arm_3</child>
+      <pose> 0 0 0 0 0 0 </pose>
+    </joint>
+<!-- EDF ARMS END -->
+
 <!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0.176876 -0.176876 0.06 0 0 0</pose>
+        <pose>0.176876 -0.176876 0.410 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_0_visual">
@@ -89,7 +345,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -133,14 +389,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.176876 0.176876 0.06 0 0 0</pose>
+        <pose>-0.176876 0.176876 0.410 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_1_visual">
@@ -148,7 +404,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -192,14 +448,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.176876 0.176876 0.06 0 0 0</pose>
+        <pose> 0.176876 0.176876 0.410 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_2_visual">
@@ -207,7 +463,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -251,14 +507,14 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
-        <inertial>
+        <pose> -0.176876 -0.176876 0.410 0 0 0</pose>
+         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
+            <mass>0.064</mass>
             <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
+              <ixx>7.536e-06</ixx>
+              <iyy>7.536e-06</iyy>
+              <izz>6.407e-06</izz>
             </inertia>
         </inertial>
        <visual name="rotor_3_visual">
@@ -266,7 +522,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -307,19 +563,136 @@
     </joint>
 <!-- Propellers definition END-->
 
-<!-- EDF Frame 200 END -->
-  <link name="edf_1_body">
+    <!-- EDF -->
+   <link name="edf_0_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.100 0 0.036 0 0 0 </pose>
+        <pose> 0.37512 -0.37512 0.375  0 0 -0.785398 </pose>
         <inertial>
-            <pose> 0 0 0 0 0 0 </pose>
-            <mass>0.175</mass>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>6.3787e-05</ixx>
-              <iyy>8.6158e-05</iyy>
-              <izz>8.6158e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
+            </inertia>
+        </inertial>
+       <visual name="edf_0_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_0_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_0_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>edf_0_body</child>
+      <pose>0 0 0 0 0 0 </pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
+        </limit>
+        <dynamics>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_4">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.37512 -0.37512 0.375  0 1.57 2.35619</pose>
+        <inertial>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
+        </inertial>
+       <visual name="rotor_4_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_4_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_4_joint" type="revolute">
+      <parent>edf_0_body</parent>
+      <child>rotor_4</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="edf_1_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.375120 0.37512 0.375  0 0 0.785398 </pose>
+        <inertial>
+            <mass>0.260</mass>
+            <inertia>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
        <visual name="edf_1_visual">
@@ -327,7 +700,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -354,12 +727,12 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>base_link</parent>
       <child>edf_1_body</child>
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose>0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
           <friction>1.0</friction>
@@ -369,27 +742,83 @@
       </axis>
     </joint>
 
+    <link name="rotor_5">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.37512 0.37512 0.375  0 1.57 -2.35619 </pose>
+        <inertial>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
+        </inertial>
+       <visual name="rotor_5_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_5_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_5_joint" type="revolute">
+      <parent>edf_1_body</parent>
+      <child>rotor_5</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
 
     <link name="edf_2_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.100 0 0.036 0 0 3.145159 </pose>
-         <inertial>
-            <pose> 0 0 0 0 0 0 </pose>
-            <mass>0.175</mass>
+        <pose>-0.53050 0 0.375 0 0 3.14159</pose>
+        <inertial>
+            <mass>0.260</mass>
             <inertia>
-              <ixx>6.3787e-05</ixx>
-              <iyy>8.6158e-05</iyy>
-              <izz>8.6158e-05</izz>
+              <ixx>8.13e-05</ixx>
+              <iyy>15.29e-05</iyy>
+              <izz>15.29e-05</izz>
             </inertia>
         </inertial>
-      <visual name="edf_2_visual">
+       <visual name="edf_2_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -420,8 +849,8 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
           <friction>1.0</friction>
@@ -431,71 +860,11 @@
       </axis>
     </joint>
 
-
-<!-- Horizontal thrusters -->
-    <link name="rotor_5">
+    <link name="rotor_6">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.100 0 0.036 0 1.5708 0</pose>
-       <inertial>
-          <mass>0.025</mass>
-          <inertia>
-            <ixx>3.9146e-06</ixx>
-            <iyy>3.9146e-06</iyy>
-            <izz>7.8125e-06</izz>
-          </inertia>
-        </inertial>
-       <visual name="rotor_5_visual">
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_impeler.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <collision name="rotor_5_collision">
-        <pose>0 0 0 0 0 0 </pose>
-        <geometry>
-          <box>
-            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
-          </box>
-        </geometry>
-        <surface>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <max_vel>0</max_vel>
-            </ode>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-    </link>
-    <joint name="rotor_5_joint" type="revolute">
-      <parent>edf_2_body</parent>
-      <child>rotor_5</child>
-      <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
-
-    <link name="rotor_4">
-        <gravity>true</gravity>
-        <self_collide>false</self_collide>
-        <velocity_decay/>
-        <pose> 0.100 0 0.036 0 1.5708 3.145159</pose>
+        <pose>-0.53050 0 0.375 0 1.57 0</pose>
         <inertial>
           <mass>0.025</mass>
           <inertia>
@@ -504,16 +873,16 @@
             <izz>7.8125e-06</izz>
           </inertia>
         </inertial>
-       <visual name="rotor_4_visual">
+       <visual name="rotor_6_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://custom_x500_dual/meshes/edf_impeler.dae</uri>
+            <uri>model://torsional_quad/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <collision name="rotor_4_collision">
+      <collision name="rotor_6_collision">
         <pose>0 0 0 0 0 0 </pose>
         <geometry>
           <box>
@@ -533,10 +902,9 @@
         </surface>
       </collision>
     </link>
-
-    <joint name="rotor_4_joint" type="revolute">
-      <parent>edf_1_body</parent>
-      <child>rotor_4</child>
+    <joint name="rotor_6_joint" type="revolute">
+      <parent>edf_2_body</parent>
+      <child>rotor_6</child>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -549,8 +917,7 @@
         </dynamics>
       </axis>
     </joint>
-<!-- Manipulator arm  END -->
-<!-- Additional Rotors 4,5END -->
+    <!-- EDF END -->
 
    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_0_joint</jointName>
@@ -617,14 +984,16 @@
       <motorType>velocity</motorType>
     </plugin>
 
-    <!-- Horizontal thrusters -->
+
+    <!-- EDFs -->
+
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000</maxRotVelocity>
+      <maxRotVelocity>1000.0</maxRotVelocity>
       <motorConstant>8.54858e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -638,10 +1007,10 @@
     <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
       <jointName>rotor_5_joint</jointName>
       <linkName>rotor_5</linkName>
-      <turningDirection>ccw</turningDirection>
+      <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1000</maxRotVelocity>
+      <maxRotVelocity>1000.0</maxRotVelocity>
       <motorConstant>8.54858e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -651,7 +1020,46 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
       <motorType>velocity</motorType>
     </plugin>
-<!-- Horizontal thrusters END-->
+
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_6_joint</jointName>
+      <linkName>rotor_6</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>8.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>6</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+<!-- EDFS Servos-->
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_0_joint"</joint_name>
+      <sub_topic>servo_0</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_1_joint"</joint_name>
+      <sub_topic>servo_1</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>edf_2_joint"</joint_name>
+      <sub_topic>servo_2</sub_topic>
+      <p_gain>10.0</p_gain>
+    </plugin>
 
   </model>
 </sdf>
