@@ -59,7 +59,7 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 	///// CUSTOM /////
 	// thrust_vectoring_setpoint_status_s thrust_vec_status;
 	// _thrust_vectoring_setpoint_status_sub.copy(&thrust_vec_status);
-	// matrix::Vector<float,8>angle_sp= matrix::Vector<float,8> (thrust_vec_status.servo_angle);
+	// matrix::Vector<float,8>angle_sp= matrix::Vector<float,8> (thrust_vec_status.tilt_angle);
 	///// CUSTOM  END /////
 
 

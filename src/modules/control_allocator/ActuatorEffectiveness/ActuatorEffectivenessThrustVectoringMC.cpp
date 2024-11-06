@@ -31,11 +31,11 @@
  *
  ****************************************************************************/
 /**
- * @file ActuatorEffectivenessThrustVectoringMC.hpp
+ * @file ActuatorEffectivenessThrustVectoringMC.cpp
  *
  * Actuator effectiveness for vector thrusting module
  *
- * @author Ricardo Rosales
+ * @author Ricardo Rosales Martinez
  */
 
 

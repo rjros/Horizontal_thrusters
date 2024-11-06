@@ -31,12 +31,10 @@
  *
  ****************************************************************************/
 
-/**
- * @file ActuatorEffectivenessVectoringRotors.hpp
- *
- * Actuator effectiveness computed from rotors position and orientation
- *
- * @author Julien Lecoeur <julien.lecoeur@gmail.com>
+ /** @file ActuatorEffectivenessVectoringRotors.hpp
+ * Multicopter position controller
+ * Modifications of the multicopter position controller for planar flight
+ * @author Ricardo Rosales Martinez
  */
 
 #pragma once

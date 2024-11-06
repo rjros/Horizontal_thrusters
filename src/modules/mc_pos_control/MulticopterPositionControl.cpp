@@ -653,6 +653,34 @@ void MulticopterPositionControl::Run()
 			geometric_setpoint_s geometric_sp;
 			geometric_sp.timestamp =hrt_absolute_time();
 
+			//Check if there is better way to change
+			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
+
+			// Operation  Modes
+			if (_param_rc_sim_mode.get()==1)
+			{
+				manual_control_switches_sub.update(&switches);
+				int32_t att_mode= switches.planar_mode_switch;
+				param_set(vectoring_param,&att_mode);
+				planar_status.att_mode=switches.planar_mode_switch;
+				thrust_vec_status.tilt_angle[0]=math::radians(90);
+				thrust_vec_status.tilt_angle[1]=math::radians(90);
+				thrust_vec_status.tilt_angle[2]=math::radians(90);
+
+			}
+
+			else
+			{
+				thrust_vec_status.tilt_angle[0]=math::radians(45);
+				thrust_vec_status.tilt_angle[1]=math::radians(45);
+				thrust_vec_status.tilt_angle[2]=math::radians(45);
+
+			}
+
+			planar_status.att_mode = _param_planar_att_mode.get();
+
+
+
 
 			//Get the the attitude setpoint with the planar attitude mode
 			if (_param_mpc_geom_ctrl.get())
@@ -669,39 +697,7 @@ void MulticopterPositionControl::Run()
 
 
 
-
-			// thrust vectoring setpoint
-
-			// _control.getThrustVectoringSetpoint(geometric_sp);
-			// PX4_INFO("Thrust %f",double(geometric_sp.thrust[2]));
-
-			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
-
-
-			if (_param_rc_sim_mode.get()==1)
-			{
-				manual_control_switches_sub.update(&switches);
-				int32_t att_mode= switches.planar_mode_switch;
-				param_set(vectoring_param,&att_mode);
-				planar_status.att_mode=switches.planar_mode_switch;
-				thrust_vec_status.servo_angle[0]=math::radians(90);
-				thrust_vec_status.servo_angle[1]=math::radians(90);
-				thrust_vec_status.servo_angle[2]=math::radians(90);
-
-			}
-
-			else
-			{
-				thrust_vec_status.servo_angle[0]=math::radians(45);
-				thrust_vec_status.servo_angle[1]=math::radians(45);
-				thrust_vec_status.servo_angle[2]=math::radians(45);
-
-			}
-
-			planar_status.att_mode = _param_planar_att_mode.get();
 			_planar_attitude_status_pub.publish(planar_status);
-
-			//publish the attitude
 			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
 			_geometric_setpoint_pub.publish(geometric_sp);
 

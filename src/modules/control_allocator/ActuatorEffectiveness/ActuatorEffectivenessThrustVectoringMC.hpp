@@ -30,6 +30,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
+/**
+ * @file ActuatorEffectivenessThrustVectoringMC.hpp
+ *
+ * Actuator effectiveness for vector thrusting module
+ *
+ * @author Ricardo Rosales Martinez
+ */
+
+
 
 #pragma once
 
