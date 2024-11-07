@@ -382,7 +382,7 @@ ControlAllocator::Run()
 	vehicle_thrust_setpoint_s vehicle_thrust_setpoint;
 
 	///// CUSTOM /////
-	planar_thrust_setpoint_s planar_thrust_setpoint;
+	thrust_vectoring_command_s thrust_vectoring_status;
 
 	// thrust_vectoring_setpoint_s thrust_vec_setpoint;
 	matrix::Vector<float, NUM_ACTUATORS> actuator_sp;
@@ -396,10 +396,10 @@ ControlAllocator::Run()
 	///// CUSTOM END /////
 
 	// If the sytem is in offboard use the following
-	if (_thrust_vectoring_status_sub.update(&planar_thrust_setpoint)){
-		_planar_control_mode = planar_thrust_setpoint.control_mode;
-		_planar_thrust_sp= matrix::Vector3f(planar_thrust_setpoint.force);
-		_planar_torque_sp= matrix::Vector3f(planar_thrust_setpoint.torque);
+	if (_thrust_vectoring_status_sub.update(&thrust_vectoring_status)){
+		_planar_control_mode = thrust_vectoring_status.flight_mode;
+		_vectoring_thrust_sp= matrix::Vector3f(thrust_vectoring_status.force);
+		_vectoring_torque_sp= matrix::Vector3f(thrust_vectoring_status.torque);
 
 			if (dt > 5_ms) {
 			do_update = true;

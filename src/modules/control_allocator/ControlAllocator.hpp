@@ -213,8 +213,8 @@ private:
 	///// CUSTOM /////
 	matrix::Vector3f _thrust_vector;
 
-	matrix::Vector3f _planar_thrust_sp;
-	matrix::Vector3f _planar_torque_sp;
+	matrix::Vector3f _vectoring_thrust_sp;
+	matrix::Vector3f _vectoring_torque_sp;
 
 	matrix::Vector<float,8> angle_sp;
 	matrix::Vector<float,8> prev_angle_sp;

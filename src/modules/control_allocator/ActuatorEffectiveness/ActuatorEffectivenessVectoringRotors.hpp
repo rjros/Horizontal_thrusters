@@ -46,7 +46,7 @@
 #include <uORB/SubscriptionInterval.hpp>
 
 ///CUSTOM///
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/thrust_vectoring_command.h>
 ///END///
 
 class ActuatorEffectivenessTilts;
@@ -140,9 +140,9 @@ public:
 	uint32_t getForwardsMotors() const;
 	uint32_t _num_tilted_rotors {2}; //total number tilted motors
 	int32_t tilting_index {0}; //value from the first tiltable motor
-	thrust_vectoring_setpoint_status_s thrust_vec_status;
+	thrust_vectoring_command_s thrust_vec_status;
 
-	uORB::Subscription _thrust_vectoring_setpoint_status_sub{ORB_ID(thrust_vectoring_setpoint_status)};
+	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_status)};
 
 
 

@@ -73,7 +73,7 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 			///TODO: Normalize output data
 			// double output = (outputs[i] - 500) / 500.0;
 			thrust_vectoring_command_s thrust_vec_status;
-			_thrust_vectoring_status_sub.copy(thrust_vec_status);
+			_thrust_vectoring_status_sub.copy(&thrust_vec_status);
 			float tilt_angle = thrust_vec_status.tilt_angle[i];
 			servo_output.set_data(tilt_angle);
 
