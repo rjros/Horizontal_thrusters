@@ -46,7 +46,6 @@
 
 // Custom msgs for the thrust vectoring vehicle
 // Move to a separate module
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
 #include <uORB/topics/geometric_setpoint.h>
 
 

@@ -188,8 +188,9 @@ set(msg_files
 	TecsStatus.msg
 	TelemetryStatus.msg
 	## CUSTOM ##
-	ThrustVectoringSetpointStatus.msg
-	ThrustVectoringSetpoint.msg
+	ThrustVectoringCommand.msg
+	# ThrustVectoringSetpointStatus.msg
+	# ThrustVectoringSetpoint.msg
 	## CUSTOM ##
 	TiltrotorExtraControls.msg
 	TimesyncStatus.msg

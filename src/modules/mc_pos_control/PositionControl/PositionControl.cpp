@@ -1104,10 +1104,9 @@ void PositionControl::getLocalPositionSetpoint(vehicle_local_position_setpoint_s
 
 
 void PositionControl::getAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode,
-					vehicle_attitude_setpoint_s &attitude_setpoint, planar_attitude_status_s &planar_status)
-					const
+					vehicle_attitude_setpoint_s &attitude_setpoint) const
 {
-	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint, planar_status,planar_flag);
+	ControlMath::thrustToAttitude(_thr_sp, _yaw_sp, att, vectoring_att_mode,attitude_setpoint);
 	attitude_setpoint.yaw_sp_move_rate = _yawspeed_sp;
 }
 

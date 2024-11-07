@@ -85,10 +85,7 @@
 
 //CUSTOM
 // Separate based on the type of vehicles
-#include <uORB/topics/planar_thrust_setpoint.h>
-
-#include <uORB/topics/thrust_vectoring_setpoint.h>
-#include <uORB/topics/vehicle_attitude_setpoint.h>
+#include <uORB/topics/thrust_vectoring_command.h>
 
 
 class ControlAllocator : public ModuleBase<ControlAllocator>, public ModuleParams, public px4::ScheduledWorkItem
@@ -190,8 +187,6 @@ private:
 	uORB::SubscriptionCallbackWorkItem _vehicle_thrust_setpoint_sub{this, ORB_ID(vehicle_thrust_setpoint)};	 /**< vehicle thrust setpoint subscription */
 
 
-
-
 	uORB::Subscription _vehicle_torque_setpoint1_sub{ORB_ID(vehicle_torque_setpoint), 1};  /**< vehicle torque setpoint subscription (2. instance) */
 	uORB::Subscription _vehicle_thrust_setpoint1_sub{ORB_ID(vehicle_thrust_setpoint), 1};	 /**< vehicle thrust setpoint subscription (2. instance) */
 
@@ -209,11 +204,7 @@ private:
 
 
 	///// CUSTOM /////
-	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
-	// uORB::SubscriptionCallbackWorkItem _thrust_vectoring_status_sub{this,ORB_ID(thrust_vectoring_setpoint_status)};
-
-	uORB::Subscription _thrust_vectoring_setpoint_sub{ORB_ID(thrust_vectoring_setpoint)};
-	uORB::Subscription _vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
+	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_status_sub{this, ORB_ID(thrust_vectoring_status)};	 /**< vehicle planar thrust setpoint subscription */
 	///// CUSTOM END /////
 
 	matrix::Vector3f _torque_sp;

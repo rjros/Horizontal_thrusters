@@ -77,8 +77,7 @@
 #include <uORB/topics/vehicle_angular_velocity.h>
 //read values from switches
 #include <uORB/topics/manual_control_switches.h>
-#include <uORB/topics/thrust_vectoring_setpoint.h>
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/thrust_vectoring_command.h>
 #include <uORB/topics/geometric_setpoint.h>
 
 
@@ -121,8 +120,7 @@ private:
 	uORB::Publication<vehicle_local_position_setpoint_s> _local_pos_sp_pub{ORB_ID(vehicle_local_position_setpoint)};	/**< vehicle local position setpoint publication */
 
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-	uORB::Publication<planar_attitude_status_s>	_planar_attitude_status_pub{ORB_ID(planar_attitude_status)}; //planar flight status
-	uORB::Publication<thrust_vectoring_setpoint_status_s>	_thrust_vectoring_setpoint_status_pub{ORB_ID(thrust_vectoring_setpoint_status)}; //thrust vectoring setpoint
+	uORB::Publication<thrust_vectoring_command_s>	_thrust_vectoring_status_pub{ORB_ID(thrust_vectoring_status)}; //thrust vectoring setpoint
 	uORB::Publication<geometric_setpoint_s>	_geometric_setpoint_pub{ORB_ID(geometric_setpoint)}; //thrust vectoring setpoint
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
@@ -141,6 +139,7 @@ private:
 
 
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
+	uORB::Subscription  _thrust_vectoring_command_sub{ORB_ID(thrust_vectoring_setpoint)};
 	uORB::Subscription manual_control_switches_sub{ORB_ID(manual_control_switches)};
 	uORB::Subscription manual_control_set_sub{ORB_ID(manual_control_setpoint)};
 	manual_control_setpoint_s stick_setpoints{};
@@ -250,7 +249,7 @@ private:
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 		(ParamInt<px4::params::RC_SIM>) _param_rc_sim_mode,
-		(ParamInt<px4::params::VECT_ATT_MODE>) _param_planar_att_mode,
+		(ParamInt<px4::params::VECT_ATT_MODE>) _param_vect_att_mode,
 		//Control mode with RC
 		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw,
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////

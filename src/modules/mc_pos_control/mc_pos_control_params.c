@@ -932,10 +932,12 @@ PARAM_DEFINE_INT32(VECT_ATT_MODE, 0);
  * RC/Simulator Inputs
  *
  *
- * @min 0
- * @max 1
- * @value 0 Simulation
+ * @min 1
+ * @max 3
  * @value 1 RC
+ * @value 2 QGC
+ * @value 3 Onboard PC
+
  */
 PARAM_DEFINE_INT32(RC_SIM, 1);
 

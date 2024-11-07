@@ -39,7 +39,7 @@
 
 ///// CUSTOM /////
 #include <uORB/Subscription.hpp>
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+#include <uORB/topics/thrust_vectoring_command.h>
 
 ///// CUSTOM END /////
 
@@ -82,7 +82,7 @@ private:
 	std::vector<gz::transport::Node::Publisher> _servos_pub;
 
 	///// CUSTOM /////
-	uORB::Subscription _thrust_vectoring_setpoint_status_sub{ORB_ID(thrust_vectoring_setpoint_status)};
+	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_status)};
 
 	///// CUSTOM END /////
 };

@@ -59,8 +59,7 @@ namespace ControlMath
  * @param omni_att_mode attitude mode for omnidirectional vehicles
  */
 void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
-		      const int vectoring_att_mode, vehicle_attitude_setpoint_s &att_sp,
-		      planar_attitude_status_s & planar_vectoring_status,bool planar_flight);
+		      const int vectoring_att_mode, vehicle_attitude_setpoint_s &att_sp);
 
 /**
  * Converts inertial thrust vector and yaw set-point to a zero-tilt attitude and body thrust vector for an omni-directional multirotor.

@@ -591,39 +591,8 @@ void MulticopterPositionControl::Run()
 
 			_control.setState(states);
 
-
-
-			//Get the the attitude setpoint with the planar attitude mode
-			if (_param_mpc_geom_ctrl.get())
-			{
-				if (!_control.updateGeometric(dt,_param_planar_att_mode.get())) {
-
-					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
-					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
-					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
-					_control.updateGeometric(dt,_param_planar_att_mode.get());
-				}
-
-			}
-			else{
-
-
-				if (!_control.update(dt,_param_planar_att_mode.get(),planar_flight)) {
-
-					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
-					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
-					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
-					_control.update(dt,_param_planar_att_mode.get(),planar_flight);
-
-				}
-
-
-			}
-
-
-
+			//////////////////////////////////////////////////////////
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
-
 
 			//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE  ////
 			//Check the values of the stick to allow for mode switching tilted stop, and planar motion
@@ -646,41 +615,79 @@ void MulticopterPositionControl::Run()
 
 
 			// Thrust planar parameters, changed by rc or by the QGroundControl
-			planar_attitude_status_s planar_status{};
-			planar_status.timestamp = _time_stamp_last_loop;
-
-			thrust_vectoring_setpoint_status_s thrust_vec_status;
+			thrust_vectoring_command_s thrust_vec_setpoint;
+			thrust_vectoring_command_s thrust_vec_status;
 			geometric_setpoint_s geometric_sp;
 			geometric_sp.timestamp =hrt_absolute_time();
 
 			//Check if there is better way to change
 			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
+			int8_t flight_mode{0};
 
-			// Operation  Modes
-			if (_param_rc_sim_mode.get()==1)
+			switch (_param_rc_sim_mode.get())
 			{
-				manual_control_switches_sub.update(&switches);
-				int32_t att_mode= switches.planar_mode_switch;
-				param_set(vectoring_param,&att_mode);
-				planar_status.att_mode=switches.planar_mode_switch;
-				thrust_vec_status.tilt_angle[0]=math::radians(90);
-				thrust_vec_status.tilt_angle[1]=math::radians(90);
-				thrust_vec_status.tilt_angle[2]=math::radians(90);
-
-			}
-
-			else
-			{
+			case 1:
+				// RC MODE
+				flight_mode= _param_vect_att_mode.get();
+				param_set(vectoring_param,&flight_mode);
 				thrust_vec_status.tilt_angle[0]=math::radians(45);
-				thrust_vec_status.tilt_angle[1]=math::radians(45);
-				thrust_vec_status.tilt_angle[2]=math::radians(45);
+			 	thrust_vec_status.tilt_angle[1]=math::radians(45);
+			 	thrust_vec_status.tilt_angle[2]=math::radians(45);
+
+				break;
+			case 2:
+				//QGC
+				flight_mode= _param_vect_att_mode.get();
+				thrust_vec_status.tilt_angle[0]=math::radians(90);
+			 	thrust_vec_status.tilt_angle[1]=math::radians(90);
+			 	thrust_vec_status.tilt_angle[2]=math::radians(90);
+				break;
+			case 3:
+				//PC
+				_thrust_vectoring_command_sub.update(&thrust_vec_setpoint);
+				flight_mode = thrust_vec_setpoint.flight_mode; // later defined from the onboard pc
+				thrust_vec_status.tilt_angle[0] = thrust_vec_setpoint.tilt_angle[0];
+				thrust_vec_status.tilt_angle[1] = thrust_vec_setpoint.tilt_angle[1];
+				thrust_vec_status.tilt_angle[2] = thrust_vec_setpoint.tilt_angle[2];
+				thrust_vec_status.tilt_angle[3] = thrust_vec_setpoint.tilt_angle[3];
+				thrust_vec_status.tilt_angle[4] = thrust_vec_setpoint.tilt_angle[4];
+				thrust_vec_status.tilt_angle[5] = thrust_vec_setpoint.tilt_angle[5];
+				thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[6];
+				thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[7];
+				param_set(vectoring_param,&flight_mode);
+				break;
+
+			default:
+
+				break;
+			}
+			///////////////////////////////////////
+			//Get the the attitude setpoint with the planar attitude mode
+			if (_param_mpc_geom_ctrl.get())
+			{
+				if (!_control.updateGeometric(dt,flight_mode)) {
+
+					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
+					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
+					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
+					_control.updateGeometric(dt,flight_mode);
+				}
 
 			}
-
-			planar_status.att_mode = _param_planar_att_mode.get();
-
+			else{
 
 
+				if (!_control.update(dt,flight_mode,planar_flight)) {
+
+					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
+					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
+					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
+					_control.update(dt,flight_mode,planar_flight);
+
+				}
+
+
+			}
 
 			//Get the the attitude setpoint with the planar attitude mode
 			if (_param_mpc_geom_ctrl.get())
@@ -690,17 +697,14 @@ void MulticopterPositionControl::Run()
 			}
 			else{
 
-				_control.getAttitudeSetpoint(matrix::Quatf(att.q), _param_planar_att_mode.get(),
-							attitude_setpoint, planar_status);
+				_control.getAttitudeSetpoint(matrix::Quatf(att.q), flight_mode,attitude_setpoint);
 
 			}
 
 
 
-			_planar_attitude_status_pub.publish(planar_status);
-			_thrust_vectoring_setpoint_status_pub.publish(thrust_vec_status);
+			_thrust_vectoring_status_pub.publish(thrust_vec_status);
 			_geometric_setpoint_pub.publish(geometric_sp);
-
 			// Here place the new attitude setpoint
 			_vehicle_attitude_setpoint_pub.publish(attitude_setpoint);
 

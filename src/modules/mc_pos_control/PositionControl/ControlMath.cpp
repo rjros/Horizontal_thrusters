@@ -52,7 +52,7 @@ namespace ControlMath
 
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att, const int vectoring_att_mode,
-		      vehicle_attitude_setpoint_s &att_sp, planar_attitude_status_s &planar_status,bool planar_flight)
+		      vehicle_attitude_setpoint_s &att_sp)
 {
 	switch (vectoring_att_mode) {
 

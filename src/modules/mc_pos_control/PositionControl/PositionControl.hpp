@@ -224,8 +224,7 @@ public:
 	 * @param attitude_setpoint reference to struct to fill up
 	 * @param thrust_vectoring_status thrust vectoring status
 	 */
-	void getAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode, vehicle_attitude_setpoint_s &attitude_setpoint,
-					planar_attitude_status_s &thrust_vectoring_status) const;
+	void getAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode, vehicle_attitude_setpoint_s &attitude_setpoint) const;
 
 
 	/**
