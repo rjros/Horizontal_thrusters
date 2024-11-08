@@ -626,34 +626,34 @@ void MulticopterPositionControl::Run()
 
 			switch (_param_rc_sim_mode.get())
 			{
-			case 1:
+			case 0:
 				// RC MODE
 				flight_mode= _param_vect_att_mode.get();
 				param_set(vectoring_param,&flight_mode);
-				thrust_vec_status.tilt_angle[0]=math::radians(45);
-			 	thrust_vec_status.tilt_angle[1]=math::radians(45);
-			 	thrust_vec_status.tilt_angle[2]=math::radians(45);
+				thrust_vec_status.tilt_angle[0]=math::radians(90);
+			 	thrust_vec_status.tilt_angle[1]=90;
+			 	// thrust_vec_status.tilt_angle[2]=0;//math::radians(45);
 
 				break;
-			case 2:
+			case 1:
 				//QGC
 				flight_mode= _param_vect_att_mode.get();
-				thrust_vec_status.tilt_angle[0]=math::radians(90);
-			 	thrust_vec_status.tilt_angle[1]=math::radians(90);
-			 	thrust_vec_status.tilt_angle[2]=math::radians(90);
+				thrust_vec_status.tilt_angle[0]=0;//math::radians(90);
+			 	thrust_vec_status.tilt_angle[1]=0;//math::radians(45);
+			 	// thrust_vec_status.tilt_angle[2]=math::radians(90);
 				break;
-			case 3:
+			case 2:
 				//PC
 				_thrust_vectoring_command_sub.update(&thrust_vec_setpoint);
 				flight_mode = thrust_vec_setpoint.flight_mode; // later defined from the onboard pc
 				thrust_vec_status.tilt_angle[0] = thrust_vec_setpoint.tilt_angle[0];
 				thrust_vec_status.tilt_angle[1] = thrust_vec_setpoint.tilt_angle[1];
-				thrust_vec_status.tilt_angle[2] = thrust_vec_setpoint.tilt_angle[2];
-				thrust_vec_status.tilt_angle[3] = thrust_vec_setpoint.tilt_angle[3];
-				thrust_vec_status.tilt_angle[4] = thrust_vec_setpoint.tilt_angle[4];
-				thrust_vec_status.tilt_angle[5] = thrust_vec_setpoint.tilt_angle[5];
-				thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[6];
-				thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[7];
+				// thrust_vec_status.tilt_angle[2] = thrust_vec_setpoint.tilt_angle[2];
+				// thrust_vec_status.tilt_angle[3] = thrust_vec_setpoint.tilt_angle[3];
+				// thrust_vec_status.tilt_angle[4] = thrust_vec_setpoint.tilt_angle[4];
+				// thrust_vec_status.tilt_angle[5] = thrust_vec_setpoint.tilt_angle[5];
+				// thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[6];
+				// thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[7];
 				param_set(vectoring_param,&flight_mode);
 				break;
 

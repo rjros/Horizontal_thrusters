@@ -521,8 +521,8 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
         </limit>
         <dynamics>
           <friction>1.0</friction>
@@ -536,7 +536,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.200 0 0.411  0 0 3.14159 </pose>
+        <pose> -0.200 0 0.411  0 0 3.14159</pose>
         <inertial>
             <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
             <mass>0.175</mass>
@@ -582,8 +582,8 @@
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
         </limit>
         <dynamics>
           <friction>1.0</friction>

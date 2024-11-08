@@ -400,6 +400,7 @@ ControlAllocator::Run()
 		_planar_control_mode = thrust_vectoring_status.flight_mode;
 		_vectoring_thrust_sp= matrix::Vector3f(thrust_vectoring_status.force);
 		_vectoring_torque_sp= matrix::Vector3f(thrust_vectoring_status.torque);
+		PX4_INFO("Servo values for 1 %f 2 %f ",double(thrust_vectoring_status.tilt_angle[0]),double(thrust_vectoring_status.tilt_angle[1]));
 
 			if (dt > 5_ms) {
 			do_update = true;
