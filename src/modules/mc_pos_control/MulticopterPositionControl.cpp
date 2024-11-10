@@ -621,7 +621,7 @@ void MulticopterPositionControl::Run()
 			geometric_sp.timestamp =hrt_absolute_time();
 
 			//Check if there is better way to change
-			param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
+			// param_t vectoring_param = param_handle(px4::params::VECT_ATT_MODE);
 			int8_t flight_mode{0};
 
 			switch (_param_rc_sim_mode.get())
@@ -629,38 +629,54 @@ void MulticopterPositionControl::Run()
 			case 0:
 				// RC MODE
 				flight_mode= _param_vect_att_mode.get();
-				param_set(vectoring_param,&flight_mode);
-				thrust_vec_status.tilt_angle[0]=math::radians(90);
-			 	thrust_vec_status.tilt_angle[1]=90;
-			 	// thrust_vec_status.tilt_angle[2]=0;//math::radians(45);
+				// param_set(vectoring_param,&flight_mode);
+				thrust_vec_status.tilt_angle[0]=math::radians(_param_mpc_vec_ang_0.get());
+				thrust_vec_status.tilt_angle[1]=math::radians(_param_mpc_vec_ang_1.get());
+				thrust_vec_status.tilt_angle[2]=math::radians(_param_mpc_vec_ang_2.get());
+				thrust_vec_status.tilt_angle[3]=math::radians(_param_mpc_vec_ang_3.get());
+				thrust_vec_status.tilt_angle[4]=math::radians(_param_mpc_vec_ang_4.get());
+				thrust_vec_status.tilt_angle[5]=math::radians(_param_mpc_vec_ang_5.get());
+				thrust_vec_status.tilt_angle[6]=math::radians(_param_mpc_vec_ang_6.get());
+				thrust_vec_status.tilt_angle[7]=math::radians(_param_mpc_vec_ang_7.get());
+
+			// PX4_INFO("Servo values for 1 %f 2 %f ",double(thrust_vec_status.tilt_angle[0]),double(thrust_vec_status.tilt_angle[1]));
 
 				break;
 			case 1:
 				//QGC
 				flight_mode= _param_vect_att_mode.get();
-				thrust_vec_status.tilt_angle[0]=0;//math::radians(90);
-			 	thrust_vec_status.tilt_angle[1]=0;//math::radians(45);
-			 	// thrust_vec_status.tilt_angle[2]=math::radians(90);
+				thrust_vec_status.tilt_angle[0]=0.0f;
+				thrust_vec_status.tilt_angle[1]=0.0f;
+				thrust_vec_status.tilt_angle[2]=0.0f;
+				thrust_vec_status.tilt_angle[3]=0.0f;
+				thrust_vec_status.tilt_angle[4]=0.0f;
+				thrust_vec_status.tilt_angle[5]=0.0f;
+				thrust_vec_status.tilt_angle[6]=0.0f;
+				thrust_vec_status.tilt_angle[7]=0.0f;
 				break;
 			case 2:
 				//PC
-				_thrust_vectoring_command_sub.update(&thrust_vec_setpoint);
-				flight_mode = thrust_vec_setpoint.flight_mode; // later defined from the onboard pc
+				_thrust_vectoring_command_sub.copy(&thrust_vec_setpoint);
+				// flight_mode = thrust_vec_setpoint.flight_mode; // later defined from the onboard pc
+				flight_mode= _param_vect_att_mode.get();
 				thrust_vec_status.tilt_angle[0] = thrust_vec_setpoint.tilt_angle[0];
 				thrust_vec_status.tilt_angle[1] = thrust_vec_setpoint.tilt_angle[1];
-				// thrust_vec_status.tilt_angle[2] = thrust_vec_setpoint.tilt_angle[2];
-				// thrust_vec_status.tilt_angle[3] = thrust_vec_setpoint.tilt_angle[3];
-				// thrust_vec_status.tilt_angle[4] = thrust_vec_setpoint.tilt_angle[4];
-				// thrust_vec_status.tilt_angle[5] = thrust_vec_setpoint.tilt_angle[5];
-				// thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[6];
-				// thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[7];
-				param_set(vectoring_param,&flight_mode);
+				thrust_vec_status.tilt_angle[2] = thrust_vec_setpoint.tilt_angle[2];
+				thrust_vec_status.tilt_angle[3] = thrust_vec_setpoint.tilt_angle[3];
+				thrust_vec_status.tilt_angle[4] = thrust_vec_setpoint.tilt_angle[4];
+				thrust_vec_status.tilt_angle[5] = thrust_vec_setpoint.tilt_angle[5];
+				thrust_vec_status.tilt_angle[6] = thrust_vec_setpoint.tilt_angle[6];
+				thrust_vec_status.tilt_angle[7] = thrust_vec_setpoint.tilt_angle[7];
+				// param_set(vectoring_param,&flight_mode);
 				break;
 
 			default:
 
 				break;
 			}
+			// PX4_INFO("Servo values for 1 %f 2 %f ",double(thrust_vec_status.tilt_angle[0]),double(thrust_vec_status.tilt_angle[1]));
+			thrust_vec_status.flight_mode = flight_mode;
+
 			///////////////////////////////////////
 			//Get the the attitude setpoint with the planar attitude mode
 			if (_param_mpc_geom_ctrl.get())
@@ -700,7 +716,6 @@ void MulticopterPositionControl::Run()
 				_control.getAttitudeSetpoint(matrix::Quatf(att.q), flight_mode,attitude_setpoint);
 
 			}
-
 
 
 			_thrust_vectoring_status_pub.publish(thrust_vec_status);

@@ -69,7 +69,7 @@ public:
 		matrix::Vector3f axis;
 		float thrust_coef;
 		float moment_ratio;
-		int tilt_index;
+		float tilt_index;
 	};
 
 	struct Geometry {
@@ -105,7 +105,9 @@ public:
 	}
 
 	static int computeEffectivenessMatrix(const Geometry &geometry,
-					      EffectivenessMatrix &effectiveness, int actuator_start_index = 0,bool tiltable_matrix=false,float tilt_angle=0,int att_mode=1);
+					      EffectivenessMatrix &effectiveness, int actuator_start_index = 0,bool tiltable_matrix=false,
+					      matrix::Vector<float,8> tilt_angles = matrix::Vector<float,8>()
+					      ,int flight_mode=1);
 
 	bool addActuators(Configuration &configuration,bool tiltable=0);
 
@@ -138,13 +140,14 @@ public:
 	uint32_t getMotors() const;
 	uint32_t getUpwardsMotors() const;
 	uint32_t getForwardsMotors() const;
+
+	//// THRUST VECTORING COMMANDS ////
 	uint32_t _num_tilted_rotors {2}; //total number tilted motors
 	int32_t tilting_index {0}; //value from the first tiltable motor
 	thrust_vectoring_command_s thrust_vec_status;
-
-	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_status)};
-
-
+	matrix::Vector<float,8> _tilt_angles;
+	uORB::Subscription _thrust_vectoring_command_sub{ORB_ID(thrust_vectoring_status)};
+	//// THRUST VECTORING COMMANDS  ////
 
 
 private:

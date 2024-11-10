@@ -7,14 +7,14 @@
     <link name="base_link">
     <inertial>
         <pose>0 0 0.015702 0 0 0</pose>
-        <mass>2.17</mass>
+        <mass>2.0</mass>
         <inertia>
-          <ixx>0.0037</ixx>
+          <ixx>0.02166666666666667</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0037</iyy>
+          <iyy>0.02166666666666667</iyy>
           <iyz>0</iyz>
-          <izz>0.0061</izz>
+          <izz>0.04000000000000001</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -75,12 +75,15 @@
         <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_0_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -133,13 +136,16 @@
         <velocity_decay/>
         <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_1_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -192,13 +198,15 @@
         <velocity_decay/>
         <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_2_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -252,12 +260,15 @@
         <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_3_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -418,12 +429,15 @@
         <pose> 0.200 0 0.015702 0 0 0 </pose>
         <inertial>
             <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
-            <mass>0.175</mass>
-            <inertia>
-              <ixx>6.3787e-05</ixx>
-              <iyy>8.6158e-05</iyy>
-              <izz>8.6158e-05</izz>
-            </inertia>
+          <mass>0.00000001</mass>
+          <inertia>
+            <ixx>0.000001</ixx>
+            <ixy>0.0</ixy>
+            <iyy>0.000001</iyy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+            <izz>0.000001</izz>
+          </inertia>
         </inertial>
        <visual name="edf_1_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -457,19 +471,22 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_1_body</child>
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose> 0 0 0 3.14 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.14</lower>
+          <upper>3.14</upper>
         </limit>
         <dynamics>
-          <friction>1.0</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
+          <damping>1.000</damping>
         </dynamics>
       </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
     </joint>
 
     <link name="edf_2_body">
@@ -478,12 +495,14 @@
         <velocity_decay/>
         <pose> -0.200 0 0.016 0 0 3.14159 </pose>
          <inertial>
-            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
-            <mass>0.175</mass>
+            <mass>0.00000001</mass>
             <inertia>
-              <ixx>6.3787e-05</ixx>
-              <iyy>8.6158e-05</iyy>
-              <izz>8.6158e-05</izz>
+              <ixx>0.000001</ixx>
+              <ixy>0.0</ixy>
+              <iyy>0.000001</iyy>
+              <ixz>0.0</ixz>
+              <iyz>0.0</iyz>
+              <izz>0.000001</izz>
             </inertia>
         </inertial>
       <visual name="edf_2_visual">
@@ -518,19 +537,22 @@
     <joint name="edf_2_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_2_body</child>
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose> 0 0 0 3.14 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-0.53</lower>
-          <upper>0.53</upper>
+          <lower>-3.14</lower>
+          <upper>3.14</upper>
         </limit>
         <dynamics>
-          <friction>1.0</friction>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
+          <damping>1.000</damping>
         </dynamics>
       </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
     </joint>
 
 <link name="rotor_4">
@@ -539,12 +561,15 @@
         <velocity_decay/>
         <pose> 0.200 0.0  0.016  0.0 1.5708 3.145159</pose>
         <inertial>
-          <mass>0.025</mass>
-          <inertia>
-            <ixx>3.9146e-06</ixx>
-            <iyy>3.9146e-06</iyy>
-            <izz>7.8125e-06</izz>
-          </inertia>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_4_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -597,12 +622,15 @@
         <velocity_decay/>
         <pose> -0.200 0.0  0.016  0.0 1.5708 0.0</pose>
         <inertial>
-          <mass>0.025</mass>
-          <inertia>
-            <ixx>3.9146e-06</ixx>
-            <iyy>3.9146e-06</iyy>
-            <izz>7.8125e-06</izz>
-          </inertia>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -760,13 +788,16 @@
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_1_joint</joint_name>
       <sub_topic>servo_0</sub_topic>
-      <p_gain>10.0</p_gain>
+      <p_gain>10</p_gain>
+      <!-- <velocity_limit>3.0</velocity_limit> -->
+
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_2_joint</joint_name>
       <sub_topic>servo_1</sub_topic>
-      <p_gain>10.0</p_gain>
+      <p_gain>10.0</p_gain>  <!-- Higher value for faster response -->
+      <!-- <velocity_limit>3.0</velocity_limit> -->
     </plugin>
   </model>
 </sdf>

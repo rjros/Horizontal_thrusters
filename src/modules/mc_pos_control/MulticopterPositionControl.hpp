@@ -257,6 +257,16 @@ private:
 		(ParamFloat<px4::params::MAX_HOR_THR>)    _param_mpc_max_hor_thr,
 		(ParamBool<px4::params::MPC_GEOM_CTRL>)   _param_mpc_geom_ctrl,
 
+		(ParamFloat<px4::params::VECT_ANG_0>)     _param_mpc_vec_ang_0,
+		(ParamFloat<px4::params::VECT_ANG_1>)     _param_mpc_vec_ang_1,
+		(ParamFloat<px4::params::VECT_ANG_2>)     _param_mpc_vec_ang_2,
+		(ParamFloat<px4::params::VECT_ANG_3>)     _param_mpc_vec_ang_3,
+		(ParamFloat<px4::params::VECT_ANG_4>)     _param_mpc_vec_ang_4,
+		(ParamFloat<px4::params::VECT_ANG_5>)     _param_mpc_vec_ang_5,
+		(ParamFloat<px4::params::VECT_ANG_6>)     _param_mpc_vec_ang_6,
+		(ParamFloat<px4::params::VECT_ANG_7>)     _param_mpc_vec_ang_7,
+
+
 		(ParamFloat<px4::params::GEOM_X_P>)    _param_mpc_geom_x_p,
 		(ParamFloat<px4::params::GEOM_Y_P>)    _param_mpc_geom_y_p,
 		(ParamFloat<px4::params::GEOM_Z_P>)    _param_mpc_geom_z_p,

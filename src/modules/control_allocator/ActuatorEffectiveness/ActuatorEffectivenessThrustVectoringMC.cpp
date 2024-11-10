@@ -57,7 +57,7 @@ ActuatorEffectivenessThrustVectoringMC::ActuatorEffectivenessThrustVectoringMC(M
 void ActuatorEffectivenessThrustVectoringMC::updateParams()
 {
 	ModuleParams::updateParams();
-	PX4_INFO("Updated params in Thrust Vectoring Effectivness Matrix");
+	// PX4_INFO("Updated params in Thrust Vectoring Effectivness Matrix");
 	// _mc_rotors_fixed=new ActuatorEffectivenessVectoringRotors(this,ActuatorEffectivenessVectoringRotors::AxisConfiguration::FixedUpwards,false);
 	// _mc_rotors_tilted= new ActuatorEffectivenessVectoringRotors(this,ActuatorEffectivenessVectoringRotors::AxisConfiguration::FixedUpwards,false);
 }
@@ -70,6 +70,17 @@ ActuatorEffectivenessThrustVectoringMC::getEffectivenessMatrix(Configuration &co
 	if (external_update == EffectivenessUpdateReason::NO_EXTERNAL_UPDATE) {
 		return false;
 	}
+
+	// Think of solution to only update the secondary matrix when angles change
+	// if (external_update == EffectivenessUpdateReason::ANGLE_UPDATE) {
+	// 	_rotors_tilted_added_succesfully=false;
+	// 	configuration.selected_matrix=1;//< thrust vectoring motors
+	// 	_rotors_tilted_added_succesfully=_mc_rotors_tilted.addActuators(configuration,true);
+	// 	// PX4_INFO("Angle Change");
+
+	// 	return _rotors_tilted_added_succesfully;
+	// }
+
 
 	// //Flags for each matrix [[fixed],[tilted]]
 	_rotors_fixed_added_succesfully=false;
@@ -88,17 +99,11 @@ ActuatorEffectivenessThrustVectoringMC::getEffectivenessMatrix(Configuration &co
 	_rotors_tilted_added_succesfully=_mc_rotors_tilted.addActuators(configuration,true);
 	// // PX4_INFO("Configuration Num actuators tilted is %d ",*configuration.num_actuators);
 
-
-
-	// PX4_INFO("Configuration Num actuators is %d ",*configuration.num_actuators);
-
 	//Tilts, servos
 	configuration.selected_matrix=1;
 	_first_tilt_idx = configuration.num_actuators_matrix[configuration.selected_matrix];
 	// _tilts.updateTorqueSign(_mc_rotors_fixed.geometry());
 	_tilts_added_succesfully = _tilts.addActuators(configuration);
-
-
 
 	return (_rotors_fixed_added_succesfully && _tilts_added_succesfully);
 }

@@ -80,6 +80,8 @@ private:
 	MixingOutput _mixing_output{"SIM_GZ_SV", MAX_ACTUATORS, *this, MixingOutput::SchedulingPolicy::Auto, false, false};
 
 	std::vector<gz::transport::Node::Publisher> _servos_pub;
+	std::vector<double> _tilt_angles{0,0,0,0,0,0,0,0};
+
 
 	///// CUSTOM /////
 	uORB::Subscription _thrust_vectoring_status_sub{ORB_ID(thrust_vectoring_status)};

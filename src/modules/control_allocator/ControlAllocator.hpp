@@ -216,9 +216,10 @@ private:
 	matrix::Vector3f _vectoring_thrust_sp;
 	matrix::Vector3f _vectoring_torque_sp;
 
-	matrix::Vector<float,8> angle_sp;
-	matrix::Vector<float,8> prev_angle_sp;
-	matrix::Vector<float, NUM_ACTUATORS> servo_sp;
+	matrix::Vector<float,8> tilt_angle;
+	matrix::Vector<float,8> prev_tilt_angle;
+	int _tilt_index{};
+	int _rotor_count{};
 	///// CUSTOM END /////
 
 	bool _planar_control_mode {false};
@@ -248,6 +249,8 @@ private:
 		(ParamInt<px4::params::CA_R_REV>) _param_r_rev,
 		// *** CUSTOM ***
 		(ParamInt<px4::params::CA_INDEX>) _param_ca_index,
+		(ParamInt<px4::params::CA_ROTOR_COUNT>) _param_ca_count,
+
 		(ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode
 		//*** END ***
 	)

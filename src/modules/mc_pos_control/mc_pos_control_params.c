@@ -1226,6 +1226,104 @@ PARAM_DEFINE_FLOAT(GEOM_Z_I, 0.0f);
  */
 PARAM_DEFINE_FLOAT(GEOM_Z_D, 0.5f);
 
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_0, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_1, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_2, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_3, 0.0f);
+
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_4, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_5, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_6, 0.0f);
+/**
+ * Rotation Angle for thruster (z axis)
+ *
+ * Angle in degrees for debugging and testing with QGC.
+ *
+ * @min -90
+ * @max 90
+ * @increment 0.1
+ * @decimal 1
+ * @group Thrusters Position Control
+ */
+PARAM_DEFINE_FLOAT(VECT_ANG_7, 0.0f);
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 ///////////////////////////////////////////////////////////////////////////////////////
 

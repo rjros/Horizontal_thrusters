@@ -63,19 +63,20 @@ bool GZMixingInterfaceServo::updateOutputs(bool stop_motors, uint16_t outputs[MA
 	bool updated = false;
 	// cmd.command_value = (float)outputs[i] / 500.f - 1.f; // [-1, 1]
 
+	// thrust_vectoring_command_s thrust_vec_status;
+	// _thrust_vectoring_status_sub.copy(&thrust_vec_status);
+
 	int i = 0;
 	for (auto &servo_pub : _servos_pub) {
 		if (_mixing_output.isFunctionSet(i)) {
 			gz::msgs::Double servo_output;
 			///TODO: Normalize output data
 			// double output = (outputs[i] - 500) / 500.0;
+			// double output = (outputs[i] - 500) / 500.0;
 			thrust_vectoring_command_s thrust_vec_status;
-			_thrust_vectoring_status_sub.update(&thrust_vec_status);
+			_thrust_vectoring_status_sub.copy(&thrust_vec_status);
 			double tilt_angle = thrust_vec_status.tilt_angle[i];
 			servo_output.set_data(tilt_angle);
-			// std::cout << "Servo topic: " << tilt_angle << std::endl;
-
-
 			if (servo_pub.Valid()) {
 				servo_pub.Publish(servo_output);
 				updated = true;

@@ -127,6 +127,10 @@ ControlAllocator::parameters_updated()
 		_has_slew_rate |= _params.slew_rate_servos[i] > FLT_EPSILON;
 	}
 
+	//Custom check the tilting index
+	_tilt_index = _param_ca_index.get();
+	_rotor_count = _param_ca_count.get();
+
 	// Allocation method & effectiveness source
 	// Do this first: in case a new method is loaded, it will be configured below
 	bool updated = update_effectiveness_source();
@@ -323,8 +327,6 @@ ControlAllocator::Run()
 	if (_parameter_update_sub.updated() && !_armed) {
 		// clear update
 
-
-
 		parameter_update_s param_update;
 
 		_parameter_update_sub.copy(&param_update);
@@ -380,34 +382,37 @@ ControlAllocator::Run()
 	bool do_update = false;
 	vehicle_torque_setpoint_s vehicle_torque_setpoint;
 	vehicle_thrust_setpoint_s vehicle_thrust_setpoint;
-
 	///// CUSTOM /////
 	thrust_vectoring_command_s thrust_vectoring_status;
 
-	// thrust_vectoring_setpoint_s thrust_vec_setpoint;
 	matrix::Vector<float, NUM_ACTUATORS> actuator_sp;
 	matrix::Vector<float, NUM_ACTUATORS> fixed_actuator_sp;
 	matrix::Vector<float, NUM_ACTUATORS> tilting_actuator_sp;
-
-	//used to separate the thrust in tilted components
-	// _thrust_vector= matrix::Vector3f(att_sp.thrust_tilted);
-
-
 	///// CUSTOM END /////
+	const EffectivenessSource source = (EffectivenessSource)_param_ca_airframe.get();
+
 
 	// If the sytem is in offboard use the following
-	if (_thrust_vectoring_status_sub.update(&thrust_vectoring_status)){
-		_planar_control_mode = thrust_vectoring_status.flight_mode;
+	if (_thrust_vectoring_status_sub.updated()){
+		_thrust_vectoring_status_sub.copy(&thrust_vectoring_status);
+		for (int i=0;i<8;i++)
+		{
+			tilt_angle(i)=thrust_vectoring_status.tilt_angle[i];
+		}
 		_vectoring_thrust_sp= matrix::Vector3f(thrust_vectoring_status.force);
 		_vectoring_torque_sp= matrix::Vector3f(thrust_vectoring_status.torque);
-		PX4_INFO("Servo values for 1 %f 2 %f ",double(thrust_vectoring_status.tilt_angle[0]),double(thrust_vectoring_status.tilt_angle[1]));
 
-			if (dt > 5_ms) {
-			do_update = true;
-			// _timestamp_sample = planar_thrust_setpoint.timestamp;
-			}
+		if (tilt_angle!=prev_tilt_angle)
+		{
+			update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::ANGLE_UPDATE);
+		}
+
+
+		prev_tilt_angle=tilt_angle;
+		if (dt > 5_ms) {
+		do_update = true;
+		}
 	}
-
 
 	// Run allocator on torque changes
 	if (_vehicle_torque_setpoint_sub.update(&vehicle_torque_setpoint)) {
@@ -437,16 +442,22 @@ ControlAllocator::Run()
 
 		update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::NO_EXTERNAL_UPDATE);
 
+
 		// Set control setpoint vector(s)
 		matrix::Vector<float, NUM_AXES> c[ActuatorEffectiveness::MAX_NUM_MATRICES];
-		c[0](0) = _torque_sp(0);
-		c[0](1) = _torque_sp(1);
-		c[0](2) = _torque_sp(2);
-		c[0](3) = _thrust_sp(0);
-		c[0](4) = _thrust_sp(1);
-		c[0](5) = _thrust_sp(2);
 
-		if (_num_control_allocation > 1) {
+		if( source != EffectivenessSource::THRUST_VECTORING_MC ||
+		   ( source == EffectivenessSource::THRUST_VECTORING_MC &&
+		     _num_control_allocation == 1 ) )
+		{
+			c[0](0) = _torque_sp(0);
+			c[0](1) = _torque_sp(1);
+			c[0](2) = _torque_sp(2);
+			c[0](3) = _thrust_sp(0);
+			c[0](4) = _thrust_sp(1);
+			c[0](5) = _thrust_sp(2);
+
+			if (_num_control_allocation > 1) {
 			if (_vehicle_torque_setpoint1_sub.copy(&vehicle_torque_setpoint)) {
 				c[1](0) = vehicle_torque_setpoint.xyz[0];
 				c[1](1) = vehicle_torque_setpoint.xyz[1];
@@ -458,23 +469,82 @@ ControlAllocator::Run()
 				c[1](4) = vehicle_thrust_setpoint.xyz[1];
 				c[1](5) = vehicle_thrust_setpoint.xyz[2];
 			}
-		}
-
-		for (int i = 0; i < _num_control_allocation; ++i) {
-
-			_control_allocation[i]->setControlSetpoint(c[i]);
-
-			// Do allocation
-			_control_allocation[i]->allocate();
-			_actuator_effectiveness->allocateAuxilaryControls(dt, i, _control_allocation[i]->_actuator_sp); //flaps and spoilers
-			_actuator_effectiveness->updateSetpoint(c[i], i, _control_allocation[i]->_actuator_sp,
-								_control_allocation[i]->getActuatorMin(), _control_allocation[i]->getActuatorMax());
-
-			if (_has_slew_rate) {
-				_control_allocation[i]->applySlewRateLimit(dt);
 			}
 
-			_control_allocation[i]->clipActuatorSetpoint();
+			for (int i = 0; i < _num_control_allocation; ++i) {
+
+				_control_allocation[i]->setControlSetpoint(c[i]);
+
+				// Do allocation
+				_control_allocation[i]->allocate();
+				_actuator_effectiveness->allocateAuxilaryControls(dt, i, _control_allocation[i]->_actuator_sp); //flaps and spoilers
+				_actuator_effectiveness->updateSetpoint(c[i], i, _control_allocation[i]->_actuator_sp,
+									_control_allocation[i]->getActuatorMin(), _control_allocation[i]->getActuatorMax());
+
+
+				if (_has_slew_rate) {
+					_control_allocation[i]->applySlewRateLimit(dt);
+				}
+
+				_control_allocation[i]->clipActuatorSetpoint();
+				//check if missing commands
+				}
+
+
+		}
+		else {
+				c[0](0) = _torque_sp(0);
+				c[0](1) = _torque_sp(1);
+				c[0](2) = _torque_sp(2);
+				c[0](3) = 0;//_thrust_sp(0);
+				c[0](4) = 0;//_thrust_sp(1);
+				c[0](5) = _thrust_sp(2);
+
+				//TORQUE SETPOiNT XYZ
+				c[1](0) = 0;
+				c[1](1) = 0;
+				c[1](2) = 0;
+				//THRUST SETPOINTS XYZ
+				c[1](3) = _thrust_sp(0);//_thrust_vector(0);
+				c[1](4) = _thrust_sp(1);//_thrust_vector(1);
+				c[1](5) = 0.0f;//_thrust_vector(2);
+
+				//Do allocation
+				_control_allocation[0]->setControlSetpoint(c[0]);
+				_control_allocation[0]->allocate();
+				//Gets the setpoint in the actuator vector
+				fixed_actuator_sp = _control_allocation[0]->getActuatorSetpoint();
+
+				_control_allocation[1]->setControlSetpoint(c[1]);
+				_control_allocation[1]->allocate();
+				tilting_actuator_sp = _control_allocation[1]->getActuatorSetpoint();
+				// tilting_actuator_sp.print();
+				//Tilt propellers INDEX to be added
+				// For now assume the servos begin after the tilted motors
+				//Total num of motors-tilted index = num of tilting motors
+				// int index =_rotor_count-_tilt_index;
+				// for(int i=index;i<_rotor_count;++i)
+				// {
+				// 	tilting_actuator_sp(i) = tilt_angle(i-index);
+				// }
+				// tilting_actuator_sp.print();
+				_control_allocation[0]->setActuatorSetpoint(fixed_actuator_sp);
+				_control_allocation[1]->setActuatorSetpoint(tilting_actuator_sp);
+
+
+				_actuator_effectiveness->updateSetpoint(c[0], 0, _control_allocation[0]->_actuator_sp,
+									_control_allocation[0]->getActuatorMin(), _control_allocation[0]->getActuatorMax());
+
+				_actuator_effectiveness->updateSetpoint(c[1], 0, _control_allocation[1]->_actuator_sp,
+									_control_allocation[1]->getActuatorMin(), _control_allocation[1]->getActuatorMax());
+				// fixed_actuator_sp.print();
+				if (_has_slew_rate) {
+				_control_allocation[0]->applySlewRateLimit(dt);
+
+				}
+
+				_control_allocation[0]->clipActuatorSetpoint();
+				_control_allocation[1]->clipActuatorSetpoint();
 		}
 
 

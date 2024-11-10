@@ -1,53 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='x500_dual_200_torque'>
-    <pose>0 0 0 0 0 1.57</pose>
+  <model name='x500_dual_200'>
+    <pose>0 0 0.217 0 0 1.57</pose>
+    <self_collide>false</self_collide>
     <static>false</static>
-    <link name="sensor_link">
-     <inertial>
-        <!-- <pose>0 0 -0.07 0 0 0</pose> -->
-        <pose>0 0 0 0 0 0</pose>
-        <mass>500</mass>
-        <inertia>
-          <ixx>0.0411</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.0411</iyy>
-          <iyz>0</iyz>
-          <izz>0.0411</izz>
-        </inertia>
-      </inertial>
-      <visual name="sensor_link_visual">
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/sensor_base.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <!-- Collision definition -->
-      <collision name="sensor_link_collision">
-        <pose> 0 0 0 0 0 0</pose>
-         <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/sensor_base.dae</uri>
-          </mesh>
-        </geometry>
-      </collision>
-      </link>
-
-
-<!-- Flight Sensors  -->
-<!-- Sensors and main frame END -->
-
     <link name="base_link">
-      <gravity>true</gravity>
-      <self_collide>false</self_collide>
-      <velocity_decay/>
-      <pose>0 0 0.395 0 0 0</pose>
-      <inertial>
+    <inertial>
         <pose>0 0 0.015702 0 0 0</pose>
         <mass>2.17</mass>
         <inertia>
@@ -66,16 +24,16 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/uav_frame_x500.dae</uri>
+            <uri>model://x500_dual_200/meshes/uav_frame_x500_simple.dae</uri>
           </mesh>
         </geometry>
       </visual>
       <!-- Collision definition -->
-      <collision name="base_link_collision">
-        <pose> 0 0 0 0 0 0</pose>
+      <collision name="base_link_collision_0">
+        <pose> 0 0 -0.076276 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.20 0.20 0.05 </size>
+            <size>0.20 0.20 0.278 </size>
           </box>
         </geometry>
         <surface>
@@ -90,7 +48,8 @@
           </friction>
         </surface>
       </collision>
-
+<!-- Collision definition END-->
+<!-- Flight Sensors  -->
       <sensor name="air_pressure_sensor" type="air_pressure">
         <always_on>1</always_on>
         <update_rate>50</update_rate>
@@ -103,37 +62,17 @@
           </pressure>
         </air_pressure>
       </sensor>
-
       <sensor name="imu_sensor" type="imu">
         <always_on>1</always_on>
         <update_rate>250</update_rate>
       </sensor>
     </link>
-
-    <!-- Sensors and main frame END -->
-    <joint name="uav_frame_joint" type="fixed">
-      <parent>sensor_link</parent>
-      <child>base_link</child>
-      <pose> 0 0 -0.016 0 0 0 </pose>
-        <sensor name= 'force_sensor' type='force_torque'>
-            <always_on>true</always_on>
-            <update_rate>100.0</update_rate>
-            <visualize>true</visualize>
-            <force_torque>
-                <frame>sensor</frame>
-                <measure_direction>child_to_parent</measure_direction>
-            </force_torque>
-            <topic>/wrench</topic>
-        </sensor>
-    </joint>
-
-
 <!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>0.176876 -0.176876 0.450 0 0 0</pose>
+        <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.075</mass>
@@ -192,7 +131,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose>-0.176876 0.176876 0.450 0 0 0</pose>
+        <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.075</mass>
@@ -251,7 +190,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.176876 0.176876 0.450 0 0 0</pose>
+        <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.075</mass>
@@ -310,7 +249,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.176876 -0.176876 0.450 0 0 0 </pose>
+        <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
             <mass>0.075</mass>
@@ -373,7 +312,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.0 0 0.395 0 0 0 </pose>
+        <pose> 0.0 0 0 0 0 0 </pose>
          <inertial>
           <pose> 0 0 0.062 0 0 0</pose>
           <mass>0.053</mass>
@@ -424,8 +363,8 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.0 0 0.395 0 0 0 </pose>
-        <inertial>
+        <pose> 0.0 0 0 0 0 0 </pose>
+         <inertial>
           <pose> 0 0 -0.030596 0 0 0</pose>
           <mass>0.081</mass>
           <inertia>
@@ -470,12 +409,13 @@
       <child>thrusters_frame_low</child>
     </joint>
 
+
 <!-- EDF Frame 200 END -->
   <link name="edf_1_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.200 0 0.411  0 0 0 </pose>
+        <pose> 0.200 0 0.015702 0 0 0 </pose>
         <inertial>
             <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
             <mass>0.175</mass>
@@ -517,15 +457,15 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_1_body</child>
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose> 0 0 0 3.14 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.14159</lower>
-          <upper>3.14159</upper>
+          <lower>-3.14</lower>
+          <upper>3.14</upper>
         </limit>
         <dynamics>
-          <friction>0.5</friction>
+          <friction>1.0</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -536,8 +476,8 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.200 0 0.411  0 0 3.14159</pose>
-        <inertial>
+        <pose> -0.200 0 0.016 0 0 3.14159 </pose>
+         <inertial>
             <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
             <mass>0.175</mass>
             <inertia>
@@ -546,7 +486,7 @@
               <izz>8.6158e-05</izz>
             </inertia>
         </inertial>
-       <visual name="edf_2_visual">
+      <visual name="edf_2_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
@@ -578,15 +518,15 @@
     <joint name="edf_2_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_2_body</child>
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose> 0 0 0 3.14 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.14159</lower>
-          <upper>3.14159</upper>
+          <lower>-3.14</lower>
+          <upper>3.14</upper>
         </limit>
         <dynamics>
-          <friction>0.5</friction>
+          <friction>1.0</friction>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
@@ -597,7 +537,7 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.200 0.0  0.411  0.0 1.5708 3.145159</pose>
+        <pose> 0.200 0.0  0.016  0.0 1.5708 3.145159</pose>
         <inertial>
           <mass>0.025</mass>
           <inertia>
@@ -651,13 +591,11 @@
       </axis>
     </joint>
 
-
-
 <link name="rotor_5">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.200 0.0  0.411  0.0 1.5708 0.0</pose>
+        <pose> -0.200 0.0  0.016  0.0 1.5708 0.0</pose>
         <inertial>
           <mass>0.025</mass>
           <inertia>
@@ -822,17 +760,16 @@
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_1_joint</joint_name>
       <sub_topic>servo_0</sub_topic>
-      <p_gain>11.0</p_gain>
-      <velocity_limit>10.0</velocity_limit>
+      <p_gain>3</p_gain>
+      <velocity_limit>3.0</velocity_limit>
 
     </plugin>
     <plugin
       filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
       <joint_name>edf_2_joint</joint_name>
       <sub_topic>servo_1</sub_topic>
-      <p_gain>20.0</p_gain>
-      <velocity_limit>10.0</velocity_limit>
-
+      <p_gain>3</p_gain>  <!-- Higher value for faster response -->
+      <velocity_limit>3.0</velocity_limit>
     </plugin>
   </model>
 </sdf>
