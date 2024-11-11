@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='x500_dual_500'>
+  <model name='x500_dual_300'>
     <pose>0 0 0.217 0 0 1.57</pose>
     <self_collide>false</self_collide>
     <static>false</static>
     <link name="base_link">
     <inertial>
         <pose>0 0 0.015702 0 0 0</pose>
-        <mass>2.245</mass>
+        <mass>2.17</mass>
         <inertia>
-          <ixx>0.0133</ixx>
+          <ixx>0.0037</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0133</iyy>
+          <iyy>0.0037</iyy>
           <iyz>0</iyz>
-          <izz>0.0249</izz>
+          <izz>0.0061</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -24,7 +24,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/uav_frame_x500_simple.dae</uri>
+            <uri>model://x500_dual_300/meshes/uav_frame_x500_simple.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -68,7 +68,6 @@
       </sensor>
     </link>
 
-
 <!-- Propellers definition -->
     <link name="rotor_0">
         <gravity>true</gravity>
@@ -77,15 +76,12 @@
         <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-              <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+            <mass>0.075</mass>
+            <inertia>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
+            </inertia>
         </inertial>
        <visual name="rotor_0_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -139,15 +135,12 @@
         <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-              <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+            <mass>0.075</mass>
+            <inertia>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
+            </inertia>
         </inertial>
        <visual name="rotor_1_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -201,15 +194,12 @@
         <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-              <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+            <mass>0.075</mass>
+            <inertia>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
+            </inertia>
         </inertial>
        <visual name="rotor_2_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -263,15 +253,12 @@
         <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
             <pose>0 0 -0.02 0 0 0</pose>
-              <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+            <mass>0.075</mass>
+            <inertia>
+              <ixx>8.8307e-06</ixx>
+              <iyy>8.8307e-06</iyy>
+              <izz>7.5083e-06</izz>
+            </inertia>
         </inertial>
        <visual name="rotor_3_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -318,7 +305,8 @@
       </axis>
     </joint>
 <!-- Propellers definition END-->
-<!-- EDF Frame 500  -->
+
+<!-- EDF Frame 300  -->
 
 <!-- Manipulator arm  -->
     <link name="thrusters_frame_top">
@@ -326,13 +314,13 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> 0.0 0 0 0 0 0 </pose>
-        <inertial>
+         <inertial>
           <pose> 0 0 0.062 0 0 0</pose>
-          <mass>0.105</mass>
-            <inertia>
-              <ixx>1.7062e-06</ixx>
-              <iyy>0.0088</iyy>
-              <izz>0.0088</izz>
+          <mass>0.070</mass>
+          <inertia>
+              <ixx>1.1375e-06</ixx>
+              <iyy>0.0021</iyy>
+              <izz>0.0021</izz>
           </inertia>
         </inertial>
        <visual name="thrusters_frame_top_visual">
@@ -340,7 +328,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/thrusters_frame_500_top.dae</uri>
+            <uri>model://x500_dual_300/meshes/thrusters_frame_300_top.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -349,7 +337,7 @@
         <pose> 0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.250 0.009 0.009 </size>
+            <size>0.01 0.01 0.01</size>
           </box>
         </geometry>
         <surface>
@@ -370,27 +358,28 @@
       <parent>base_link</parent>
       <child>thrusters_frame_top</child>
     </joint>
+
 <!-- Manipulator arm  -->
     <link name="thrusters_frame_low">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> 0.0 0 0 0 0 0 </pose>
-        <inertial>
+         <inertial>
           <pose> 0 0 -0.030596 0 0 0</pose>
-          <mass>0.133</mass>
-            <inertia>
-              <ixx>2.1612e-06</ixx>
-              <iyy>0.0111</iyy>
-              <izz>0.0111</izz>
-          </inertia>
+          <mass>0.099</mass>
+          <inertia>
+            <ixx>1.6087e-06</ixx>
+            <iyy>0.0030</iyy>
+            <izz>0.0030</izz>
+        </inertia>
         </inertial>
        <visual name="thrusters_frame_low_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/thrusters_frame_500_low.dae</uri>
+            <uri>model://x500_dual_300/meshes/thrusters_frame_300_low.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -399,7 +388,7 @@
         <pose> 0 0 0 0 0 0 </pose>
         <geometry>
           <box>
-            <size>0.250 0.009 0.009 </size>
+            <size>0.01 0.01 0.01</size>
           </box>
         </geometry>
         <surface>
@@ -421,29 +410,27 @@
       <child>thrusters_frame_low</child>
     </joint>
 
-<!-- EDF Frame 500 END -->
+<!-- EDF Frame 300 END -->
 <link name="edf_1_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.500 0 0.016 0 0 0 </pose>
+        <pose> 0.300 0 0.016 0 0 0 </pose>
         <inertial>
-        <mass>0.00000001</mass>
-          <inertia>
-            <ixx>0.000001</ixx>
-            <ixy>0.0</ixy>
-            <iyy>0.000001</iyy>
-            <ixz>0.0</ixz>
-            <iyz>0.0</iyz>
-            <izz>0.000001</izz>
-          </inertia>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+            <mass>0.175</mass>
+            <inertia>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
+            </inertia>
         </inertial>
        <visual name="edf_1_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/edf_housing.dae</uri>
+            <uri>model://x500_dual_300/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -470,47 +457,41 @@
     <joint name="edf_1_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_1_body</child>
-      <pose> 0 0 0 3.14 0 0 </pose>
+      <pose> 0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.14</lower>
-          <upper>3.14</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
-          <damping>1.000</damping>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
         </dynamics>
       </axis>
-      <physics>
-        <ode>
-          <implicit_spring_damper>1</implicit_spring_damper>
-        </ode>
-      </physics>
     </joint>
 
     <link name="edf_2_body">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.500 0 0.016 0 0 3.14159 </pose>
+        <pose> -0.300 0 0.016 0 0 3.14159 </pose>
         <inertial>
             <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
-           <mass>0.00000001</mass>
-           <inertia>
-            <ixx>0.000001</ixx>
-            <ixy>0.0</ixy>
-            <iyy>0.000001</iyy>
-            <ixz>0.0</ixz>
-            <iyz>0.0</iyz>
-            <izz>0.000001</izz>
-          </inertia>
+            <mass>0.175</mass>
+            <inertia>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
+            </inertia>
         </inertial>
        <visual name="edf_2_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/edf_housing.dae</uri>
+            <uri>model://x500_dual_300/meshes/edf_housing.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -537,46 +518,40 @@
     <joint name="edf_2_joint" type="revolute">
       <parent>thrusters_frame_low</parent>
       <child>edf_2_body</child>
-      <pose> 0 0 0 3.14 0 0 </pose>
+      <pose> 0 0 0 0 0 0 </pose>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
-          <lower>-3.14</lower>
-          <upper>3.14</upper>
+          <lower>-3.145159</lower>
+          <upper>3.145159</upper>
         </limit>
         <dynamics>
-          <damping>1.000</damping>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
         </dynamics>
       </axis>
-      <physics>
-        <ode>
-          <implicit_spring_damper>1</implicit_spring_damper>
-        </ode>
-      </physics>
     </joint>
 
 <link name="rotor_4">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> 0.500 0.0  0.016  0.0 1.5708 3.145159</pose>
+        <pose> 0.300 0.0  0.016  0.0 1.5708 3.145159</pose>
         <inertial>
-          <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
         </inertial>
        <visual name="rotor_4_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/edf_impeler.dae</uri>
+            <uri>model://x500_dual_300/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -622,25 +597,21 @@
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
-        <pose> -0.500 0.0  0.016  0.0 1.5708 0.0</pose>
+        <pose> -0.300 0.0  0.016  0.0 1.5708 0.0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-              <mass>0.005</mass>
-              <inertia>
-                <ixx>9.75e-07</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.000166704</iyy>
-                <iyz>0</iyz>
-                <izz>0.000167604</izz>
-              </inertia>
+          <mass>0.025</mass>
+          <inertia>
+            <ixx>3.9146e-06</ixx>
+            <iyy>3.9146e-06</iyy>
+            <izz>7.8125e-06</izz>
+          </inertia>
         </inertial>
        <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_500/meshes/edf_impeler.dae</uri>
+            <uri>model://x500_dual_300/meshes/edf_impeler.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -787,22 +758,6 @@
       <motorType>velocity</motorType>
     </plugin>
 <!-- Horizontal thrusters END-->
-    <plugin
-      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
-      <joint_name>edf_1_joint</joint_name>
-      <sub_topic>servo_0</sub_topic>
-      <p_gain>10</p_gain>
-      <!-- <velocity_limit>3.0</velocity_limit> -->
-    </plugin>
-
-    <plugin
-      filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
-      <joint_name>edf_2_joint</joint_name>
-      <sub_topic>servo_1</sub_topic>
-      <p_gain>10.0</p_gain>  <!-- Higher value for faster response -->
-      <!-- <velocity_limit>3.0</velocity_limit> -->
-    </plugin>
-
 
   </model>
 </sdf>
