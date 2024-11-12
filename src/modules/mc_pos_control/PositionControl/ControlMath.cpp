@@ -78,6 +78,8 @@ void thrustToAttitude(const Vector3f &thr_sp, const float yaw_sp, const matrix::
 
 	// Estimate the optimal tilt angle and direction to counteract the wind
 	// Calculate the setpoint z axis
+	PX4_INFO("Thrust value %f",double(-thr_sp.length()));
+
 	Vector3f cmd_z;
 	matrix::Dcmf R_cmd = matrix::Quatf(att_sp.q_d);
 
@@ -318,10 +320,14 @@ void thrustToFixedPitchAttitude(const Vector3f &thr_sp, const float yaw_sp, cons
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
 
+	Vector3f thrust_z=_rotation * Vector3f{thr_sp(0),thr_sp(1),thr_sp(2)};
+
+	Vector3f th_z =_rotation2*Vector3f{0.0f,thrust_z(1),thrust_z(2)};
+
 	// BODY FRAME
 	att_sp.thrust_body[0] = thrust_sp_xy.dot(body_x);
-	att_sp.thrust_body[1] = thrust_sp_xy.dot(body_y);
-	att_sp.thrust_body[2] = thrust_sp_xy.dot(body_z);
+	att_sp.thrust_body[1] = 0.0f;
+	att_sp.thrust_body[2] = -th_z.length();
 
 	// PX4_INFO("New Thrust Components %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
 

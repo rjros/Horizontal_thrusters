@@ -713,7 +713,7 @@ void MulticopterPositionControl::Run()
 			}
 			else{
 
-				_control.getAttitudeSetpoint(matrix::Quatf(att.q), flight_mode,attitude_setpoint);
+				_control.getAttitudeSetpoint(matrix::Quatf(vehicle_attitude.q), flight_mode,attitude_setpoint);
 
 			}
 
