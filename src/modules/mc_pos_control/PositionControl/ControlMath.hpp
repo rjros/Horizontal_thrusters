@@ -56,10 +56,10 @@ namespace ControlMath
  * @param thr_sp desired 3D thrust vector
  * @param yaw_sp the desired yaw
  * @param att_sp attitude setpoint to fill
- * @param omni_att_mode attitude mode for omnidirectional vehicles
+ * @param vectoring_att_mode attitude mode for omnidirectional vehicles
  */
 void thrustToAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
-		      const int vectoring_att_mode, vehicle_attitude_setpoint_s &att_sp);
+		      const int vectoring_att_mode, const int auto_mode,vehicle_attitude_setpoint_s &att_sp);
 
 /**
  * Converts inertial thrust vector and yaw set-point to a zero-tilt attitude and body thrust vector for an omni-directional multirotor.
@@ -80,6 +80,21 @@ void thrustToZeroTiltAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp
  */
 void thrustToFixedPitchAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
 			      vehicle_attitude_setpoint_s &att_sp);
+
+void thrustToFixedRollAttitude(const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
+			      vehicle_attitude_setpoint_s &att_sp);
+
+/**Converts inertial thrust vector and yaw set-point to a zero tilt in the X axis (Pitch angle) and attitude for the Roll angle body and calcualtes the thrust vector for an omni-directional multirotor.
+ * @param thr_sp a 3D vector
+ * @param yaw_sp the desired yaw
+ * @param att current attitude of the robot
+ * @param att_sp attitude setpoint to fill
+ */
+void autoAttitudeChange(const int auto_mode, const matrix::Vector3f &thr_sp, const float yaw_sp, const matrix::Quatf &att,
+			      vehicle_attitude_setpoint_s &att_sp);
+
+
+
 /**
  * Converts inertial thrust vector and yaw set-point to a zero tilt in the X+ axis (Negative Pitch angle) and attitude for the +Pitch/Roll angle body and calcualtes the thrust vector for an omni-directional multirotor.
  * @param thr_sp a 3D vector

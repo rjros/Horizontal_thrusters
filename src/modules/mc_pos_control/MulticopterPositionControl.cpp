@@ -304,7 +304,8 @@ void MulticopterPositionControl::parameters_update(bool force)
 }
 
 PositionControlStates MulticopterPositionControl::set_vehicle_states(const vehicle_local_position_s
-		&vehicle_local_position,const vehicle_angular_velocity_s &vehicle_angular_velocity, const vehicle_attitude_s &vehicle_attitude)
+		&vehicle_local_position,const vehicle_angular_velocity_s &vehicle_angular_velocity, const vehicle_attitude_s &vehicle_attitude,
+		Vector<int,4>CA_flag)
 {
 	PositionControlStates states;
 
@@ -356,6 +357,7 @@ PositionControlStates MulticopterPositionControl::set_vehicle_states(const vehic
 	states.yaw = vehicle_local_position.heading;
 	states.rates= Vector3f(vehicle_angular_velocity.xyz);
 	states.attitude = Quaternionf(vehicle_attitude.q);
+	states.CA_mode= CA_flag;
 
 	return states;
 }
@@ -379,6 +381,7 @@ void MulticopterPositionControl::Run()
 	// CUSTOM //
 	vehicle_attitude_s vehicle_attitude;
 	vehicle_angular_velocity_s vehicle_angular_velocity;
+	control_allocator_flag_s control_allocator_xy;
 	// CUSTOM //
 
 	if (_local_pos_sub.update(&vehicle_local_position)) {
@@ -407,6 +410,16 @@ void MulticopterPositionControl::Run()
 
 		_vehicle_attitude_sub.update(&vehicle_attitude);
 		_vehicle_angular_velocity_sub.update(&vehicle_angular_velocity);
+
+		control_allocator_flag_sub.update(&control_allocator_xy);
+
+		CA_mode(0) = control_allocator_xy.xy_flag[0];
+		CA_mode(1) = control_allocator_xy.xy_flag[1];
+		CA_mode(2) = control_allocator_xy.xy_flag[2];
+		CA_mode(3) = control_allocator_xy.xy_flag[3];
+
+
+
 
 		if (_param_mpc_use_hte.get()) {
 			hover_thrust_estimate_s hte;
@@ -462,7 +475,7 @@ void MulticopterPositionControl::Run()
 		_heading_reset_counter = vehicle_local_position.heading_reset_counter;
 
 
-		PositionControlStates states{set_vehicle_states(vehicle_local_position,vehicle_angular_velocity,vehicle_attitude)};
+		PositionControlStates states{set_vehicle_states(vehicle_local_position,vehicle_angular_velocity,vehicle_attitude,CA_mode)};
 
 
 		if (_vehicle_control_mode.flag_multicopter_position_control_enabled) {

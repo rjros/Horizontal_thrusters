@@ -66,6 +66,9 @@ set(msg_files
 	DebugVect.msg
 	DifferentialPressure.msg
 	DistanceSensor.msg
+	## CUSTOM ##
+	ControlAllocatorFlag.msg
+	## CUSTOM END ##
 	Ekf2Timestamps.msg
 	EscReport.msg
 	EscStatus.msg

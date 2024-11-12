@@ -79,6 +79,8 @@
 #include <uORB/topics/manual_control_switches.h>
 #include <uORB/topics/thrust_vectoring_command.h>
 #include <uORB/topics/geometric_setpoint.h>
+#include <uORB/topics/control_allocator_flag.h>
+
 
 
 
@@ -142,6 +144,8 @@ private:
 	uORB::Subscription  _thrust_vectoring_command_sub{ORB_ID(thrust_vectoring_setpoint)};
 	uORB::Subscription manual_control_switches_sub{ORB_ID(manual_control_switches)};
 	uORB::Subscription manual_control_set_sub{ORB_ID(manual_control_setpoint)};
+	uORB::Subscription control_allocator_flag_sub{ORB_ID(control_allocator_flag)};
+
 	manual_control_setpoint_s stick_setpoints{};
 
 	//Stick values from the controller
@@ -150,6 +154,7 @@ private:
 	//Values from setpoints
 	bool planar_flight =false;
 	manual_control_switches_s switches{};
+	matrix::Vector<int,4> CA_mode;
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 	hrt_abstime _time_stamp_last_loop{0};		/**< time stamp of last loop iteration */
@@ -321,7 +326,7 @@ private:
 	 * Check for validity of positon/velocity states.
 	 */
 	PositionControlStates set_vehicle_states(const vehicle_local_position_s &local_pos, const vehicle_angular_velocity_s &vehicle_angular_velocity,
-						 const vehicle_attitude_s &vehicle_attitude);
+						 const vehicle_attitude_s &vehicle_attitude,matrix::Vector<int,4>CA_mode);
 
 	/**
 	 * Generate setpoint to bridge no executable setpoint being available.

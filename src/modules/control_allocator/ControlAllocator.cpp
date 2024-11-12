@@ -144,7 +144,42 @@ ControlAllocator::parameters_updated()
 		_control_allocation[i]->updateParameters();
 	}
 
+	// X_pos
+	// X_neg
+	// Y_pos
+	// Y_neg
+	_xy_flag={0,0,0,0};
 	update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::CONFIGURATION_UPDATE);
+	for (int i = 0; i < _num_control_allocation; ++i) {
+		matrix::Matrix <float,NUM_AXES,NUM_ACTUATORS> effectiveness_matrix = _control_allocation[i]->getEffectivenessMatrix();
+		matrix::Matrix<float,NUM_ACTUATORS,NUM_AXES>thrust_matrix = effectiveness_matrix.T();
+		thrust_matrix.print();
+		for (int j=0;j<NUM_ACTUATORS;j++)
+		{
+
+			if (thrust_matrix(j,3)>=3.0f)
+			{
+				_xy_flag(0)++;
+			}
+			else if (thrust_matrix(j,3)<=-3.0f)
+			{
+				_xy_flag(1)++;
+			}
+
+			if (thrust_matrix(j,4)>=3.0f)
+			{
+				_xy_flag(2)++;
+			}
+			else if (thrust_matrix(j,4)<=-3.0f)
+			{
+				_xy_flag(3)++;
+			}
+		}
+
+	}
+	// _xy_flag.print();
+
+
 }
 
 void
@@ -404,7 +439,35 @@ ControlAllocator::Run()
 
 		if (tilt_angle!=prev_tilt_angle)
 		{
+			_xy_flag={0,0,0,0};
 			update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::ANGLE_UPDATE);
+			for (int i = 0; i < _num_control_allocation; ++i) {
+			matrix::Matrix <float,NUM_AXES,NUM_ACTUATORS> effectiveness_matrix = _control_allocation[i]->getEffectivenessMatrix();
+			matrix::Matrix<float,NUM_ACTUATORS,NUM_AXES>thrust_matrix = effectiveness_matrix.T();
+			// thrust_matrix.print();
+			for (int j=0;j<NUM_ACTUATORS;j++)
+			{
+				if (thrust_matrix(j,3)>=3.0f)
+				{
+					_xy_flag(0)++;
+				}
+				else if (thrust_matrix(j,3)<=-3.0f)
+				{
+					_xy_flag(1)++;
+				}
+
+				if (thrust_matrix(j,4)>=3.0f)
+				{
+					_xy_flag(2)++;
+				}
+				else if (thrust_matrix(j,4)<=-3.0f)
+				{
+					_xy_flag(3)++;
+				}
+			}
+			}
+
+
 		}
 
 
@@ -438,8 +501,16 @@ ControlAllocator::Run()
 	if (do_update) {
 		_last_run = now;
 
-		check_for_motor_failures();
 
+	 	control_allocator_flag_s control_allocator_xy;
+
+		control_allocator_xy.xy_flag[0] = _xy_flag(0);
+		control_allocator_xy.xy_flag[1] = _xy_flag(1);
+		control_allocator_xy.xy_flag[2] = _xy_flag(2);
+		control_allocator_xy.xy_flag[3] = _xy_flag(3);
+		__control_allocator_flag_pub.publish(control_allocator_xy);
+
+		check_for_motor_failures();
 		update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::NO_EXTERNAL_UPDATE);
 
 

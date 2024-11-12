@@ -86,6 +86,7 @@
 //CUSTOM
 // Separate based on the type of vehicles
 #include <uORB/topics/thrust_vectoring_command.h>
+#include <uORB/topics/control_allocator_flag.h>
 
 
 class ControlAllocator : public ModuleBase<ControlAllocator>, public ModuleParams, public px4::ScheduledWorkItem
@@ -196,6 +197,10 @@ private:
 	uORB::Publication<actuator_motors_s>	_actuator_motors_pub{ORB_ID(actuator_motors)};
 	uORB::Publication<actuator_servos_s>	_actuator_servos_pub{ORB_ID(actuator_servos)};
 	uORB::Publication<actuator_servos_trim_s>	_actuator_servos_trim_pub{ORB_ID(actuator_servos_trim)};
+	// CUSTOM //
+	uORB::Publication<control_allocator_flag_s>	__control_allocator_flag_pub{ORB_ID(control_allocator_flag)};
+	///// CUSTOM END /////
+
 
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 
@@ -220,6 +225,8 @@ private:
 	matrix::Vector<float,8> prev_tilt_angle;
 	int _tilt_index{};
 	int _rotor_count{};
+	matrix::Vector4f _xy_flag={0,0,0,0};
+
 	///// CUSTOM END /////
 
 	bool _planar_control_mode {false};

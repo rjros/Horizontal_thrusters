@@ -59,6 +59,7 @@ struct PositionControlStates {
 	matrix::Vector3f rates;
 	matrix::Quaternionf attitude;
 	float yaw;
+	matrix::Vector<int,4> CA_mode;
 };
 /**
  * 	Core Position-Control for MC.
@@ -310,10 +311,19 @@ private:
 	void _single_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
 
 	// For the combined [planar/tilter] control of the system
-	void _combined_positionControl(const float dt,const float yaw_sp);// planar proportional position control
-	void _combined_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
-	void _combined_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
+	void _planar_X_positionControl(const float dt,const float yaw_sp);// planar proportional position control
+	void _planar_X_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
+	void _planar_X_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
 
+	// For the combined [planar/tilter] control of the system
+	void _planar_Y_positionControl(const float dt,const float yaw_sp);// planar proportional position control
+	void _planar_Y_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
+	void _planar_Y_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
+
+	// For Automatic Change based on the Control Allocation Matrix
+	void _autoPlanar_positionControl(const float dt,const float yaw_sp);// planar proportional position control
+	void _autoPlanar_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
+	void _autoPlanar_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
 
 	//Gains for the planar controller/
 	void _geometricControl(const float dt); ///< Position proportional control
@@ -390,6 +400,8 @@ private:
 	float _max_thrust_y {0};  ///< Force in [N]
 	float _max_thrust_z {0};  ///< Force in [N]
 	matrix::Dcmf _R ; // Rotation matrix of the Body frame
+	matrix::Vector<int,4> _CA_mode;
+
 
 
 	// Gains for geometric controller
@@ -406,6 +418,10 @@ private:
 	matrix::Matrix3f _Rd; /* Rotation matrix*/
 	matrix::Vector3f _Wd; /* Angular velocity*/
 	matrix::Vector3f _Wd_dot; /* Angular accelertion */
+
+	int _control_mode = 0b0000;
+	int _auto_mode = 0b0000;
+
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 };
