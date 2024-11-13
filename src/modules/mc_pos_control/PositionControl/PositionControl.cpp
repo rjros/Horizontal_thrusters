@@ -481,14 +481,7 @@ void PositionControl::getThrustVectoringSetpoint(geometric_setpoint_s &thrust_ve
 
 void PositionControl::_normalization(matrix::Vector3f &thrust_sp)
 {
-	//Thrust Setpoint normalization
-	// _thr_sp(0) = PX4_ISFINITE(_thr_sp(0))? _thr_sp(0) / _max_thrust_x : 0.0f;
-	// _thr_sp(1) = PX4_ISFINITE(_thr_sp(1)) ? _thr_sp(1) / _max_thrust_y : 0.0f;
-	// _thr_sp(2) = PX4_ISFINITE(_thr_sp(2)) ? _thr_sp(2) / _max_thrust_z : 0.0f;
 
-	// _thr_sp(0) = math::constrain(_thr_sp(0), -1.0f, 1.0f);
-	// _thr_sp(1) = math::constrain(_thr_sp(1), -1.0f, 1.0f);
-	// _thr_sp(2) = math::constrain(_thr_sp(2), -1.0f, 1.0f);
 
 	thrust_sp(0) = PX4_ISFINITE(thrust_sp(0))? thrust_sp(0) / _max_thrust_x : 0.0f;
 	thrust_sp(1) = PX4_ISFINITE(thrust_sp(1)) ? thrust_sp(1) / _max_thrust_y : 0.0f;
@@ -736,10 +729,22 @@ void PositionControl::_planar_X_velocityControl(const float dt, const float yaw_
 
 	Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
-	if ((th_body(0) >= _lim_planar_thr_max && vel_xy_error(0) >= 0.0f) ||
-	(th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
-	vel_xy_error(0) = 0.f;
+	if(th_body(0)>=0.0f)
+	{
+		if ((th_body(0) >= _lim_planar_thr_max && vel_xy_error(0) >= 0.0f) ||
+		(th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
+		vel_xy_error(0) = 0.f;
+		}
 	}
+
+	else {
+		if ((th_body(0) <= -_lim_planar_thr_max && vel_xy_error(0) <= 0.0f) ||
+		(th_body(0)>= -_lim_planar_thr_min && vel_xy_error(0) >= 0.0f)) {
+		vel_xy_error(0) = 0.f;
+		}
+
+	}
+
 	th_body(0)=math::min(th_body(0),_lim_planar_thr_max);
 
 	vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
@@ -877,9 +882,20 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 
 	Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
-	if ((th_body(1) >= _lim_planar_thr_max && vel_xy_error(1) >= 0.0f) ||
-	(th_body(1)<= _lim_planar_thr_min && vel_xy_error(1) <= 0.0f)) {
-	vel_xy_error(1) = 0.f;
+		if(th_body(1)>=0.0f)
+	{
+		if ((th_body(1) >= _lim_planar_thr_max && vel_xy_error(1) >= 0.0f) ||
+		(th_body(1)<= _lim_planar_thr_min && vel_xy_error(1) <= 0.0f)) {
+		vel_xy_error(1) = 0.f;
+		}
+	}
+
+	else {
+		if ((th_body(1) <= -_lim_planar_thr_max && vel_xy_error(1) <= 0.0f) ||
+		(th_body(1)>= -_lim_planar_thr_min && vel_xy_error(1) >= 0.0f)) {
+		vel_xy_error(1) = 0.f;
+		}
+
 	}
 	th_body(1)=math::min(th_body(1),_lim_planar_thr_max);
 
@@ -1141,7 +1157,7 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
 	int8_t sp_flags{0};
 	// Set the flag bits based on the sign of vp_x and vp_y
 	sp_flags |= (vel_sp_body(0) >= 0) ? 0b1000 : 0b0100; // 1 in the X bit for positive X
-	sp_flags |= (vel_sp_body(1) >= 0) ? 0b0010 : 0b0000; // 1 in the Y bit for positive Y
+	sp_flags |= (vel_sp_body(1) >= 0) ? 0b0010 : 0b0001; // 1 in the Y bit for positive Y
 
 	// PX4_INFO("Current diretion %d",flags);
 	// check supported vehicle
@@ -1149,12 +1165,12 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
 	// Only X + supported 2
 	// only X - supported 3
 	int CA_flags{0};
+	// _CA_mode.print();
 	// Check the supported mode
 	CA_flags |= (_CA_mode(0)>0 ? 0b1000 : 0b0000); // Bit 3 for X+
 	CA_flags |= (_CA_mode(1)>0 ? 0b0100 : 0b0000); // Bit 2 for X-
 	CA_flags |= (_CA_mode(2)>0 ? 0b0010 : 0b0000); // Bit 1 for Y+
 	CA_flags |= (_CA_mode(3)>0 ? 0b0001 : 0b0000); // Bit 0 for Y-
-	// _CA_mode.print();
 
 	_control_mode = (sp_flags & CA_flags);
 
@@ -1174,7 +1190,6 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
 
 	else if (_control_mode == 0b0010 || _control_mode == 0b0001)
 	{
-		PX4_INFO("HERE");
 		_auto_mode=3;
 		_planar_Y_velocityControl(dt,yaw_sp);
 	}
