@@ -45,6 +45,9 @@
 #include <px4_platform_common/module_params.h>
 
 #include <geo/geo.h>
+#include <bitset>
+#include<iostream>
+
 
 using namespace matrix;
 
@@ -57,12 +60,10 @@ void PositionControl::setVelocityGains(const Vector3f &P, const Vector3f &I, con
 	_gain_vel_d = D;
 }
 //Planar Gains//
-void PositionControl::setPlanarPositionGains(const Vector3f &P, const Vector3f &I, const Vector3f &D)
+void PositionControl::setPlanarPositionGains(const Vector3f &P)
 {
 	//Use values from the users parameters,this depends on number of fans
 	_gain_planar_pos_p = P;
-	_gain_planar_pos_i = I;
-	_gain_planar_pos_d = D;
 }
 void PositionControl::setPlanarVelocityGains(const Vector3f &P, const Vector3f &I, const Vector3f &D)
 {
@@ -477,8 +478,6 @@ void PositionControl::getThrustVectoringSetpoint(geometric_setpoint_s &thrust_ve
 
 }
 
-
-
 void PositionControl::_normalization(matrix::Vector3f &thrust_sp)
 {
 
@@ -494,8 +493,6 @@ void PositionControl::_normalization(matrix::Vector3f &thrust_sp)
 
 
 //// CUSTOM PARAMETERS FOR GEOMETRIC CONTROLLER END////
-
-
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 void PositionControl::_planar_positionControl(const float dt, const float yaw_sp)
 {
@@ -659,6 +656,7 @@ void PositionControl::_planar_X_positionControl(const float dt,const float yaw_s
 	//assume gains are for this mode only, although they could be based on the direction
 	// of the vel vector
 	// P-position controller
+
 	Vector3f pos_error = _pos_sp - _pos;
 	Vector3f vel_sp_position = pos_error.emult(_gain_planar_pos_p);// + _pos_int - _vel.emult(_gain_planar_pos_d);
 	ControlMath::addIfNotNanVector3f(_vel_sp, vel_sp_position);
@@ -780,7 +778,7 @@ void PositionControl::_planar_X_accelerationControl(const float yaw_sp)
 
 	//Thrust back to rotation
 	th_body=body_z * collective_thrust;
-	th_body(0)=body_accel_sp(0)*_hover_thrust;
+	th_body(0)=body_accel_sp(0)*_hover_thrust/CONSTANTS_ONE_G;
 	_thr_sp=_rotation2*th_body;
 
 }
@@ -875,7 +873,7 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 		thrust_max_xy = sqrtf(thrust_max_xy_squared);
 	}
 
-	// Saturate thrust in Y axis (roll)
+	// Saturate thrust in X axis (roll)
 	if (thrust_sp_xy_norm > thrust_max_xy) {
 		th_body(0) = thrust_sp_xy(0) / thrust_sp_xy_norm * thrust_max_xy;
 	}
@@ -912,8 +910,6 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
 
-	// PX4_INFO("Thrust  %f %f %f",(double)th_body(0),(double)th_body(1),(double)th_body(2));
-	// PX4_INFO("Thrust Body %f %f %f",(double)_thr_sp(0),(double)_thr_sp(1),(double)_thr_sp(2));
 
 
 }
@@ -934,7 +930,7 @@ void PositionControl::_planar_Y_accelerationControl(const float yaw_sp)
 	collective_thrust = math::min(collective_thrust, -_lim_thr_min);
 	//Thrust back to rotation
 	th_body=body_z * collective_thrust;
-	th_body(1)=body_accel_sp(1)*_hover_thrust;
+	th_body(1)=body_accel_sp(1)*_hover_thrust/CONSTANTS_ONE_G;
 	_thr_sp=_rotation2*th_body;
 
 }
@@ -1136,23 +1132,31 @@ void PositionControl::_planar_Y_accelerationControl(const float yaw_sp)
 void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw_sp)
 {
 
+	//create temp variables since the modes have different gains
+	Vector3f vel_sp = _vel_sp;
+	Vector3f pos_sp = _pos_sp;
+
 	matrix::Dcmf _rotation,_rotation2;
 	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -_yaw_sp}};
 	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
-	Vector3f pos_error = _pos_sp - _pos;
-	Vector3f vel_sp_position = pos_error.emult(_gain_planar_pos_p);// + _pos_int - _vel.emult(_gain_planar_pos_d);
-	ControlMath::addIfNotNanVector3f(_vel_sp, vel_sp_position);
+	Vector3f pos_error = pos_sp - _pos;
+	Vector3f vel_sp_position = pos_error.emult(_gain_planar_pos_p);
+
+	// Position and feed-forward velocity setpoints or position states being NAN results in them not having an influence
+	ControlMath::addIfNotNanVector3f(vel_sp, vel_sp_position);
+	// PX4_INFO("Velocity after %f", double(_vel_sp(2)));
+
 	// make sure there are no NAN elements for further reference while constraining
 	ControlMath::setZeroIfNanVector3f(vel_sp_position);
 
-	_vel_sp.xy() = ControlMath::constrainXY(vel_sp_position.xy(), (_vel_sp - vel_sp_position).xy(), _lim_vel_horizontal);
-	// Constrain velocity in z-direction.
-	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
+	// make sure there are no NAN elements for further reference while constraining
+	ControlMath::setZeroIfNanVector3f(vel_sp_position);
+
 
 	// Check the sp direction in the body frame to select the mode
 	//If X +, check what mode is needed {X+,X-,Y+,Y-}
 	//If Y +, check what mode is needed {X+,X-,Y+,Y-}
-	Vector3f vel_sp_body=_rotation * _vel_sp;
+	Vector3f vel_sp_body=_rotation * vel_sp;
 
 	int8_t sp_flags{0};
 	// Set the flag bits based on the sign of vp_x and vp_y
@@ -1172,6 +1176,7 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
 	CA_flags |= (_CA_mode(2)>0 ? 0b0010 : 0b0000); // Bit 1 for Y+
 	CA_flags |= (_CA_mode(3)>0 ? 0b0001 : 0b0000); // Bit 0 for Y-
 
+
 	_control_mode = (sp_flags & CA_flags);
 
 	// Thrusters in both axis
@@ -1179,25 +1184,27 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
         	_control_mode == 0b1001 || _control_mode == 0b0101)
 	{
 		_auto_mode=1;
+		_planar_positionControl(dt,_yaw_sp);
 		_planar_velocityControl(dt,_yaw_sp);
 
 	}
 	else if (_control_mode == 0b1000 || _control_mode == 0b0100)
 	{
 		_auto_mode=2;
+		_planar_X_positionControl(dt,yaw_sp);
 		_planar_X_velocityControl(dt,yaw_sp);
 	}
 
 	else if (_control_mode == 0b0010 || _control_mode == 0b0001)
 	{
 		_auto_mode=3;
+		_planar_Y_positionControl(dt,yaw_sp);
 		_planar_Y_velocityControl(dt,yaw_sp);
 	}
 	else {
 		_auto_mode=4;
 		_positionControl();
 		_velocityControl(dt);
-
 	}
 
 }

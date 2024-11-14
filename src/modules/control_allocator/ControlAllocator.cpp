@@ -441,6 +441,8 @@ ControlAllocator::Run()
 		{
 			_xy_flag={0,0,0,0};
 			update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::ANGLE_UPDATE);
+			updateParams();
+			parameters_updated();
 			for (int i = 0; i < _num_control_allocation; ++i) {
 			matrix::Matrix <float,NUM_AXES,NUM_ACTUATORS> effectiveness_matrix = _control_allocation[i]->getEffectivenessMatrix();
 			matrix::Matrix<float,NUM_ACTUATORS,NUM_AXES>thrust_matrix = effectiveness_matrix.T();

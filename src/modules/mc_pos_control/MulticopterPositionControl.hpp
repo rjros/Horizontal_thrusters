@@ -196,12 +196,17 @@ private:
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 		(ParamFloat<px4::params::TOTAL_MASS>) _param_mpc_total_mass,
-		(ParamFloat<px4::params::MPC_PXY_P>) _param_mpc_pxy_pos_p_vel,
-		(ParamFloat<px4::params::MPC_PXY_I>) _param_mpc_pxy_pos_i_vel,
-		(ParamFloat<px4::params::MPC_PXY_D>) _param_mpc_pxy_pos_d_vel,
-		(ParamFloat<px4::params::MPC_PXY_VEL_P_A>) _param_mpc_pxy_vel_p_acc,
-		(ParamFloat<px4::params::MPC_PXY_VEL_I_A>) _param_mpc_pxy_vel_i_acc,
-		(ParamFloat<px4::params::MPC_PXY_VEL_D_A>) _param_mpc_pxy_vel_d_acc,
+		(ParamFloat<px4::params::MPC_PX_P>) _param_mpc_px_pos_p_vel,
+		(ParamFloat<px4::params::MPC_PY_P>) _param_mpc_py_pos_p_vel,
+		(ParamFloat<px4::params::MPC_PX_VEL_P_A>) _param_mpc_px_vel_p_acc,
+		(ParamFloat<px4::params::MPC_PY_VEL_P_A>) _param_mpc_py_vel_p_acc,
+
+		(ParamFloat<px4::params::MPC_PX_VEL_I_A>) _param_mpc_px_vel_i_acc,
+		(ParamFloat<px4::params::MPC_PY_VEL_I_A>) _param_mpc_py_vel_i_acc,
+
+		(ParamFloat<px4::params::MPC_PX_VEL_D_A>) _param_mpc_px_vel_d_acc,
+		(ParamFloat<px4::params::MPC_PY_VEL_D_A>) _param_mpc_py_vel_d_acc,
+
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 		(ParamFloat<px4::params::MPC_XY_VEL_MAX>)   _param_mpc_xy_vel_max,

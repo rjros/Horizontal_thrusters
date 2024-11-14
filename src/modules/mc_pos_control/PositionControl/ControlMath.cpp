@@ -185,7 +185,7 @@ void thrustToFixedPitchAttitude(const Vector3f &thr_sp, const float yaw_sp, cons
 	Vector3f body_x={0.0f,0.0f,0.0f};
 	//check the magnitude of the horizontal vector in the body frame
 	Vector3f thrust_sp_xy=_rotation * Vector3f{thr_sp(0),thr_sp(1),thr_sp(2)};
-	thrust_sp_xy(0)=thrust_sp_xy(0);//*1.10f;
+	thrust_sp_xy(0)=thrust_sp_xy(0);
 	//PX4_INFO("Thrust in the setpoint %f %f %f ",(double)t.;phr_sp(0),(double)thr_sp(1),(double)thr_sp(2));
 	thrust_sp_xy=_rotation2*Vector3f{thrust_sp_xy(0),thrust_sp_xy(1),thrust_sp_xy(2)};
 
@@ -247,7 +247,7 @@ void thrustToFixedPitchAttitude(const Vector3f &thr_sp, const float yaw_sp, cons
 	att_sp.thrust_body[1] = 0.0f;
 	att_sp.thrust_body[2] = -th_z.length();
 
-	// PX4_INFO("New Thrust Components %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
+	// PX4_INFO(" Fixed Pitch %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
 
 
 }
@@ -349,7 +349,7 @@ void thrustToFixedRollAttitude(const Vector3f &thr_sp, const float yaw_sp, const
 	att_sp.thrust_body[1] = thrust_sp_xy.dot(body_y);
 	att_sp.thrust_body[2] = -th_z.length();
 
-	// PX4_INFO("New Thrust Components %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
+	// PX4_INFO("Fixed Roll %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
 
 
 }

@@ -108,7 +108,7 @@ public:
 	 * @param I 3D vector of integral gains
 	 * @param D 3D vector of derivative gains
 	 */
-	void setPlanarPositionGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+	void setPlanarPositionGains(const matrix::Vector3f &P);
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END  ////
 
 	/**
