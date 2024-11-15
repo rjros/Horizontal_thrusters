@@ -180,8 +180,11 @@ void thrustToFixedPitchAttitude(const Vector3f &thr_sp, const float yaw_sp, cons
 	// zero vector, no direction, set safe level value
 	//The angles in the rotation could be use select the different modes
 	matrix::Dcmf _rotation,_rotation2;
-	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
-	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
+	// _rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	_rotation2 = _rotation.transpose();
+
 	Vector3f body_x={0.0f,0.0f,0.0f};
 	//check the magnitude of the horizontal vector in the body frame
 	Vector3f thrust_sp_xy=_rotation * Vector3f{thr_sp(0),thr_sp(1),thr_sp(2)};
@@ -279,9 +282,6 @@ void thrustToFixedRollAttitude(const Vector3f &thr_sp, const float yaw_sp, const
 	body_z=_rotation2*matrix::Vector3f{(float)-thrust_rotated(0), 0.0f, (float)-thrust_rotated(2)};
 	body_z.normalize();
 
-	// vector of desired yaw direction in XY plane, rotated by PI/2
-	// const Vector3f y_C{-sinf(yaw_sp), cosf(yaw_sp), 0.f};
-
 	// desired body_x axis, orthogonal to body_z
 	Vector3f body_y = Vector3f(-sinf(yaw_sp), cosf(yaw_sp), 0.0f);
 
@@ -349,7 +349,6 @@ void thrustToFixedRollAttitude(const Vector3f &thr_sp, const float yaw_sp, const
 	att_sp.thrust_body[1] = thrust_sp_xy.dot(body_y);
 	att_sp.thrust_body[2] = -th_z.length();
 
-	// PX4_INFO("Fixed Roll %f %f",(double)att_sp.thrust_body[0],(double)att_sp.thrust_body[1]);
 
 
 }
@@ -402,8 +401,7 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	}
 
 	if (fabsf(body_z(2)) < 0.000001f) {
-		// desired thrust is in XY plane, set X downside to construct correct matrix,
-		// but yaw component will not be used actually
+
 		body_x.zero();
 		body_x(2) = 1.0f;
 	}
@@ -432,9 +430,6 @@ void bodyzToAttitude(Vector3f body_z, const float yaw_sp, vehicle_attitude_setpo
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
 
-	// Vector3f zd = R_sp.col(2);
-	// zd.print();
-	// euler.print();
 
 
 }

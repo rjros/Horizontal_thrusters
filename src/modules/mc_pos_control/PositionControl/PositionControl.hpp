@@ -422,6 +422,7 @@ private:
 	int _control_mode = 0b0000;
 	int _auto_mode = 0b0000;
 
+	matrix::Dcmf _rotation,_rotation2;
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 };
