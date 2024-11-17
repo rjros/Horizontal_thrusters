@@ -201,10 +201,6 @@ void MulticopterPositionControl::parameters_update(bool force)
 		Vector3f(_param_mpc_geom_x_d.get(), _param_mpc_geom_y_d.get(), _param_mpc_geom_z_d.get()));
 
 
-
-
-
-
 		// Check that the design parameters are inside the absolute maximum constraints
 		if (_param_mpc_xy_cruise.get() > _param_mpc_xy_vel_max.get()) {
 			_param_mpc_xy_cruise.set(_param_mpc_xy_vel_max.get());

@@ -281,10 +281,28 @@ public:
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
 	void getGeometricAttitudeSetpoint(vehicle_attitude_setpoint_s &attitude_setpoint) ;
 
+	/**
+	 * Get the controllers output attitude setpoint
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
+	void GeometricAttitude(vehicle_attitude_setpoint_s &attitude_setpoint) ;
+	/**
+	 * Get the controllers output attitude setpoint for X thrusters
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
+	void XThrusterAttitude(vehicle_attitude_setpoint_s &attitude_setpoint);
 
+	/**
+	 * Get the controllers output attitude setpoint for Y thrusters
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
+	void YThrusterAttitude(vehicle_attitude_setpoint_s &attitude_setpoint);
 
-
-
+	/**
+	 * Get the controllers output attitude setpoint for Y thrusters
+	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
+	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.*/
+	void XYThrusterAttitude(vehicle_attitude_setpoint_s &attitude_setpoint);
 
 
 
@@ -327,6 +345,14 @@ private:
 
 	//Gains for the planar controller/
 	void _geometricControl(const float dt); ///< Position proportional control
+	void _geometricAuto(const float dt);///< Selects the thruster mode based on the Control Allocation
+	void _geometric_X_thrusters(const float dt);
+	void _geometric_Y_thrusters(const float dt);
+	void _geometric_XY_thrusters(const float dt);
+
+
+
+
 	void _normalization(matrix::Vector3f &thrust_sp);
 
 
@@ -410,6 +436,8 @@ private:
 	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
 	matrix::Vector3f _geom_int;
 	matrix::Vector3f _f_w{};
+	matrix::Vector3f _f_b{};
+
 
 	matrix::Vector3f _thrust_sp; /**< desired thrust */
 
