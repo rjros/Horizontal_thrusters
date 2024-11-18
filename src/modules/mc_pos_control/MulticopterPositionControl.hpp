@@ -263,8 +263,9 @@ private:
 		//Control mode with RC
 		(ParamInt<px4::params::RC_PLANAR_SW>) _param_planar_mode_sw,
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
-		(ParamFloat<px4::params::MAX_VERT_THR>)    _param_mpc_max_ver_thr,
-		(ParamFloat<px4::params::MAX_HOR_THR>)    _param_mpc_max_hor_thr,
+		(ParamFloat<px4::params::Z_THRUST_MAX>)    _param_mpc_z_thrust_max,
+		(ParamFloat<px4::params::X_THRUST_MAX>)    _param_mpc_x_thrust_max,
+		(ParamFloat<px4::params::Y_THRUST_MAX>)    _param_mpc_y_thrust_max,
 		(ParamBool<px4::params::MPC_GEOM_CTRL>)   _param_mpc_geom_ctrl,
 
 		(ParamFloat<px4::params::VECT_ANG_0>)     _param_mpc_vec_ang_0,
@@ -287,8 +288,16 @@ private:
 
 		(ParamFloat<px4::params::GEOM_X_D>)    _param_mpc_geom_x_d,
 		(ParamFloat<px4::params::GEOM_Y_D>)    _param_mpc_geom_y_d,
-		(ParamFloat<px4::params::GEOM_Z_D>)    _param_mpc_geom_z_d
+		(ParamFloat<px4::params::GEOM_Z_D>)    _param_mpc_geom_z_d,
 
+		(ParamFloat<px4::params::GEOM_THX_P>)  _param_mpc_geom_thx_p,
+		(ParamFloat<px4::params::GEOM_THY_P>)  _param_mpc_geom_thy_p,
+
+		(ParamFloat<px4::params::GEOM_THX_I>)  _param_mpc_geom_thx_i,
+		(ParamFloat<px4::params::GEOM_THY_I>)  _param_mpc_geom_thy_i,
+
+		(ParamFloat<px4::params::GEOM_THX_D>)  _param_mpc_geom_thx_d,
+		(ParamFloat<px4::params::GEOM_THY_D>)  _param_mpc_geom_thy_d
 
 	);
 

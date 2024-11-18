@@ -268,6 +268,15 @@ public:
 	void setGeometricPositionGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
 
 	/**
+	 * Set the velocity control gains for thrusters
+	 * @param P 3D vector of proportional gains for x,y,z axis
+	 * @param I 3D vector of integral gains
+	 * @param D 3D vector of derivative gains
+	 */
+	void setGeometricPositionThrusterGains(const matrix::Vector3f &P, const matrix::Vector3f &I, const matrix::Vector3f &D);
+
+
+	/**
 	 * Get the controllers output thrust vectoring setpoint
 	 * This attitude setpoint was generated from the resulting acceleration setpoint after position and velocity control.
 	 * It needs to be executed by the attitude controller to achieve velocity and position tracking.
@@ -431,9 +440,16 @@ private:
 
 
 	// Gains for geometric controller
+
 	matrix::Vector3f _gain_geom_p; ///< Position control proportional gain
 	matrix::Vector3f _gain_geom_i; ///< Velocity control proportional gain
 	matrix::Vector3f _gain_geom_d; ///< Velocity control integral gain
+
+	matrix::Vector3f _gain_geom_thr_p; ///< Position control proportional gain
+	matrix::Vector3f _gain_geom_thr_i; ///< Velocity control proportional gain
+	matrix::Vector3f _gain_geom_thr_d; ///< Velocity control integral gain
+
+
 	matrix::Vector3f _geom_int;
 	matrix::Vector3f _f_w{};
 	matrix::Vector3f _f_b{};

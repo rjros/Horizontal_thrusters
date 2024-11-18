@@ -166,6 +166,14 @@ void PositionControl::setGeometricPositionGains(const Vector3f &P, const Vector3
 }
 
 
+void PositionControl::setGeometricPositionThrusterGains(const Vector3f &P, const Vector3f &I, const Vector3f &D)
+{
+	_gain_geom_thr_p = P;
+	_gain_geom_thr_i = I;
+	_gain_geom_thr_d = D;
+}
+
+
 bool PositionControl::update(const float dt, const int vectoring_att_mode,bool planar_flight)
 {
 	bool valid = _inputValid();
@@ -399,6 +407,7 @@ void PositionControl::_geometricAuto(const float dt)
 	// X (+,-) supported  3
 	// Only X + supported 2
 	// only X - supported 3
+
 	int CA_flags{0};
 	_CA_mode.print();
 	// Check the supported mode
@@ -439,6 +448,11 @@ void PositionControl::_geometricControl(const float dt)
 
 	// Constrain the velocities  (pos-pos)
 
+	//Gains
+	Vector3f Kp = _gain_geom_p;
+	Vector3f Ki = _gain_geom_i;
+	Vector3f Kd = _gain_geom_d;
+
 	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
@@ -468,16 +482,11 @@ void PositionControl::_geometricControl(const float dt)
 			_geom_int(i) += deltaI;
 		}
 	}
-	// Constrain the velocity vectors to follow constrants
-	// Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d)
-	// 	-_geom_int;
-
-	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d)
-	-constrain(_geom_int, -_sigma,_sigma).emult(_gain_geom_i);
 
 
-	// Allows takeoff
-	// _acc_sp.print();
+	Vector3f acc_pid =  -pos_error.emult(Kp) - vel_error.emult(Kd)
+	-constrain(_geom_int, -_sigma,_sigma).emult(Ki);
+
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 	_f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
@@ -494,6 +503,11 @@ void PositionControl::_geometric_XY_thrusters(const float dt)
 	_vel 	  = _R.transpose()* _vel;
 	_vel_sp   = _R.transpose()* _vel_sp;
 	_acc_sp   = _R.transpose()* _acc_sp;
+
+	// Gains
+	Vector3f Kp = _gain_geom_thr_p;
+	Vector3f Ki = _gain_geom_thr_i;
+	Vector3f Kd = _gain_geom_thr_d;
 
 	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
@@ -523,8 +537,8 @@ void PositionControl::_geometric_XY_thrusters(const float dt)
 		}
 	}
 
-	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d)
-	-constrain(_geom_int, -_sigma,_sigma).emult(_gain_geom_i);
+	Vector3f acc_pid =  -pos_error.emult(Kp) - vel_error.emult(Kd)
+	-constrain(_geom_int, -_sigma,_sigma).emult(Ki);
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
@@ -554,6 +568,11 @@ void PositionControl::_geometric_X_thrusters(const float dt)
 	_vel_sp   = _R.transpose()* _vel_sp;
 	_acc_sp   = _R.transpose()* _acc_sp;
 
+	// Gains
+	Vector3f Kp = {_gain_geom_thr_p(0),_gain_geom_p(1),_gain_geom_p(2)};
+	Vector3f Ki = {_gain_geom_thr_i(0),_gain_geom_i(1),_gain_geom_i(2)};
+	Vector3f Kd = {_gain_geom_thr_d(0),_gain_geom_d(1),_gain_geom_d(2)};
+
 	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
@@ -581,8 +600,8 @@ void PositionControl::_geometric_X_thrusters(const float dt)
 		}
 	}
 
-	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d)
-	-constrain(_geom_int, -_sigma,_sigma).emult(_gain_geom_i);
+	Vector3f acc_pid =  -pos_error.emult(Kp) - vel_error.emult(Kd)
+	-constrain(_geom_int, -_sigma,_sigma).emult(Ki);
 
 	// Allows takeoff
 	// _acc_sp.print();
@@ -613,6 +632,11 @@ void PositionControl::_geometric_Y_thrusters(const float dt)
 	_vel_sp   = _R.transpose()* _vel_sp;
 	_acc_sp   = _R.transpose()* _acc_sp;
 
+	// Gains
+	Vector3f Kp = {_gain_geom_p(0),_gain_geom_thr_p(1),_gain_geom_p(2)};
+	Vector3f Ki = {_gain_geom_i(0),_gain_geom_thr_i(1),_gain_geom_i(2)};
+	Vector3f Kd = {_gain_geom_d(0),_gain_geom_thr_d(1),_gain_geom_d(2)};
+
 	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
@@ -640,8 +664,8 @@ void PositionControl::_geometric_Y_thrusters(const float dt)
 		}
 	}
 
-	Vector3f acc_pid =  -pos_error.emult(_gain_geom_p) - vel_error.emult(_gain_geom_d)
-	-constrain(_geom_int, -_sigma,_sigma).emult(_gain_geom_i);
+	Vector3f acc_pid =  -pos_error.emult(Kp) - vel_error.emult(Kd)
+	-constrain(_geom_int, -_sigma,_sigma).emult(Ki);
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 

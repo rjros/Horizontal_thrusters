@@ -194,11 +194,17 @@ void MulticopterPositionControl::parameters_update(bool force)
 
 		//// GEOMETRIC GAINS ////
 		_control.setMass(_param_mpc_total_mass.get());
-		_control.setGeometricThrustLimits(_param_mpc_max_hor_thr.get(),_param_mpc_max_hor_thr.get(),_param_mpc_max_ver_thr.get());
+		_control.setGeometricThrustLimits(_param_mpc_x_thrust_max.get(),_param_mpc_y_thrust_max.get(),_param_mpc_z_thrust_max.get());
 		_control.setGeometricPositionGains(
 		Vector3f(_param_mpc_geom_x_p.get(), _param_mpc_geom_y_p.get(), _param_mpc_geom_z_p.get()),
 		Vector3f(_param_mpc_geom_x_i.get(), _param_mpc_geom_y_i.get(), _param_mpc_geom_z_i.get()),
 		Vector3f(_param_mpc_geom_x_d.get(), _param_mpc_geom_y_d.get(), _param_mpc_geom_z_d.get()));
+
+		_control.setGeometricPositionThrusterGains(
+		Vector3f(_param_mpc_geom_thx_p.get(), _param_mpc_geom_thy_p.get(), _param_mpc_geom_z_p.get()),
+		Vector3f(_param_mpc_geom_thx_i.get(), _param_mpc_geom_thy_i.get(), _param_mpc_geom_z_i.get()),
+		Vector3f(_param_mpc_geom_thx_d.get(), _param_mpc_geom_thy_d.get(), _param_mpc_geom_z_d.get()));
+
 
 
 		// Check that the design parameters are inside the absolute maximum constraints
