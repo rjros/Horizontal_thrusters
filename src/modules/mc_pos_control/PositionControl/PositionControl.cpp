@@ -392,11 +392,22 @@ void PositionControl::_geometricAuto(const float dt)
 	//If X +, check what mode is needed {X+,X-,Y+,Y-}
 	//If Y +, check what mode is needed {X+,X-,Y+,Y-}
 	Vector3f vel_sp_body=_R.transpose() * vel_sp;
+	Vector3f acc_sp_body=_R.transpose() * _acc_sp;
+
 
 	int8_t sp_flags{0};
-	// Set the flag bits based on the sign of vp_x and vp_y
-	sp_flags |= (vel_sp_body(0) >= 0) ? 0b1000 : 0b0100; // 1 in the X bit for positive X
-	sp_flags |= (vel_sp_body(1) >= 0) ? 0b0010 : 0b0001; // 1 in the Y bit for positive Y
+	// When acc setpoints are sent this get priority over the velocity
+	if (acc_sp_body.isAllNan())
+	{
+		sp_flags |= (vel_sp_body(0) >= 0) ? 0b1000 : 0b0100; // 1 in the X bit for positive X
+		sp_flags |= (vel_sp_body(1) >= 0) ? 0b0010 : 0b0001; // 1 in the Y bit for positive Y
+
+	}
+	else
+	{
+		sp_flags |= (acc_sp_body(0) >= 0) ? 0b1000 : 0b0100; // 1 in the X bit for positive X
+		sp_flags |= (acc_sp_body(1) >= 0) ? 0b0010 : 0b0001; // 1 in the Y bit for positive Y
+	}
 
 	// PX4_INFO("Current diretion %d",flags);
 	// check supported vehicle
@@ -433,7 +444,7 @@ void PositionControl::_geometricAuto(const float dt)
 	{
 		_auto_mode=3;
 		// PX4_INFO("Y Thuster mode");
-		_geometric_Y_thrusters(dt);
+		_geometric_Y_thrusters(sp_flags,dt);
 	}
 	else {
 		_auto_mode=4;
@@ -622,8 +633,9 @@ void PositionControl::_geometric_X_thrusters(const float dt)
 
 }
 
-void PositionControl::_geometric_Y_thrusters(const float dt)
+void PositionControl::_geometric_Y_thrusters(const int sp_flag,const float dt)
 {
+
 
 	// Rotation to the body frame
 	_pos 	  = _R.transpose()* _pos;
@@ -631,6 +643,8 @@ void PositionControl::_geometric_Y_thrusters(const float dt)
 	_vel 	  = _R.transpose()* _vel;
 	_vel_sp   = _R.transpose()* _vel_sp;
 	_acc_sp   = _R.transpose()* _acc_sp;
+
+	ControlMath::setZeroIfNanVector3f(_acc_sp);
 
 	// Gains
 	Vector3f Kp = {_gain_geom_p(0),_gain_geom_thr_p(1),_gain_geom_p(2)};
@@ -683,6 +697,8 @@ void PositionControl::_geometric_Y_thrusters(const float dt)
 	_vel 	  = _R* _vel;
 	_vel_sp   = _R* _vel_sp;
 	_acc_sp   = _R* _acc_sp;
+
+
 
 }
 
@@ -822,7 +838,7 @@ void PositionControl::YThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Changes based on the current mode
 	_normalization(_f_b);
-	// _f_b.print();
+	_f_b.print();
 
 	Vector3f(0.0f, _f_b(1), _f_b(2)).copyTo(att_sp.thrust_body);
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;

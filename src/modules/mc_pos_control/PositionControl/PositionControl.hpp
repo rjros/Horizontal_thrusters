@@ -356,7 +356,7 @@ private:
 	void _geometricControl(const float dt); ///< Position proportional control
 	void _geometricAuto(const float dt);///< Selects the thruster mode based on the Control Allocation
 	void _geometric_X_thrusters(const float dt);
-	void _geometric_Y_thrusters(const float dt);
+	void _geometric_Y_thrusters(const int sp_flag, const float dt);
 	void _geometric_XY_thrusters(const float dt);
 
 
