@@ -180,10 +180,10 @@ void thrustToFixedPitchAttitude(const Vector3f &thr_sp, const float yaw_sp, cons
 	// zero vector, no direction, set safe level value
 	//The angles in the rotation could be use select the different modes
 	matrix::Dcmf _rotation,_rotation2;
-	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
-	// _rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
-	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
-	_rotation2 = _rotation.transpose();
+	_rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, -yaw_sp}};
+	_rotation2 = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	// _rotation = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, yaw_sp}};
+	// _rotation2 = _rotation.transpose();
 
 	Vector3f body_x={0.0f,0.0f,0.0f};
 	//check the magnitude of the horizontal vector in the body frame

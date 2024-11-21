@@ -183,10 +183,6 @@ bool PositionControl::update(const float dt, const int vectoring_att_mode,bool p
 	_yawspeed_sp = PX4_ISFINITE(_yawspeed_sp) ? _yawspeed_sp : 0.f;
 	_yaw_sp = PX4_ISFINITE(_yaw_sp) ? _yaw_sp : _yaw;
 
-	_rotation = _R.transpose();// matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
-	_rotation2 =_R;//  _rotation.transpose();
-
-
 	bool distance_flag=false;
 	float error_xy=sqrt(pow((_pos_sp(0) - _pos(0)),2)+pow((_pos_sp(1) - _pos(1)),2));
 	distance_flag= (error_xy>=_planar_threshold)?true:false;
@@ -409,7 +405,7 @@ void PositionControl::_geometricAuto(const float dt)
 	// only X - supported 3
 
 	int CA_flags{0};
-	_CA_mode.print();
+	// _CA_mode.print();
 	// Check the supported mode
 	CA_flags |= (_CA_mode(0)>0 ? 0b1000 : 0b0000); // Bit 3 for X+
 	CA_flags |= (_CA_mode(1)>0 ? 0b0100 : 0b0000); // Bit 2 for X-
@@ -423,21 +419,25 @@ void PositionControl::_geometricAuto(const float dt)
         	_control_mode == 0b1001 || _control_mode == 0b0101)
 	{
 		_auto_mode=1;
+		// PX4_INFO("XY Thuster mode");
 		_geometric_XY_thrusters(dt);
 	}
 	else if (_control_mode == 0b1000 || _control_mode == 0b0100)
 	{
 		_auto_mode=2;
+		// PX4_INFO("X Thuster mode");
 		_geometric_X_thrusters(dt);
 	}
 
 	else if (_control_mode == 0b0010 || _control_mode == 0b0001)
 	{
 		_auto_mode=3;
+		// PX4_INFO("Y Thuster mode");
 		_geometric_Y_thrusters(dt);
 	}
 	else {
 		_auto_mode=4;
+		// PX4_INFO("Tilted Thuster mode");
 		_geometricControl(dt);
 	}
 }
@@ -636,6 +636,8 @@ void PositionControl::_geometric_Y_thrusters(const float dt)
 	Vector3f Kp = {_gain_geom_p(0),_gain_geom_thr_p(1),_gain_geom_p(2)};
 	Vector3f Ki = {_gain_geom_i(0),_gain_geom_thr_i(1),_gain_geom_i(2)};
 	Vector3f Kd = {_gain_geom_d(0),_gain_geom_thr_d(1),_gain_geom_d(2)};
+	// Kp.print();
+	// Kd.print();
 
 	_vel_sp(0) = math::constrain(_vel_sp(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	_vel_sp(1) = math::constrain(_vel_sp(1), -_lim_vel_horizontal, _lim_vel_horizontal);
@@ -771,6 +773,7 @@ void PositionControl::XThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Changes based on the current mode
 	_normalization(_f_b);
+	// _f_b.print();
 
 	Vector3f(_f_b(0), 0.0f, _f_b(2)).copyTo(att_sp.thrust_body);
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
@@ -819,7 +822,7 @@ void PositionControl::YThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Changes based on the current mode
 	_normalization(_f_b);
-	_f_b.print();
+	// _f_b.print();
 
 	Vector3f(0.0f, _f_b(1), _f_b(2)).copyTo(att_sp.thrust_body);
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
@@ -970,10 +973,10 @@ void PositionControl::_planar_positionControl(const float dt, const float yaw_sp
 
 
 
-	Vector3f vel_sp_xy=_rotation * Vector3f{_vel_sp(0),_vel_sp(1),0};
+	Vector3f vel_sp_xy=_R.transpose() * Vector3f{_vel_sp(0),_vel_sp(1),0};
 	vel_sp_xy(0) = math::constrain(vel_sp_xy(0), -_lim_vel_horizontal, _lim_vel_horizontal);
 	vel_sp_xy(1) = math::constrain(vel_sp_xy(1), -_lim_vel_horizontal, _lim_vel_horizontal);
-	vel_sp_xy=_rotation2*Vector3f{vel_sp_xy(0),vel_sp_xy(1),0};
+	vel_sp_xy=_R*Vector3f{vel_sp_xy(0),vel_sp_xy(1),0};
 	_vel_sp.xy()=vel_sp_xy.xy();
 	// Constrain velocity in z-direction.
 	_vel_sp(2) = math::constrain(_vel_sp(2), -_lim_vel_up, _lim_vel_down);
@@ -1013,8 +1016,8 @@ void PositionControl::_planar_velocityControl(const float dt,const float yaw_sp)
 	// Integrator anti-windup in vertical direction
 
 	//Rotate the thrust
-	Vector3f thr_sp_xy=_rotation * Vector3f{_thr_sp(0),_thr_sp(1),0};
-	Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
+	Vector3f thr_sp_xy=_R.transpose() * Vector3f{_thr_sp(0),_thr_sp(1),0};
+	Vector3f vel_xy_error=_R.transpose() * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
 
 	if(thr_sp_xy(0)>=0.0f)
@@ -1053,8 +1056,8 @@ void PositionControl::_planar_velocityControl(const float dt,const float yaw_sp)
 	thr_sp_xy(1)=thr_sp_xy(1)>=0.0f? math::min(thr_sp_xy(1),_lim_planar_thr_max): math::max(thr_sp_xy(1),-_lim_planar_thr_max);
 
 
-	thr_sp_xy=_rotation2*Vector3f{thr_sp_xy(0),thr_sp_xy(1),0};
-	vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
+	thr_sp_xy=_R*Vector3f{thr_sp_xy(0),thr_sp_xy(1),0};
+	vel_xy_error=_R*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
 	_thr_sp.xy()=thr_sp_xy.xy();
 	vel_error.xy()=vel_xy_error.xy();
 
@@ -1107,12 +1110,12 @@ void PositionControl::_planar_X_positionControl(const float dt,const float yaw_s
 	//assume gains are for this mode only, although they could be based on the direction
 
 	//Rotate the setpoints and references to the body frame
-	_pos =_rotation *  _pos;
-	_pos_sp =_rotation * _pos_sp;
-	_vel = _rotation*_vel;
-	_vel_sp = _rotation*_vel_sp;
-	_acc_sp = _rotation*_acc_sp;
-	_vel_int = _rotation*_vel_int;
+	_pos =_R.transpose() *  _pos;
+	_pos_sp =_R.transpose() * _pos_sp;
+	_vel = _R.transpose()*_vel;
+	_vel_sp = _R.transpose()*_vel_sp;
+	_acc_sp = _R.transpose()*_acc_sp;
+	_vel_int = _R.transpose()*_vel_int;
 
 
 	Vector3f _position_gains = {_gain_planar_pos_p(0),_gain_pos_p(1),_gain_pos_p(2)};
@@ -1161,7 +1164,7 @@ void PositionControl::_planar_X_velocityControl(const float dt, const float yaw_
 	//Planar and Tilted case
 	//Force in the X axis of the body frame must be separated from the acceleration sp.
 
-	// Vector3f th_body=_rotation*_thr_sp;
+	// Vector3f th_body=_R.transpose()*_thr_sp;
 
 	//////Compare the merit of using an anti windup
 	// // Use tracking Anti-Windup for horizontal direction: during saturation, the integrator is used to unsaturate the output
@@ -1191,7 +1194,7 @@ void PositionControl::_planar_X_velocityControl(const float dt, const float yaw_
 		_thr_sp(1) = thrust_sp_xy(1) / thrust_sp_xy_norm * thrust_max_xy;
 	}
 
-	// Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
+	// Vector3f vel_xy_error=_R.transpose() * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
 	if(_thr_sp(0)>=0.0f)
 	{
@@ -1211,12 +1214,12 @@ void PositionControl::_planar_X_velocityControl(const float dt, const float yaw_
 
 	_thr_sp(0)=math::min(_thr_sp(0),_lim_planar_thr_max);
 
-	// vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
-	// Vector3f th_new=_rotation2*_thr_sp;
+	// vel_xy_error=_R*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
+	// Vector3f th_new=_R*_thr_sp;
 	// _thr_sp.xy()=th_new.xy();
 	// vel_error.xy()=vel_xy_error.xy();
 
-	_thr_sp = _rotation2*_thr_sp;
+	_thr_sp = _R*_thr_sp;
 
 	// Make sure integral doesn't get NAN
 	ControlMath::setZeroIfNanVector3f(vel_error);
@@ -1226,11 +1229,11 @@ void PositionControl::_planar_X_velocityControl(const float dt, const float yaw_
 	// limit thrust integral
 	_vel_int(2) = math::min(fabsf(_vel_int(2)), CONSTANTS_ONE_G) * sign(_vel_int(2));
 
-	_vel_int = _rotation2*_vel_int;
+	_vel_int = _R*_vel_int;
 
-	_pos_sp =_rotation2  * _pos_sp;
-	_vel_sp = _rotation2 *_vel_sp;
-	_acc_sp = _rotation2 *_acc_sp;
+	_pos_sp =_R  * _pos_sp;
+	_vel_sp = _R *_vel_sp;
+	_acc_sp = _R *_acc_sp;
 	// _thr_sp.print();
 
 
@@ -1281,7 +1284,7 @@ void PositionControl::_planar_Y_positionControl(const float dt,const float yaw_s
 
 	// Constrain horizontal velocity by prioritizing the velocity component along the
 	// the desired position setpoint over the feed-forward term.
-	Vector3f vel_body_xy=_rotation * Vector3f{_vel_sp(0),_vel_sp(1),0};
+	Vector3f vel_body_xy=_R.transpose() * Vector3f{_vel_sp(0),_vel_sp(1),0};
 
 	//Vel in X axis
 	vel_body_xy(0) = math::constrain(vel_body_xy(0), -_lim_vel_horizontal, _lim_vel_horizontal);
@@ -1319,7 +1322,7 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 
 	//Planar and Tilted case
 	//Force in the X axis of the body frame must be separated from the acceleration sp.
-	Vector3f th_body=_rotation*_thr_sp;
+	Vector3f th_body=_R.transpose()*_thr_sp;
 
 	//////Compare the merit of using an anti windup
 	// // Use tracking Anti-Windup for horizontal direction: during saturation, the integrator is used to unsaturate the output
@@ -1349,7 +1352,7 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 		th_body(0) = thrust_sp_xy(0) / thrust_sp_xy_norm * thrust_max_xy;
 	}
 
-	Vector3f vel_xy_error=_rotation * Vector3f{vel_error(0),vel_error(1),0};
+	Vector3f vel_xy_error=_R.transpose() * Vector3f{vel_error(0),vel_error(1),0};
 	//separate the thrust for each sign
 		if(th_body(1)>=0.0f)
 	{
@@ -1368,8 +1371,8 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 	}
 	th_body(1)=math::min(th_body(1),_lim_planar_thr_max);
 
-	vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
-	Vector3f th_new=_rotation2*th_body;
+	vel_xy_error=_R*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
+	Vector3f th_new=_R*th_body;
 	_thr_sp.xy()=th_new.xy();
 	vel_error.xy()=vel_xy_error.xy();
 
@@ -1387,7 +1390,7 @@ void PositionControl::_planar_Y_velocityControl(const float dt, const float yaw_
 void PositionControl::_planar_Y_accelerationControl(const float yaw_sp)
 {
 	//Force in the X axis of the body frame must be separated from the acceleration sp.
-	Vector3f body_accel_sp=_rotation*_acc_sp;
+	Vector3f body_accel_sp=_R.transpose()*_acc_sp;
 	Vector3f th_body=Vector3f{0.0,0.0,0.0};
 
 	//YZ
@@ -1399,7 +1402,7 @@ void PositionControl::_planar_Y_accelerationControl(const float yaw_sp)
 	//Thrust back to rotation
 	th_body=body_z * collective_thrust;
 	th_body(1)=body_accel_sp(1)*_hover_thrust/CONSTANTS_ONE_G;
-	_thr_sp=_rotation2*th_body;
+	_thr_sp=_R*th_body;
 
 }
 
@@ -1426,7 +1429,7 @@ void PositionControl::_autoPlanar_positionControl(const float dt,const float yaw
 	// Check the sp direction in the body frame to select the mode
 	//If X +, check what mode is needed {X+,X-,Y+,Y-}
 	//If Y +, check what mode is needed {X+,X-,Y+,Y-}
-	Vector3f vel_sp_body=_rotation * vel_sp;
+	Vector3f vel_sp_body=_R.transpose() * vel_sp;
 
 	int8_t sp_flags{0};
 	// Set the flag bits based on the sign of vp_x and vp_y
