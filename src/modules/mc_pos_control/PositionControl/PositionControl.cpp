@@ -453,11 +453,16 @@ void PositionControl::_geometricAuto(const float dt)
 	}
 }
 
+
 void PositionControl::_geometricControl(const float dt)
 {
 	//Normal UAV flight using the geometric controller
-
-	// Constrain the velocities  (pos-pos)
+	// Rotation to the body frame
+	_pos 	  = _R.transpose()* _pos;
+	_pos_sp   = _R.transpose()* _pos_sp;
+	_vel 	  = _R.transpose()* _vel;
+	_vel_sp   = _R.transpose()* _vel_sp;
+	_acc_sp   = _R.transpose()* _acc_sp;
 
 	//Gains
 	Vector3f Kp = _gain_geom_p;
@@ -499,7 +504,22 @@ void PositionControl::_geometricControl(const float dt)
 	-constrain(_geom_int, -_sigma,_sigma).emult(Ki);
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
-	_f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
+
+	Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+
+
+	// Work in the world frame
+	_f_b = _mass * (_acc_sp - g_b);
+
+	_f_w = _R * _f_b;
+
+	// Rotate to Inertial Frame
+	_pos 	  = _R* _pos;
+	_pos_sp   = _R* _pos_sp;
+	_vel 	  = _R* _vel;
+	_vel_sp   = _R* _vel_sp;
+	_acc_sp   = _R* _acc_sp;
+	// _f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
 }
 
