@@ -721,7 +721,7 @@
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -737,7 +737,7 @@
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -753,7 +753,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -769,7 +769,7 @@
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>

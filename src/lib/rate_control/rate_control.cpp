@@ -250,7 +250,7 @@ void RateControl::updateIntegralGeometric(Vector3f &rate_error, const float dt)
 		i_factor = math::max(0.0f, 1.f - i_factor * i_factor);
 
 		// Perform the integration using a first order method
-		float rate_i = _geom_int(i) + _c2 * _gain_geom_i(i) * rate_error(i) * dt;
+		float rate_i = _geom_int(i) + i_factor * _gain_geom_i(i) * rate_error(i) * dt;
 
 		// do not propagate the result if out of range or invalid
 		if (PX4_ISFINITE(rate_i)) {

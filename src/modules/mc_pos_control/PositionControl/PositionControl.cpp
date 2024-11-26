@@ -255,8 +255,7 @@ bool PositionControl::updateGeometric(const float dt, const int vectoring_att_mo
 		break;//here
 
 	default:
-		_positionControl();
-		_velocityControl(dt);
+		_geometricControl(dt);
 		}
 
 
@@ -858,7 +857,7 @@ void PositionControl::YThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Changes based on the current mode
 	_normalization(_f_b);
-	_f_b.print();
+	// _f_b.print();
 
 	Vector3f(0.0f, _f_b(1), _f_b(2)).copyTo(att_sp.thrust_body);
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
@@ -941,12 +940,6 @@ void PositionControl::GeometricAttitude(vehicle_attitude_setpoint_s &att_sp)
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
 
 }
-
-
-
-
-
-
 
 void PositionControl::getThrustVectoringSetpoint(geometric_setpoint_s &thrust_vectoring_setpoint)const
 {
