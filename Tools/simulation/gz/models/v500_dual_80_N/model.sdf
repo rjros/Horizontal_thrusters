@@ -7,14 +7,14 @@
     <link name="base_link">
     <inertial>
         <pose>0 0 0.015702 0 0 0</pose>
-        <mass>2.17</mass>
+        <mass>2.247</mass>
         <inertia>
-          <ixx>0.0037</ixx>
+          <ixx>0.0133</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.0037</iyy>
+          <iyy>0.0133</iyy>
           <iyz>0</iyz>
-          <izz>0.0061</izz>
+          <izz>0.0249</izz>
         </inertia>
       </inertial>
       <gravity>true</gravity>
@@ -76,13 +76,16 @@
         <velocity_decay/>
         <pose>0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_0_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -135,13 +138,16 @@
         <velocity_decay/>
         <pose>-0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_1_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -194,13 +200,16 @@
         <velocity_decay/>
         <pose> 0.176876 0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_2_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -253,13 +262,16 @@
         <velocity_decay/>
         <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
         <inertial>
-            <pose>0 0 -0.02 0 0 0</pose>
-            <mass>0.075</mass>
-            <inertia>
-              <ixx>8.8307e-06</ixx>
-              <iyy>8.8307e-06</iyy>
-              <izz>7.5083e-06</izz>
-            </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_3_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -306,9 +318,8 @@
       </axis>
     </joint>
 <!-- Propellers definition END-->
-
-<!-- EDF Frame 200 END -->
-  <link name="edf_1_body">
+<!-- EDF Mass -->
+  <link name="edf_1_ball">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
@@ -320,6 +331,53 @@
               <iyy>8.6158e-05</iyy>
               <izz>8.6158e-05</izz>
             </inertia>
+        </inertial>
+    </link>
+
+    <joint name="edf_1_mass" type="fixed">
+      <parent>base_link</parent>
+      <child>edf_1_ball</child>
+    </joint>
+<!-- EDF Mass -->
+  <link name="edf_2_ball">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.100 0 -0.064 0 0 3.145159 </pose>
+         <inertial>
+            <mass>0.175</mass>
+            <inertia>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
+            </inertia>
+        </inertial>
+    </link>
+
+    <joint name="edf_2_mass" type="fixed">
+      <parent>base_link</parent>
+      <child>edf_2_ball</child>
+    </joint>
+
+<!-- EDF Mass -->
+
+<!-- EDF Frame 200 END -->
+  <link name="edf_1_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.100 0 -0.064 0 0 0 </pose>
+        <inertial>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+          <mass>0.00000001</mass>
+          <inertia>
+            <ixx>0.000001</ixx>
+            <ixy>0.0</ixy>
+            <iyy>0.000001</iyy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+            <izz>0.000001</izz>
+          </inertia>
         </inertial>
        <visual name="edf_1_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -374,14 +432,17 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> -0.100 0 -0.064 0 0 3.145159 </pose>
-         <inertial>
-            <pose> 0 0 0 0 0 0 </pose>
-            <mass>0.175</mass>
-            <inertia>
-              <ixx>6.3787e-05</ixx>
-              <iyy>8.6158e-05</iyy>
-              <izz>8.6158e-05</izz>
-            </inertia>
+        <inertial>
+            <!-- <pose> 0.0172 0 0 0 0 0 </pose> -->
+          <mass>0.00000001</mass>
+          <inertia>
+            <ixx>0.000001</ixx>
+            <ixy>0.0</ixy>
+            <iyy>0.000001</iyy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+            <izz>0.000001</izz>
+          </inertia>
         </inertial>
       <visual name="edf_2_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -437,13 +498,17 @@
         <self_collide>false</self_collide>
         <velocity_decay/>
         <pose> -0.100 0 -0.064 0 1.5708 0</pose>
-       <inertial>
-          <mass>0.025</mass>
-          <inertia>
-            <ixx>3.9146e-06</ixx>
-            <iyy>3.9146e-06</iyy>
-            <izz>7.8125e-06</izz>
-          </inertia>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -496,12 +561,16 @@
         <velocity_decay/>
         <pose> 0.100 0 -0.064 0 1.5708 3.145159</pose>
         <inertial>
-          <mass>0.025</mass>
-          <inertia>
-            <ixx>3.9146e-06</ixx>
-            <iyy>3.9146e-06</iyy>
-            <izz>7.8125e-06</izz>
-          </inertia>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
         </inertial>
        <visual name="rotor_4_visual">
         <pose>0 0 0 0 0 0</pose>

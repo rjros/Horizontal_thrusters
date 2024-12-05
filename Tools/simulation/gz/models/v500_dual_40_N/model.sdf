@@ -623,7 +623,7 @@ S          <mass>0.00000001</mass>
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -639,7 +639,7 @@ S          <mass>0.00000001</mass>
       <turningDirection>ccw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -655,7 +655,7 @@ S          <mass>0.00000001</mass>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -671,7 +671,7 @@ S          <mass>0.00000001</mass>
       <turningDirection>cw</turningDirection>
       <timeConstantUp>0.0125</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
-      <maxRotVelocity>1225.22</maxRotVelocity>
+      <maxRotVelocity>1000</maxRotVelocity>
       <motorConstant>11.1913e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
@@ -717,6 +717,5 @@ S          <mass>0.00000001</mass>
       <motorType>velocity</motorType>
     </plugin>
 <!-- Horizontal thrusters END-->
-
   </model>
 </sdf>

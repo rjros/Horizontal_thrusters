@@ -773,6 +773,8 @@ void PositionControl::XThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Same for all modes
 	Vector3f body_z = -_f_w/_f_w.norm();
+	// body_z.print();
+
 
 	if (body_z.norm_squared() < FLT_EPSILON) {
 		body_z(2) = 1.f;
@@ -821,6 +823,7 @@ void PositionControl::YThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	// Same for all modes
 	Vector3f body_z = -_f_w/_f_w.norm();
+
 
 	if (body_z.norm_squared() < FLT_EPSILON) {
 		body_z(2) = 1.f;
