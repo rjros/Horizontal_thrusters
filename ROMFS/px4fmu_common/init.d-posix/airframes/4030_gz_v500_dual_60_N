@@ -17,9 +17,12 @@ param set-default SENS_EN_GPSSIM 1
 param set-default SENS_EN_BAROSIM 0
 param set-default SENS_EN_MAGSIM 1
 
-param set-default CA_AIRFRAME 0
+param set-default CA_AIRFRAME 11 ## Thrust Vectoring Vehicle
 param set-default CA_ROTOR_COUNT 6
-param set-default VECT_ATT_MODE 2
+
+param set-default CA_INDEX 4  	  ## Index for the first tilting rotors
+param set RC_SIM 0 		  # 0:Simulation, 1:RC, 2:Offboard
+param set-default VECT_ATT_MODE 1
 
 
 param set-default CA_ROTOR0_PX 0.177
