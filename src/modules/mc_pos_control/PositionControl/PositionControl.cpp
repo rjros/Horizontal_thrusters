@@ -233,6 +233,8 @@ bool PositionControl::updateGeometric(const float dt, const int vectoring_att_mo
 	if (valid) {
 	_yawspeed_sp = PX4_ISFINITE(_yawspeed_sp) ? _yawspeed_sp : 0.f;
 	_yaw_sp = PX4_ISFINITE(_yaw_sp) ? _yaw_sp : _yaw;
+	_R_yaw = matrix::Dcmf{matrix::Eulerf{0.f, 0.f, _yaw_sp}};
+
 	// PX4_INFO("Yaw setpoint %f",double(_yaw_sp));
 
 	// _geometricControl(dt);
@@ -457,11 +459,11 @@ void PositionControl::_geometricControl(const float dt)
 {
 	//Normal UAV flight using the geometric controller
 	// Rotation to the body frame
-	_pos 	  = _R.transpose()* _pos;
-	_pos_sp   = _R.transpose()* _pos_sp;
-	_vel 	  = _R.transpose()* _vel;
-	_vel_sp   = _R.transpose()* _vel_sp;
-	_acc_sp   = _R.transpose()* _acc_sp;
+	// _pos 	  = _R.transpose()* _pos;
+	// _pos_sp   = _R.transpose()* _pos_sp;
+	// _vel 	  = _R.transpose()* _vel;
+	// _vel_sp   = _R.transpose()* _vel_sp;
+	// _acc_sp   = _R.transpose()* _acc_sp;
 
 	//Gains
 	Vector3f Kp = _gain_geom_p;
@@ -504,20 +506,26 @@ void PositionControl::_geometricControl(const float dt)
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
-	Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+	// Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+
+	Vector3f g_b = Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
 
 
 	// Work in the world frame
-	_f_b = _mass * (_acc_sp - g_b);
+	// _f_b = _mass * (_acc_sp - g_b);
 
-	_f_w = _R * _f_b;
+	_f_w = _mass * (_acc_sp - g_b);
+
+
+	//_f_w = _R_yaw * _f_b;
+
 
 	// Rotate to Inertial Frame
-	_pos 	  = _R* _pos;
-	_pos_sp   = _R* _pos_sp;
-	_vel 	  = _R* _vel;
-	_vel_sp   = _R* _vel_sp;
-	_acc_sp   = _R* _acc_sp;
+	// _pos 	  = _R* _pos;
+	// _pos_sp   = _R* _pos_sp;
+	// _vel 	  = _R* _vel;
+	// _vel_sp   = _R* _vel_sp;
+	// _acc_sp   = _R* _acc_sp;
 	// _f_w = _mass * (_acc_sp - (Vector3f(0.0f,0.0f,CONSTANTS_ONE_G)));
 
 }
@@ -528,11 +536,11 @@ void PositionControl::_geometricControl(const float dt)
 void PositionControl::_geometric_XY_thrusters(const float dt)
 {
 	// Rotation to the body frame
-	_pos 	  = _R.transpose()* _pos;
-	_pos_sp   = _R.transpose()* _pos_sp;
-	_vel 	  = _R.transpose()* _vel;
-	_vel_sp   = _R.transpose()* _vel_sp;
-	_acc_sp   = _R.transpose()* _acc_sp;
+	_pos 	  = _R_yaw.transpose()* _pos;
+	_pos_sp   = _R_yaw.transpose()* _pos_sp;
+	_vel 	  = _R_yaw.transpose()* _vel;
+	_vel_sp   = _R_yaw.transpose()* _vel_sp;
+	_acc_sp   = _R_yaw.transpose()* _acc_sp;
 
 	// Gains
 	Vector3f Kp = _gain_geom_thr_p;
@@ -572,18 +580,19 @@ void PositionControl::_geometric_XY_thrusters(const float dt)
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
-	Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+	Vector3f g_b =  _R_yaw.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
 
 	_f_b = _mass * (_acc_sp - g_b);
 
-	_f_w = _R * Vector3f(0.0f,0.0f,_f_b(2));
+
+	_f_w = _R_yaw * Vector3f(0.0f,0.0f,_f_b(2));
 
 	// Rotate to Inertial Frame
-	_pos 	  = _R* _pos;
-	_pos_sp   = _R* _pos_sp;
-	_vel 	  = _R* _vel;
-	_vel_sp   = _R* _vel_sp;
-	_acc_sp   = _R* _acc_sp;
+	_pos 	  = _R_yaw* _pos;
+	_pos_sp   = _R_yaw* _pos_sp;
+	_vel 	  = _R_yaw* _vel;
+	_vel_sp   = _R_yaw* _vel_sp;
+	_acc_sp   = _R_yaw* _acc_sp;
 }
 
 
@@ -592,11 +601,11 @@ void PositionControl::_geometric_X_thrusters(const float dt)
 
 	// Vector3f acceleration_sp= _acc_sp;
 	// Rotation to the body frame
-	_pos 	  = _R.transpose()* _pos;
-	_pos_sp   = _R.transpose()* _pos_sp;
-	_vel 	  = _R.transpose()* _vel;
-	_vel_sp   = _R.transpose()* _vel_sp;
-	_acc_sp   = _R.transpose()* _acc_sp;
+	_pos 	  = _R_yaw.transpose()* _pos;
+	_pos_sp   = _R_yaw.transpose()* _pos_sp;
+	_vel 	  = _R_yaw.transpose()* _vel;
+	_vel_sp   = _R_yaw.transpose()* _vel_sp;
+	_acc_sp   = _R_yaw.transpose()* _acc_sp;
 
 	// Gains
 	Vector3f Kp = {_gain_geom_thr_p(0),_gain_geom_p(1),_gain_geom_p(2)};
@@ -637,18 +646,22 @@ void PositionControl::_geometric_X_thrusters(const float dt)
 	// _acc_sp.print();
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
-	Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+	Vector3f g_b =  _R_yaw.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+
 
 	_f_b = _mass * (_acc_sp - g_b);
 
-	_f_w = _R * Vector3f(0.0f,_f_b(1),_f_b(2));
+
+	_f_w = _R_yaw * Vector3f(0.0f,_f_b(1),_f_b(2));
 
 
-	_pos 	  = _R* _pos;
-	_pos_sp   = _R* _pos_sp;
-	_vel 	  = _R* _vel;
-	_vel_sp   = _R* _vel_sp;
-	_acc_sp   = _R* _acc_sp;
+
+	// Rotate to Inertial Frame
+	_pos 	  = _R_yaw* _pos;
+	_pos_sp   = _R_yaw* _pos_sp;
+	_vel 	  = _R_yaw* _vel;
+	_vel_sp   = _R_yaw* _vel_sp;
+	_acc_sp   = _R_yaw* _acc_sp;
 
 }
 
@@ -657,11 +670,11 @@ void PositionControl::_geometric_Y_thrusters(const int sp_flag,const float dt)
 
 
 	// Rotation to the body frame
-	_pos 	  = _R.transpose()* _pos;
-	_pos_sp   = _R.transpose()* _pos_sp;
-	_vel 	  = _R.transpose()* _vel;
-	_vel_sp   = _R.transpose()* _vel_sp;
-	_acc_sp   = _R.transpose()* _acc_sp;
+	_pos 	  = _R_yaw.transpose()* _pos;
+	_pos_sp   = _R_yaw.transpose()* _pos_sp;
+	_vel 	  = _R_yaw.transpose()* _vel;
+	_vel_sp   = _R_yaw.transpose()* _vel_sp;
+	_acc_sp   = _R_yaw.transpose()* _acc_sp;
 
 	ControlMath::setZeroIfNanVector3f(_acc_sp);
 
@@ -704,18 +717,21 @@ void PositionControl::_geometric_Y_thrusters(const int sp_flag,const float dt)
 
 	ControlMath::addIfNotNanVector3f(_acc_sp, acc_pid);
 
-	Vector3f g_b =  _R.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
+	Vector3f g_b =  _R_yaw.transpose()*Vector3f(0.0f,0.0f,CONSTANTS_ONE_G);
 
 	_f_b = _mass * (_acc_sp - g_b);
 
-	_f_w = _R * Vector3f(_f_b(0),0.0f,_f_b(2));
 
 
-	_pos 	  = _R* _pos;
-	_pos_sp   = _R* _pos_sp;
-	_vel 	  = _R* _vel;
-	_vel_sp   = _R* _vel_sp;
-	_acc_sp   = _R* _acc_sp;
+	_f_w = _R_yaw * Vector3f(_f_b(0),0.0f,_f_b(2));
+
+
+	// Rotate to Inertial Frame
+	_pos 	  = _R_yaw* _pos;
+	_pos_sp   = _R_yaw* _pos_sp;
+	_vel 	  = _R_yaw* _vel;
+	_vel_sp   = _R_yaw* _vel_sp;
+	_acc_sp   = _R_yaw* _acc_sp;
 
 
 
@@ -780,13 +796,26 @@ void PositionControl::XThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 		body_z(2) = 1.f;
 	}
 
-	// Remains fixed
+	// // Remains fixed
+	// Vector3f body_xc = Vector3f(cos(_yaw_sp), sin(_yaw_sp), 0.0f);
+	// Vector3f body_x = (body_xc - (body_xc.dot(body_z) * body_z)).normalized();
+
+	// // desired body_y axis
+	// Vector3f body_y = body_z % body_x;
+	// body_y.normalize();
+
 	Vector3f body_x = Vector3f(cos(_yaw_sp), sin(_yaw_sp), 0.0f);
-	body_x.normalize();
+
 
 	// desired body_y axis
 	Vector3f body_y = body_z % body_x;
 	body_y.normalize();
+
+	// Vector3f body_x = {0.0f,0.0f,0.0f};
+	// body_x = body_y % body_z;
+	// body_x.normalize();
+
+
 
 	Dcmf R_sp;
 
@@ -809,10 +838,22 @@ void PositionControl::XThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 
 	// Changes based on the current mode
-	_normalization(_f_b);
-	// _f_b.print();
+	// float thr_yz= _f_w.length();
 
-	Vector3f(_f_b(0), 0.0f, _f_b(2)).copyTo(att_sp.thrust_body);
+	float thr_yz= _f_w.dot(_R.col(2));
+	Vector3f thr_cmd = {_f_b(0),0.0f,thr_yz};
+
+	// int sign =  (_f_w(2) >= 0)?  1: -1;
+	// Vector3f thr_cmd = {_f_b(0),0.0f,sign*thr_yz};
+
+	// _normalization(_f_b);
+	_normalization(thr_cmd);
+
+	//thr_cmd.print();
+
+	// Vector3f(_f_b(0), 0.0f, _f_b(2)).copyTo(att_sp.thrust_body);
+	Vector3f(thr_cmd(0), 0.0f, thr_cmd(2)).copyTo(att_sp.thrust_body);
+
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
 
 }
@@ -856,6 +897,14 @@ void PositionControl::YThrusterAttitude(vehicle_attitude_setpoint_s &att_sp)
 	att_sp.roll_body = euler.phi();
 	att_sp.pitch_body = euler.theta();
 	att_sp.yaw_body = euler.psi();
+
+
+	float thr_z= _f_w.length();//_f_w.dot(_R.col(2));
+	int sign =  (_f_w(2) >= 0)?  1: -1;
+
+	Vector3f thr_cmd = {0.0f,0.0f,sign*thr_z};
+	//_normalization(_f_b);
+	_normalization(thr_cmd);
 
 
 	// Changes based on the current mode
@@ -906,6 +955,7 @@ void PositionControl::GeometricAttitude(vehicle_attitude_setpoint_s &att_sp)
 
 	Vector3f proj_body_x = Vector3f(cos(_yaw_sp), sin(_yaw_sp), 0.0f);
 
+
 	// desired body_y axis
 	Vector3f body_y = body_z % proj_body_x;
 	body_y.normalize();
@@ -935,11 +985,24 @@ void PositionControl::GeometricAttitude(vehicle_attitude_setpoint_s &att_sp)
 	att_sp.yaw_body = euler.psi();
 
 	// use for the 3d thrust
-	_f_b = _R.transpose() *_f_w;
 
-	_normalization(_f_b);
-	// _f_b.print();
-	Vector3f(0.0f,0.0f,_f_b(2)).copyTo(att_sp.thrust_body);
+	// float thr_z= _f_w.length();//_f_w.dot(_R.col(2));
+	float thr_z= _f_w.dot(_R.col(2));
+	Vector3f thr_cmd = {0.0f,0.0f,thr_z};
+
+
+	// int sign =  (_f_w(2) >= 0)?  1: -1;
+	// Vector3f thr_cmd = {0.0f,0.0f,sign*thr_z};
+
+	//_normalization(_f_b);
+	_normalization(thr_cmd);
+
+
+	// Vector3f(0.0f, 0.0f, _f_b(2)).copyTo(att_sp.thrust_body);
+	Vector3f(0.0f, 0.0f, thr_cmd(2)).copyTo(att_sp.thrust_body);
+
+
+
 	att_sp.yaw_sp_move_rate = _yawspeed_sp;
 
 }

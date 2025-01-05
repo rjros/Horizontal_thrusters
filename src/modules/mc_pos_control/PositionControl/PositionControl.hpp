@@ -435,6 +435,7 @@ private:
 	float _max_thrust_y {0};  ///< Force in [N]
 	float _max_thrust_z {0};  ///< Force in [N]
 	matrix::Dcmf _R ; // Rotation matrix of the Body frame
+	matrix::Dcmf _R_yaw; // Rotaion matrix wrt to the yaw_sp
 	matrix::Vector<int,4> _CA_mode;
 
 

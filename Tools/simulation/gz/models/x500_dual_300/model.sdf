@@ -7,7 +7,7 @@
     <link name="base_link">
     <inertial>
         <pose>0 0 0.015702 0 0 0</pose>
-        <mass>2.247</mass>
+        <mass>2.47</mass>
         <inertia>
           <ixx>0.0133</ixx>
           <ixy>0</ixy>

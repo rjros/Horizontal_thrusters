@@ -28,6 +28,13 @@ param set VECT_ATT_MODE 2	# 0:UNKNOWN, 1:constant zero tilt, 2:fixed attitude, 3
 param set CA_SV_TL_COUNT 2
 
 
+param set-default TOTAL_MASS 3.118
+
+#### Inertia Values ####
+param set-default MC_IXX 0.0142
+param set-default MC_IYY 0.0592
+param set-default MC_IZZ 0.0701
+#### Inertia Values END ####
 
 param set-default CA_ROTOR0_PX 0.177
 param set-default CA_ROTOR0_PY 0.177
