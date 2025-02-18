@@ -17,18 +17,68 @@ param set-default SENS_EN_GPSSIM 1
 param set-default SENS_EN_BAROSIM 0
 param set-default SENS_EN_MAGSIM 1
 
-param set-default CA_AIRFRAME 11 ## Thrust Vectoring Vehicle
+
+## Vehicle General Parameters ##
+param set-default CA_AIRFRAME 	11  	## Thrust Vectoring Vehicle
 param set-default CA_ROTOR_COUNT 6
 
-param set-default CA_INDEX 4  	  ## Index for the first tilting rotors
-param set RC_SIM 0 		  # 0:Simulation, 1:RC, 2:Offboard
-param set-default VECT_ATT_MODE 1
+param set-default CA_INDEX 	4  	## Index for the first tilting rotors
+param set RC_SIM 		0 	# 0:Simulation, 1:RC, 2:Offboard
+param set VECT_ATT_MODE 	3	# 1:constant zero tilt, 2:fixed attitude, 3:tilted attitude
 
-#### Inertia Values ####
-param set-default MC_IXX 0.0140
-param set-default MC_IYY 0.0175
-param set-default MC_IZZ 0.0286
-#### Inertia Values END ####
+param set-default TOTAL_MASS 	2.627
+param set-default MPC_GEOM_CTRL	1
+
+param set-default MC_IXX 	0.0140
+param set-default MC_IYY 	0.0175
+param set-default MC_IZZ 	0.0286
+
+param set-default X_THRUST_MAX 	8.550
+param set-default Y_THRUST_MAX 	8.550
+param set-default Z_THRUST_MAX 	44.76
+
+param set-default X_TORQUE_MAX 	3.960
+param set-default Y_TORQUE_MAX 	3.960
+param set-default Z_TORQUE_MAX 	0.358
+## Vehicle General Parameters END ##
+
+## Controller Gains ##
+param set-default GEOM_X_D       4.0000
+param set-default GEOM_X_I       0.2000
+param set-default GEOM_X_P       6.0000
+
+param set-default GEOM_Y_D       5.0000
+param set-default GEOM_Y_I       0.1000
+param set-default GEOM_Y_P       8.0000
+
+param set-default GEOM_Z_D       5.0000
+param set-default GEOM_Z_I       1.5000
+param set-default GEOM_Z_P       8.0000
+
+param set-default GEOM_THX_D     7.0000
+param set-default GEOM_THX_I     0.2500
+param set-default GEOM_THX_P     9.0000
+
+param set-default GEOM_THY_D     6.0000
+param set-default GEOM_THY_I     0.3000
+param set-default GEOM_THY_P     9.0000
+
+param set-default GEOM_ROLL_P    10.0000
+param set-default GEOM_ROLLR_I   0.1000
+param set-default GEOM_ROLLR_P   15.0000
+param set-default GEOM_ROLL_RATE_D 0.0000
+
+param set-default GEOM_PITCH_P   15.0000
+param set-default GEOM_PITCHR_I  0.1000
+param set-default GEOM_PITCHR_P  15.0000
+param set-default GEOM_PTCH_RTE_D 0.0000
+
+param set-default GEOM_YAW_P     5.0000
+param set-default GEOM_YAWR_I    0.3000
+param set-default GEOM_YAWR_P    8.0000
+param set-default GEOM_YAW_RTE_D 0.0000
+## Controller Gains ##
+
 
 param set-default CA_ROTOR0_PX 0.177
 param set-default CA_ROTOR0_PY 0.177
