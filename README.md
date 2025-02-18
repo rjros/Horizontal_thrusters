@@ -67,6 +67,9 @@ The following parameters define the behavior of the vehicle and its thrust-vecto
 | **X_THRUST_MAX** | Max horizontal thrust along **X-axis** (**N**). |
 | **Y_THRUST_MAX** | Max horizontal thrust along **Y-axis** (**N**). |
 | **Z_THRUST_MAX** | Max vertical thrust (**N**). |
+| **X_TORQUE_MAX** | Maximum torque about the **X-axis**, expressed in **N·m**. |
+| **Y_TORQUE_MAX** | Maximum torque about the **Y-axis**, expressed in **N·m**. |
+| **Z_TORQUE_MAX** | Maximum torque about the **Z-axis**, expressed in **N·m**. |
 | **VECT_ANG_N** | Rotation angle for **thruster N**, used only when **RC_SIM = QGC**. |
 | **MC_IXX** | **Moment of inertia** about **X-axis** (**kg·m²**). Similar parameters: **MC_IXY, MC_IXZ, MC_IYY, MC_IYZ, MC_IZZ**. |
 
