@@ -46,7 +46,7 @@
 #include <uORB/topics/vehicle_local_position_setpoint.h>
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE////
 #include <uORB/topics/planar_attitude_status.h>
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+// #include <uORB/topics/thrust_vectoring_setpoint_status.h>
 #include <uORB/topics/geometric_setpoint.h>
 
 
@@ -223,7 +223,6 @@ public:
 	 * @param att current attitude of the robot
 	 * @param vectoring_att_mode attitude mode for thrust vectoring capable vehicles
 	 * @param attitude_setpoint reference to struct to fill up
-	 * @param thrust_vectoring_status thrust vectoring status
 	 */
 	void getAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode, vehicle_attitude_setpoint_s &attitude_setpoint) const;
 
@@ -233,7 +232,7 @@ public:
 	 */
 	static const trajectory_setpoint_s empty_trajectory_setpoint;
 
-	//// GEOEMETRIC CONTROLLER FUNCTIONS ////
+	//// GEOMETRIC CONTROLLER FUNCTIONS ////
 	/**
 	 * Apply P-position and PID-velocity controller that updates the member
 	 * thrust, yaw- and yawspeed-setpoints.

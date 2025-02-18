@@ -62,7 +62,7 @@
 
 // GEOMETRIC CONTROLLER CUSTOM MSGS
 #include <uORB/topics/vehicle_attitude.h>
-#include <uORB/topics/thrust_vectoring_setpoint_status.h>
+// #include <uORB/topics/thrust_vectoring_setpoint_status.h>
 #include <uORB/topics/geometric_setpoint.h>
 
 
@@ -201,9 +201,9 @@ private:
 		(ParamFloat<px4::params::GEOM_PITCHR_I>)    	_param_mpc_geom_pr_i,
 		(ParamFloat<px4::params::GEOM_YAWR_I>)    	_param_mpc_geom_yr_i,
 
-		(ParamFloat<px4::params::GEOM_ROLL_RATE_D>)   	_param_mpc_geom_rr_d,
-		(ParamFloat<px4::params::GEOM_PTCH_RTE_D>)    	_param_mpc_geom_pr_d,
-		(ParamFloat<px4::params::GEOM_YAW_RTE_D>)    	_param_mpc_geom_yr_d,
+		(ParamFloat<px4::params::GEOM_ROLLR_D>)   	_param_mpc_geom_rr_d,
+		(ParamFloat<px4::params::GEOM_PITCHR_D>)    	_param_mpc_geom_pr_d,
+		(ParamFloat<px4::params::GEOM_YAWR_D>)    	_param_mpc_geom_yr_d,
 
 		(ParamFloat<px4::params::X_TORQUE_MAX>)    	_param_mpc_x_torque_max,
 		(ParamFloat<px4::params::Y_TORQUE_MAX>)    	_param_mpc_y_torque_max,
