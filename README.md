@@ -96,18 +96,21 @@ The following parameters define the behavior of the vehicle and its thrust-vecto
 | **GEOM_ROLLR_D** | Derivative gain for **rate control** (roll rate). Similar for **pitch, yaw** (**GEOM_PITCHR_D, GEOM_YAWR_D**). |
 
 ## Citation
+
+For more details, you can access the article [here](https://www.mdpi.com/2504-446X/9/2/145).
+
 If you use this work in an academic context, please cite:
 
 ```bibtex
 @Article{drones9020145,
-  AUTHOR = {Martinez, Ricardo Rosales and Paul, Hannibal and Shimonomura, Kazuhiro},
-  TITLE = {Design and Control Strategies of Multirotors with Horizontal Thrust-Vectored Propellers},
-  JOURNAL = {Drones},
-  VOLUME = {9},
-  YEAR = {2025},
-  NUMBER = {2},
-  ARTICLE-NUMBER = {145},
-  URL = {https://www.mdpi.com/2504-446X/9/2/145},
-  ISSN = {2504-446X},
-  DOI = {10.3390/drones9020145}
+  author = {Martinez, Ricardo Rosales and Paul, Hannibal and Shimonomura, Kazuhiro},
+  title = {Design and Control Strategies of Multirotors with Horizontal Thrust-Vectored Propellers},
+  journal = {Drones},
+  volume = {9},
+  year = {2025},
+  number = {2},
+  article-number = {145},
+  url = {https://www.mdpi.com/2504-446X/9/2/145},
+  issn = {2504-446X},
+  doi = {10.3390/drones9020145}
 }
