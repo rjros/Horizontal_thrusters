@@ -97,14 +97,17 @@ The following parameters define the behavior of the vehicle and its thrust-vecto
 
 ## Citation
 If you use this work in an academic context, please cite:
+
 ```bibtex
-@article{Martinez2025,
-  author = {Martinez, R.R. and Paul, H. and Shimonomura, K.},
-  title = {Design and Control Strategies of Multirotors with Horizontal Thrust-Vectored Propellers},
-  journal = {Drones},
-  year = {2025},
-  volume = {9},
-  pages = {145},
-  doi = {10.3390/drones9020145}
+@Article{drones9020145,
+  AUTHOR = {Martinez, Ricardo Rosales and Paul, Hannibal and Shimonomura, Kazuhiro},
+  TITLE = {Design and Control Strategies of Multirotors with Horizontal Thrust-Vectored Propellers},
+  JOURNAL = {Drones},
+  VOLUME = {9},
+  YEAR = {2025},
+  NUMBER = {2},
+  ARTICLE-NUMBER = {145},
+  URL = {https://www.mdpi.com/2504-446X/9/2/145},
+  ISSN = {2504-446X},
+  DOI = {10.3390/drones9020145}
 }
-```
