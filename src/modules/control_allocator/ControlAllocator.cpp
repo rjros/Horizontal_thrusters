@@ -591,16 +591,6 @@ ControlAllocator::Run()
 				_control_allocation[1]->setControlSetpoint(c[1]);
 				_control_allocation[1]->allocate();
 				tilting_actuator_sp = _control_allocation[1]->getActuatorSetpoint();
-				// tilting_actuator_sp.print();
-				//Tilt propellers INDEX to be added
-				// For now assume the servos begin after the tilted motors
-				//Total num of motors-tilted index = num of tilting motors
-				// int index =_rotor_count-_tilt_index;
-				// for(int i=index;i<_rotor_count;++i)
-				// {
-				// 	tilting_actuator_sp(i) = tilt_angle(i-index);
-				// }
-				// tilting_actuator_sp.print();
 				_control_allocation[0]->setActuatorSetpoint(fixed_actuator_sp);
 				_control_allocation[1]->setActuatorSetpoint(tilting_actuator_sp);
 
