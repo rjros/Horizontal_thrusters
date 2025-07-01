@@ -1620,7 +1620,7 @@ void PositionControl::getLocalPositionSetpoint(vehicle_local_position_setpoint_s
 }
 
 
-void PositionControl::etAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode,
+void PositionControl::getAttitudeSetpoint(const matrix::Quatf &att, const int vectoring_att_mode,
 					vehicle_attitude_setpoint_s &attitude_setpoint) const
 {
 	// _thr_sp.print();
