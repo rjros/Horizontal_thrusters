@@ -706,12 +706,12 @@ void MulticopterPositionControl::Run()
 			else{
 
 
-				if (!_control.update(dt,flight_mode,planar_flight)) {
+				if (!_control.update(dt,flight_mode)) {
 
 					_vehicle_constraints = {0, NAN, NAN, false, {}}; // reset constraints
 					_control.setInputSetpoint(generateFailsafeSetpoint(vehicle_local_position.timestamp_sample, states, true));
 					_control.setVelocityLimits(_param_mpc_xy_vel_max.get(), _param_mpc_z_vel_max_up.get(), _param_mpc_z_vel_max_dn.get());
-					_control.update(dt,flight_mode,planar_flight);
+					_control.update(dt,flight_mode);
 
 				}
 

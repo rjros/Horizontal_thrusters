@@ -199,7 +199,7 @@ public:
 	 * @param dt time in seconds since last iteration
 	 * @return true if update succeeded and output setpoint is executable, false if not
 	 */
-	bool update(const float dt,const int att_mode,bool planar_flight);
+	bool update(const float dt,const int att_mode);
 
 	/**
 	 * Set the integral term in xy to 0.
@@ -335,6 +335,12 @@ private:
 	void _single_positionControl(const float dt,const float yaw_sp);// planar proportional position control
 	void _single_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
 	void _single_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
+
+	// For the combined [planar/tilter] control of the system
+	void _combined_positionControl(const float dt,const float yaw_sp);// planar proportional position control
+	void _combined_velocityControl(const float dt,const float yaw_sp);  //planar velocity control
+	void _combined_accelerationControl(const float yaw_sp);// separates thrust values if planar condition is on
+
 
 	// For the combined [planar/tilter] control of the system
 	void _planar_X_positionControl(const float dt,const float yaw_sp);// planar proportional position control
