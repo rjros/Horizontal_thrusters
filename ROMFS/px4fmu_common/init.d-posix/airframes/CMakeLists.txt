@@ -122,6 +122,9 @@ px4_add_romfs_files(
 	4032_gz_v500_dual_80_N
 	4033_gz_v500_dual_100
 	4034_gz_v500_dual_100_N
+
+	4040_gz_x500_dual_force
+
 	## CUSTOM GZ models ##
 
 	## CUSTOM gazebo ##

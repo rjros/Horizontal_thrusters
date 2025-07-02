@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='x500_dual_force'>
+    <pose>0 0 0.217 0 0 0</pose>
+    <self_collide>false</self_collide>
+    <static>false</static>
+    <link name="base_link">
+    <inertial>
+        <pose>0 0 0.015702 0 0 0</pose>
+        <mass>2.247</mass>
+        <inertia>
+          <ixx>0.0133</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0133</iyy>
+          <iyz>0</iyz>
+          <izz>0.0249</izz>
+        </inertia>
+      </inertial>
+      <gravity>true</gravity>
+      <velocity_decay/>
+      <visual name="base_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/uav_frame_x500_simple.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- Collision definition -->
+      <collision name="base_link_collision_0">
+        <pose> 0 0 -0.076276 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.40 0.40 0.278 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+<!-- Collision definition END-->
+<!-- Flight Sensors  -->
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
+
+      <sensor name="imu_sensor" type="imu">
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+      </sensor>
+<!-- Flight Sensors  -->
+    </link>
+<!-- Propellers definition -->
+    <link name="rotor_0">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>0.176876 -0.176876 0.06 0 0 0</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_0_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/holybro_propeller_ccw.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_0_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_0_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_0</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_1">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose>-0.176876 0.176876 0.06 0 0 0</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/holybro_propeller_ccw.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_1_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_1_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_2">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.176876 0.176876 0.06 0 0 0</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/holybro_propeller_cw.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_2_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_2_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_3">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.176876 -0.176876 0.06 0 0 0</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_3_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/holybro_propeller_cw.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_3_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.2792307692307692 0.016923076923076923 0.0008461538461538462</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_3_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_3</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+<!-- Propellers definition END-->
+<!-- EDF Mass -->
+  <link name="edf_1_ball">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.100 0 0.036 0 0 0 </pose>
+        <inertial>
+            <mass>0.175</mass>
+            <inertia>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
+            </inertia>
+        </inertial>
+    </link>
+
+    <joint name="edf_1_mass" type="fixed">
+      <parent>base_link</parent>
+      <child>edf_1_ball</child>
+    </joint>
+<!-- EDF Mass -->
+
+<!-- EDF Mass -->
+  <link name="edf_2_ball">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.100 0 0.036 0 0 3.145159 </pose>
+         <inertial>
+            <mass>0.175</mass>
+            <inertia>
+              <ixx>6.3787e-05</ixx>
+              <iyy>8.6158e-05</iyy>
+              <izz>8.6158e-05</izz>
+            </inertia>
+        </inertial>
+    </link>
+
+    <joint name="edf_2_mass" type="fixed">
+      <parent>base_link</parent>
+      <child>edf_2_ball</child>
+    </joint>
+<!-- EDF Mass -->
+
+<!-- EDF Frame 200 END -->
+  <link name="edf_1_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.100 0 0.016 0 0 0 </pose>
+        <inertial>
+          <mass>0.00000001</mass>
+          <inertia>
+            <ixx>0.000001</ixx>
+            <ixy>0.0</ixy>
+            <iyy>0.000001</iyy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+            <izz>0.000001</izz>
+          </inertia>
+        </inertial>
+       <visual name="edf_1_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_1_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_1_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>edf_1_body</child>
+      <pose> 0 0 0 0 0 0 </pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.53</lower>
+          <upper>0.53</upper>
+        </limit>
+        <dynamics>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+
+    <link name="edf_2_body">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.100 0 0.016 0 0 3.145159 </pose>
+        <inertial>
+          <mass>0.00000001</mass>
+          <inertia>
+            <ixx>0.000001</ixx>
+            <ixy>0.0</ixy>
+            <iyy>0.000001</iyy>
+            <ixz>0.0</ixz>
+            <iyz>0.0</iyz>
+            <izz>0.000001</izz>
+          </inertia>
+        </inertial>
+      <visual name="edf_2_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/edf_housing.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="edf_2_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="edf_2_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>edf_2_body</child>
+      <pose> 0 0 0 0 0 0 </pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.53</lower>
+          <upper>0.53</upper>
+        </limit>
+        <dynamics>
+          <friction>1.0</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+
+<!-- Horizontal thrusters -->
+    <link name="rotor_5">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.100 0 0.016 0 1.5708 0</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_5_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/edf_impeler.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_5_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_5_joint" type="revolute">
+      <parent>edf_2_body</parent>
+      <child>rotor_5</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_4">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.100 0 0.016  0 1.5708 3.145159</pose>
+        <inertial>
+            <pose>0 0 0 0 0 0</pose>
+              <mass>0.005</mass>
+              <inertia>
+                <ixx>9.75e-07</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000166704</iyy>
+                <iyz>0</iyz>
+                <izz>0.000167604</izz>
+              </inertia>
+        </inertial>
+       <visual name="rotor_4_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://custom_x500_dual/meshes/edf_impeler.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_4_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="rotor_4_joint" type="revolute">
+      <parent>edf_1_body</parent>
+      <child>rotor_4</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+<!-- Manipulator arm  END -->
+<!-- Manipulator arm  -->
+    <link name="manipulator_arm">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.40 0 -0.0086 0 0 0 </pose>
+        <inertial>
+          <pose> -0.207 0 0 0 0 0</pose>
+          <mass>0.16</mass>
+          <inertia>
+            <ixx>1.8727e-05</ixx>
+            <iyy>0.0027</iyy>
+            <izz>0.0027</izz>
+        </inertia>
+        </inertial>
+       <visual name="manipulator_arm_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_force/meshes/manipulator_arm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="manipulator_arm_collision">
+        <pose> -0.207 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.444 0.009 0.009 </size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="manipulator_arm_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>manipulator_arm</child>
+    </joint>
+
+     <link name="manipulator_tip">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> 0.420 0 -0.0086 0 0 3.14159 </pose>
+        <inertial>
+          <pose>-0.030522 0 0 0 0 0 </pose>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>1.8225e-05</ixx>
+            <iyy>2.4614e-05</iyy>
+            <izz>2.4614e-05</izz>
+        </inertia>
+        </inertial>
+       <visual name="manipulator_tip_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_force/meshes/manipulator_tip.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="manipulator_tip_collision">
+        <pose>-0.034296 0 0 0 0 0 </pose>
+        <geometry>
+          <sphere>
+            <radius>0.03</radius> <!-- Adjust the radius as needed -->
+          </sphere>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="manipulator_tip_joint" type="fixed">
+      <parent>manipulator_arm</parent>
+      <child>manipulator_tip</child>
+      <pose> 0 0 0 0 -1.5708 0 </pose>
+        <sensor name= 'forcetorque' type='force_torque'>
+            <always_on>true</always_on>
+            <update_rate>100.0</update_rate>
+            <visualize>true</visualize>
+            <force_torque>
+                <frame>sensor</frame>
+                <measure_direction>child_to_parent</measure_direction>
+            </force_torque>
+            <topic>leptrino_force_sensor/sensor_wrench</topic>
+        </sensor>
+    </joint>
+
+    <frame name="caster_frame" attached_to='manipulator_tip'>
+    </frame>
+
+<!--caster wheel-->
+    <link name='caster'>
+        <pose>0.475 0 -0.0086  0 0 0 </pose>
+        <velocity_decay/>
+            <inertial>
+            <mass>0.001</mass>
+            <inertia>
+                <ixx>0.1</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.1</iyy>
+                <iyz>0</iyz>
+                <izz>0.1</izz>
+            </inertia>
+        </inertial>
+        <visual name='visual'>
+            <geometry>
+                <sphere>
+                    <radius>0.02</radius>
+                </sphere>
+            </geometry>
+            <material>
+                <ambient>0.0 1 0.0 1</ambient>
+                <diffuse>0.0 1 0.0 1</diffuse>
+                <specular>0.0 1 0.0 1</specular>
+            </material>
+        </visual>
+        <collision name='collision'>
+            <geometry>
+              <sphere>
+                  <radius>0.02</radius>
+              </sphere>
+            </geometry>
+            <surface>
+              <friction>
+                <ode>
+                  <mu>0.6</mu>  <!-- Typical coefficient for metal cast -->
+                  <mu2>0.6</mu2> <!-- Secondary coefficient, often same as mu for isotropic materials -->
+                  <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
+                  <slip1>0.0</slip1> <!-- No slip for realistic static friction -->
+                  <slip2>0.0</slip2> <!-- No slip for realistic static friction -->
+                </ode>
+                <bullet>
+                  <friction>
+                    <friction>0.6</friction> <!-- Primary friction coefficient -->
+                    <friction2>0.6</friction2> <!-- Secondary friction coefficient -->
+                    <fdir1>0 0 0</fdir1> <!-- Automatic computation -->
+                    <rolling_friction>0.01</rolling_friction> <!-- No rolling friction -->
+                  </friction>
+                </bullet>
+              </friction>
+            </surface>
+        </collision>
+    </link>
+<!--different type of joints ball joint--> <!--defult value is the child-->
+    <joint name='chassis' type='ball'>
+      <parent>caster_frame</parent>
+      <child>caster</child>
+    </joint>
+
+<!-- Manipulator arm  END -->
+<!-- Additional Rotors 4,5END -->
+
+   <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_0_joint</jointName>
+      <linkName>rotor_0</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>0</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_1_joint</jointName>
+      <linkName>rotor_1</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+     <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>1</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_2_joint</jointName>
+      <linkName>rotor_2</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>2</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_3_joint</jointName>
+      <linkName>rotor_3</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+     <maxRotVelocity>10920.0</maxRotVelocity>
+      <motorConstant>12.1311e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>3</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- Horizontal thrusters -->
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_4_joint</jointName>
+      <linkName>rotor_4</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>9.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>4</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <plugin filename="gz-sim-multicopter-motor-model-system" name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_5_joint</jointName>
+      <linkName>rotor_5</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1000.0</maxRotVelocity>
+      <motorConstant>9.54858e-06</motorConstant>
+      <momentConstant>0.016</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>5</motorNumber>
+      <rotorDragCoefficient>8.06428e-05</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+<!-- Horizontal thrusters END-->
+
+  </model>
+</sdf>

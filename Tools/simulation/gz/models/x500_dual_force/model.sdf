@@ -25,7 +25,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://x500_dual_200/meshes/uav_frame_x500_simple.dae</uri>
+            <uri>model://x500_dual_force/meshes/uav_model_motors.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -89,7 +89,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-           <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_force/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -147,7 +147,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-           <uri>model://x500_dual_200/meshes/holybro_propeller_ccw.dae</uri>
+            <uri>model://x500_dual_force/meshes/holybro_propeller_ccw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -205,7 +205,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-                   <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_force/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -263,7 +263,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-                   <uri>model://x500_dual_200/meshes/holybro_propeller_cw.dae</uri>
+            <uri>model://x500_dual_force/meshes/holybro_propeller_cw.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -322,7 +322,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500_dual/meshes/50mm_blade_motor_z.dae</uri>
+            <uri>model://x500_dual_force/meshes/50mm_blade_motor_z.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -380,7 +380,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500_dual/meshes/50mm_blade_motor_z.dae</uri>
+            <uri>model://x500_dual_force/meshes/50mm_blade_motor_z.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -440,7 +440,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500_dual/meshes/manipulator_arm.dae</uri>
+            <uri>model://x500_dual_force/meshes/manipulator_arm.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -489,7 +489,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://holybro_x500_dual/meshes/manipulator_tip.dae</uri>
+            <uri>model://x500_dual_force/meshes/manipulator_tip.dae</uri>
           </mesh>
         </geometry>
       </visual>

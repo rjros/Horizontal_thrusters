@@ -1,0 +1,145 @@
+#!/bin/sh
+#
+# @name Gazebo x500 Dual
+#
+# @type Quadrotor
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default_wall}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_dual_force}
+
+param set-default SIM_GZ_EN 1
+
+param set-default SENS_EN_GPSSIM 1
+param set-default SENS_EN_BAROSIM 0
+param set-default SENS_EN_MAGSIM 1
+
+
+## Vehicle General Parameters ##
+param set-default CA_AIRFRAME 11 ## Thrust Vectoring Vehicle
+param set-default CA_ROTOR_COUNT 6
+param set-default CA_INDEX 4  	  ## Index for the first tilting rotors
+
+param set RC_SIM 0 		  # 0:Simulation, 1:RC, 2:Offboard
+param set-default VECT_ATT_MODE 1 # Normal Flight
+
+param set-default TOTAL_MASS 	2.627
+param set-default MPC_GEOM_CTRL	1
+
+param set-default MC_IXX	0.013399999588727951
+param set-default MC_IXY	0.000000000000000000
+param set-default MC_IXZ	0.000000000000000000
+param set-default MC_IYY	0.017000000923871994
+param set-default MC_IYZ	0.000000000000000000
+param set-default MC_IZZ	0.028599999845027924
+
+param set-default X_THRUST_MAX 	8.550
+param set-default Y_THRUST_MAX 	8.550
+param set-default Z_THRUST_MAX 	44.76
+
+param set-default X_TORQUE_MAX 	3.960
+param set-default Y_TORQUE_MAX 	3.960
+param set-default Z_TORQUE_MAX 	0.358
+## Vehicle General Parameters END ##
+
+## Controller Gains ##
+param set-default GEOM_X_D 	4.000000000000000000
+param set-default GEOM_X_I 	0.200000002980232239
+param set-default GEOM_X_P 	6.000000000000000000
+
+param set-default GEOM_Y_D 	4.000000000000000000
+param set-default GEOM_Y_I 	0.200000002980232239
+param set-default GEOM_Y_P 	6.000000000000000000
+
+param set-default GEOM_Z_D 	5.000000000000000000
+param set-default GEOM_Z_I 	1.500000000000000000
+param set-default GEOM_Z_P 	8.000000000000000000
+
+param set-default GEOM_THX_D 	7.000000000000000000
+param set-default GEOM_THX_I 	0.250000000000000000
+param set-default GEOM_THX_P 	9.000000000000000000
+
+param set-default GEOM_THY_D 	6.000000000000000000
+param set-default GEOM_THY_I 	0.300000011920928955
+param set-default GEOM_THY_P 	9.000000000000000000
+
+param set-default GEOM_ROLL_P 	10.000000000000000000
+param set-default GEOM_ROLLR_I 	0.100000001490116119
+param set-default GEOM_ROLLR_P 	12.000000000000000000
+param set-default GEOM_ROLLR_D 	0.000000000000000000
+
+param set-default GEOM_PITCH_P 	10.000000000000000000
+param set-default GEOM_PITCHR_I 0.100000001490116119
+param set-default GEOM_PITCHR_P 12.000000000000000000
+param set-default GEOM_PITCHR_D 0.000000000000000000
+
+param set-default GEOM_YAW_P 	5.000000000000000000
+param set-default GEOM_YAWR_I 	0.300000011920928955
+param set-default GEOM_YAWR_P 	8.000000000000000000
+param set-default GEOM_YAWR_D 	0.000000000000000000
+## Controller Gains END ##
+
+param set-default CA_ROTOR0_PX 0.177
+param set-default CA_ROTOR0_PY 0.177
+param set-default CA_ROTOR0_KM  0.05
+
+param set-default CA_ROTOR1_PX -0.177
+param set-default CA_ROTOR1_PY -0.177
+param set-default CA_ROTOR1_KM  0.05
+
+param set-default CA_ROTOR2_PX 	0.177
+param set-default CA_ROTOR2_PY -0.177
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.177
+param set-default CA_ROTOR3_PY 	0.177
+param set-default CA_ROTOR3_KM -0.05
+
+# Back fan, pushes front ####
+param set-default CA_ROTOR4_PX -0.100
+param set-default CA_ROTOR4_PY 0.00
+param set-default CA_ROTOR4_PZ 0.00
+param set-default CA_ROTOR4_KM 0.00
+param set-default CA_ROTOR4_AX -1.0
+param set-default CA_ROTOR4_AY 0.0
+param set-default CA_ROTOR4_AZ 0.0
+#### Back fan, pushes front END ####
+
+#### Front fan, pushes back ####
+param set-default CA_ROTOR5_PX 0.100
+param set-default CA_ROTOR5_PY 0.00
+param set-default CA_ROTOR5_PZ 0.00
+param set-default CA_ROTOR5_KM 0.00
+param set-default CA_ROTOR5_AX 1.0
+param set-default CA_ROTOR5_AY 0.0
+param set-default CA_ROTOR5_AZ 0.0
+#### Front fan, pushes back END ####
+
+
+param set-default SIM_GZ_EC_FUNC1 101
+param set-default SIM_GZ_EC_FUNC2 102
+param set-default SIM_GZ_EC_FUNC3 103
+param set-default SIM_GZ_EC_FUNC4 104
+param set-default SIM_GZ_EC_FUNC5 105
+param set-default SIM_GZ_EC_FUNC6 106
+
+
+param set-default SIM_GZ_EC_MIN1 150
+param set-default SIM_GZ_EC_MIN2 150
+param set-default SIM_GZ_EC_MIN3 150
+param set-default SIM_GZ_EC_MIN4 150
+param set-default SIM_GZ_EC_MIN5 150
+param set-default SIM_GZ_EC_MIN6 150
+
+
+param set-default SIM_GZ_EC_MAX1 1000
+param set-default SIM_GZ_EC_MAX2 1000
+param set-default SIM_GZ_EC_MAX3 1000
+param set-default SIM_GZ_EC_MAX4 1000
+param set-default SIM_GZ_EC_MAX5 1000
+param set-default SIM_GZ_EC_MAX6 1000
+
+param set-default MPC_THR_HOVER 0.60
