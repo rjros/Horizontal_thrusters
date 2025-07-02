@@ -8,7 +8,7 @@
 . ${R}etc/init.d/rc.mc_defaults
 
 PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
-PX4_GZ_WORLD=${PX4_GZ_WORLD:=default_wall}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
 PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_dual_force}
 
 param set-default SIM_GZ_EN 1
@@ -23,11 +23,11 @@ param set-default CA_AIRFRAME 11 ## Thrust Vectoring Vehicle
 param set-default CA_ROTOR_COUNT 6
 param set-default CA_INDEX 4  	  ## Index for the first tilting rotors
 
-param set RC_SIM 0 		  # 0:Simulation, 1:RC, 2:Offboard
+param set RC_SIM 2 		  # 0:Simulation, 1:RC, 2:Offboard
 param set-default VECT_ATT_MODE 1 # Normal Flight
 
 param set-default TOTAL_MASS 	2.627
-param set-default MPC_GEOM_CTRL	1
+param set-default MPC_GEOM_CTRL	0
 
 param set-default MC_IXX	0.013399999588727951
 param set-default MC_IXY	0.000000000000000000

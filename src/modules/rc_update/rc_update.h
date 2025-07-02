@@ -244,6 +244,9 @@ public:
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 		(ParamInt<px4::params::RC_PLANAR_SW>) _param_rc_planar_mode_sw,
 		(ParamFloat<px4::params::RC_PLANAR_TH>) _param_rc_planar_th,
+
+		(ParamInt<px4::params::RC_FORCE_CTRL_SW>) _param_rc_force_ctrl_mode_sw,
+		(ParamFloat<px4::params::RC_FORCE_CTRL_TH>) _param_rc_force_ctrl_th,
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 
 		(ParamInt<px4::params::RC_CHAN_CNT>) _param_rc_chan_cnt

@@ -103,6 +103,11 @@ ControlAllocator::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+	if (!_planar_thrust_setpoint_sub.registerCallback()) {
+		PX4_ERR("callback registration failed");
+		return false;
+	}
+
 
 
 #ifndef ENABLE_LOCKSTEP_SCHEDULER // Backup schedule would interfere with lockstep
@@ -344,6 +349,7 @@ ControlAllocator::Run()
 		_vehicle_torque_setpoint_sub.unregisterCallback();
 		_vehicle_thrust_setpoint_sub.unregisterCallback();
 		_thrust_vectoring_status_sub.unregisterCallback();
+		_planar_thrust_setpoint_sub.unregisterCallback();
 		exit_and_cleanup();
 		return;
 	}
@@ -417,8 +423,13 @@ ControlAllocator::Run()
 	bool do_update = false;
 	vehicle_torque_setpoint_s vehicle_torque_setpoint;
 	vehicle_thrust_setpoint_s vehicle_thrust_setpoint;
-	///// CUSTOM /////
+	planar_thrust_setpoint_s planar_thrust_setpoint;
 	thrust_vectoring_command_s thrust_vectoring_status;
+
+	// force_control_mode_s force_ctrl_mode;
+
+	///// CUSTOM /////
+	// thrust_vectoring_command_s thrust_vectoring_status;
 
 	matrix::Vector<float, NUM_ACTUATORS> actuator_sp;
 	matrix::Vector<float, NUM_ACTUATORS> fixed_actuator_sp;
@@ -427,57 +438,6 @@ ControlAllocator::Run()
 	const EffectivenessSource source = (EffectivenessSource)_param_ca_airframe.get();
 
 
-	// If the sytem is in offboard use the following
-	if (_thrust_vectoring_status_sub.updated()){
-		_thrust_vectoring_status_sub.copy(&thrust_vectoring_status);
-		for (int i=0;i<8;i++)
-		{
-			tilt_angle(i)=thrust_vectoring_status.tilt_angle[i];
-		}
-		_vectoring_thrust_sp= matrix::Vector3f(thrust_vectoring_status.force);
-		_vectoring_torque_sp= matrix::Vector3f(thrust_vectoring_status.torque);
-
-		if (tilt_angle!=prev_tilt_angle)
-		{
-			_xy_flag={0,0,0,0};
-			update_effectiveness_matrix_if_needed(EffectivenessUpdateReason::ANGLE_UPDATE);
-			updateParams();
-			parameters_updated();
-			for (int i = 0; i < _num_control_allocation; ++i) {
-			matrix::Matrix <float,NUM_AXES,NUM_ACTUATORS> effectiveness_matrix = _control_allocation[i]->getEffectivenessMatrix();
-			matrix::Matrix<float,NUM_ACTUATORS,NUM_AXES>thrust_matrix = effectiveness_matrix.T();
-			// thrust_matrix.print();
-			for (int j=0;j<NUM_ACTUATORS;j++)
-			{
-				if (thrust_matrix(j,3)>=3.0f)
-				{
-					_xy_flag(0)++;
-				}
-				else if (thrust_matrix(j,3)<=-3.0f)
-				{
-					_xy_flag(1)++;
-				}
-
-				if (thrust_matrix(j,4)>=3.0f)
-				{
-					_xy_flag(2)++;
-				}
-				else if (thrust_matrix(j,4)<=-3.0f)
-				{
-					_xy_flag(3)++;
-				}
-			}
-			}
-
-
-		}
-
-
-		prev_tilt_angle=tilt_angle;
-		if (dt > 5_ms) {
-		do_update = true;
-		}
-	}
 
 	// Run allocator on torque changes
 	if (_vehicle_torque_setpoint_sub.update(&vehicle_torque_setpoint)) {
@@ -489,7 +449,7 @@ ControlAllocator::Run()
 	}
 
 	// Also run allocator on thrust setpoint changes if the torque setpoint
-	// has not been updated for more than 5ms
+
 	if (_vehicle_thrust_setpoint_sub.update(&vehicle_thrust_setpoint)) {
 		_thrust_sp = matrix::Vector3f(vehicle_thrust_setpoint.xyz);
 
@@ -500,12 +460,44 @@ ControlAllocator::Run()
 	}
 
 
+	if (_thrust_vectoring_status_sub.update(&thrust_vectoring_status)){
+		force_ctrl = thrust_vectoring_status.force_ctrl;
+		if (dt > 5_ms) {
+			do_update = true;
+			_timestamp_sample = thrust_vectoring_status.timestamp;
+		}
+
+	}
+
+	if (_planar_thrust_setpoint_sub.update(&planar_thrust_setpoint)) {
+			_vectoring_thrust_sp = matrix::Vector3f(planar_thrust_setpoint.force);
+			_vectoring_torque_sp = matrix::Vector3f(planar_thrust_setpoint.torque);
+		if (dt > 5_ms) {
+			do_update = true;
+			_timestamp_sample = planar_thrust_setpoint.timestamp;
+		}
+
+	}
+
+
+	if (!force_ctrl)
+	{
+		_vectoring_thrust_sp(0) = 0.0f;
+		_vectoring_thrust_sp(1) = 0.0f;
+		_vectoring_thrust_sp(2) = 0.0f;
+		_vectoring_torque_sp(0) = 0.0f;
+		_vectoring_torque_sp(1) = 0.0f;
+		_vectoring_torque_sp(2) = 0.0f;
+
+	}
+
+
+	//_vectoring_thrust_sp.print();
+
 	if (do_update) {
 		_last_run = now;
 
-
 	 	control_allocator_flag_s control_allocator_xy;
-
 		control_allocator_xy.xy_flag[0] = _xy_flag(0);
 		control_allocator_xy.xy_flag[1] = _xy_flag(1);
 		control_allocator_xy.xy_flag[2] = _xy_flag(2);
@@ -566,22 +558,22 @@ ControlAllocator::Run()
 
 		}
 		else {
+				// _thrust_sp.print();
 				c[0](0) = _torque_sp(0);
 				c[0](1) = _torque_sp(1);
 				c[0](2) = _torque_sp(2);
-				c[0](3) = 0;//_thrust_sp(0);
-				c[0](4) = 0;//_thrust_sp(1);
+				c[0](3) = 0.0f;
+				c[0](4) = 0.0f;
 				c[0](5) = _thrust_sp(2);
 
 				//TORQUE SETPOiNT XYZ
-				c[1](0) = 0;
-				c[1](1) = 0;
-				c[1](2) = 0;
+				c[1](0) = 0.0f;
+				c[1](1) = 0.0f;
+				c[1](2) = 0.0f;
 				//THRUST SETPOINTS XYZ
-				c[1](3) = _thrust_sp(0);//_thrust_vector(0);
-				c[1](4) = _thrust_sp(1);//_thrust_vector(1);
-				c[1](5) = 0.0f;//_thrust_vector(2);
-
+				c[1](3) = (_thrust_sp(0) + _vectoring_thrust_sp(0));
+				c[1](4) = _thrust_sp(1);
+				c[1](5) = 0.0f;
 				//Do allocation
 				_control_allocation[0]->setControlSetpoint(c[0]);
 				_control_allocation[0]->allocate();

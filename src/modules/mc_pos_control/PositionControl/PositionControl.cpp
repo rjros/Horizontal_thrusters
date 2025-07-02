@@ -502,7 +502,12 @@ void PositionControl::_combined_velocityControl(const float dt, const float yaw_
 	(th_body(0)<= _lim_planar_thr_min && vel_xy_error(0) <= 0.0f)) {
 	vel_xy_error(0) = 0.f;
 	}
-	th_body(0)=math::min(th_body(0),_lim_planar_thr_max);
+
+
+	// th_body(0)=math::min(th_body(0),_lim_planar_thr_max);
+
+	th_body(0)=th_body(0)>=0.0f? math::min(th_body(0),_lim_planar_thr_max): math::max(th_body(0),-_lim_planar_thr_max);
+
 
 	vel_xy_error=_rotation2*Vector3f{vel_xy_error(0),vel_xy_error(1),0};
 	Vector3f th_new=_rotation2*th_body;

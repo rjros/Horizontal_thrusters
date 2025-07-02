@@ -91,6 +91,9 @@ set(msg_files
 	FollowTarget.msg
 	FollowTargetEstimator.msg
 	FollowTargetStatus.msg
+	###CUSTOM###
+	ForceControlMode.msg
+	###CUSTOM END###
 	GeneratorStatus.msg
 	GeofenceResult.msg
 	###CUSTOM###

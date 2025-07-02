@@ -25,7 +25,9 @@ uint8 offboard_switch            # offboard 2 position switch (optional): _NORMA
 uint8 kill_switch                # throttle kill: _NORMAL_, KILL
 #### CUSTOM Planar parameter ####
 uint8 planar_mode_switch         # Attitude mode change : _TILTING_MODE, PLANAR_FLIGHT
+uint8 force_control_switch       # Enabled,Disabled
 #### CUSTOM Planar parameter ####
+
 uint8 gear_switch                # landing gear switch: _DOWN_, UP
 uint8 transition_switch          # VTOL transition switch: _HOVER, FORWARD_FLIGHT
 

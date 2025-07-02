@@ -63,7 +63,8 @@ static bool operator ==(const manual_control_switches_s &a, const manual_control
 		a.engage_main_motor_switch == b.engage_main_motor_switch &&
 
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
-		a.planar_mode_switch == b.planar_mode_switch) ; //planar switch parameter
+		a.planar_mode_switch == b.planar_mode_switch && //planar switch parameter
+		a.force_control_switch==b.force_control_switch);
 		//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END////
 
 }
@@ -653,6 +654,8 @@ void RCUpdate::UpdateManualSwitches(const hrt_abstime &timestamp_sample)
 		getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_ENGAGE_MAIN_MOTOR, _param_rc_eng_mot_th.get());
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 	switches.planar_mode_switch = getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_PLANAR_MODE, _param_rc_planar_th.get());
+	switches.force_control_switch= getRCSwitchOnOffPosition(rc_channels_s::FUNCTION_FORCE_CONTROL_MODE, _param_rc_force_ctrl_th.get());
+
 	//// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE ////
 
 #if defined(ATL_MANTIS_RC_INPUT_HACKS)

@@ -304,7 +304,7 @@
     </joint>
 <!-- Propellers definition END-->
 <!-- Horizontal thrusters -->
-    <link name="rotor_5">
+    <link name="rotor_4">
         <gravity>true</gravity>
         <self_collide>false</self_collide>
         <velocity_decay/>
@@ -316,6 +316,64 @@
             <iyy>1.349858234714004e-05</iyy>
             <izz>1.0464910483993325e-07</izz>
           </inertia>
+        </inertial>
+       <visual name="rotor_4_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://x500_dual_force/meshes/50mm_blade_motor_z.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_5_collision">
+        <pose>0 0 0 0 0 0 </pose>
+        <geometry>
+          <box>
+            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+    <joint name="rotor_4_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_5</child>
+      <axis>
+        <xyz>0 0 1 </xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="rotor_5">
+        <gravity>true</gravity>
+        <self_collide>false</self_collide>
+        <velocity_decay/>
+        <pose> -0.0985 0 0.031 0 1.57 0 </pose>
+        <inertial>
+          <mass>0.016076923076923075</mass>
+          <inertia>
+            <ixx>1.349858234714004e-05</ixx>
+            <iyy>1.349858234714004e-05</iyy>
+            <izz>1.0464910483993325e-07</izz>
+        </inertia>
         </inertial>
        <visual name="rotor_5_visual">
         <pose>0 0 0 0 0 0</pose>
@@ -346,66 +404,8 @@
         </surface>
       </collision>
     </link>
+
     <joint name="rotor_5_joint" type="revolute">
-      <parent>base_link</parent>
-      <child>rotor_5</child>
-      <axis>
-        <xyz>0 0 1 </xyz>
-        <limit>
-          <lower>-1e+16</lower>
-          <upper>1e+16</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-    </joint>
-
-    <link name="rotor_4">
-        <gravity>true</gravity>
-        <self_collide>false</self_collide>
-        <velocity_decay/>
-        <pose> -0.0985 0 0.031 0 1.57 0 </pose>
-        <inertial>
-          <mass>0.016076923076923075</mass>
-          <inertia>
-            <ixx>1.349858234714004e-05</ixx>
-            <iyy>1.349858234714004e-05</iyy>
-            <izz>1.0464910483993325e-07</izz>
-        </inertia>
-        </inertial>
-       <visual name="rotor_4_visual">
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://x500_dual_force/meshes/50mm_blade_motor_z.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <collision name="rotor_4_collision">
-        <pose>0 0 0 0 0 0 </pose>
-        <geometry>
-          <box>
-            <size>0.0008461538461538462 0.016923076923076923 0.004</size>
-          </box>
-        </geometry>
-        <surface>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <max_vel>0</max_vel>
-            </ode>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-    </link>
-
-    <joint name="rotor_4_joint" type="revolute">
       <parent>base_link</parent>
       <child>rotor_4</child>
       <axis>

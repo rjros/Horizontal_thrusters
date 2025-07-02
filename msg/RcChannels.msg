@@ -29,6 +29,8 @@ uint8 FUNCTION_FLTBTN_SLOT_5 = 25
 uint8 FUNCTION_FLTBTN_SLOT_6 = 26
 uint8 FUNCTION_ENGAGE_MAIN_MOTOR = 27
 uint8 FUNCTION_PLANAR_MODE  = 28                              # Tilt mode and Zero tilt mode
+uint8 FUNCTION_FORCE_CONTROL_MODE  = 29                              # Tilt mode and Zero tilt mode
+
 
 
 uint8 FUNCTION_FLTBTN_SLOT_COUNT = 6
@@ -36,7 +38,7 @@ uint8 FUNCTION_FLTBTN_SLOT_COUNT = 6
 uint64 timestamp_last_valid					# Timestamp of last valid RC signal
 float32[18] channels						# Scaled to -1..1 (throttle: 0..1)
 uint8 channel_count						# Number of valid channels
-int8[29] function						# Functions mapping
+int8[30] function						# Functions mapping
 uint8 rssi							# Receive signal strength index
 bool signal_lost						# Control signal lost, should be checked together with topic timeout
 uint32 frame_drop_count						# Number of dropped frames

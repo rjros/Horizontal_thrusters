@@ -53,6 +53,9 @@ publications:
   - topic: /fmu/out/thrust_vectoring_status
     type: px4_msgs::msg::ThrustVectoringCommand
 
+  - topic: /fmu/out/force_control_mode
+    type: px4_msgs::msg::ForceControlMode
+
 subscriptions:
 
   - topic: /fmu/in/offboard_control_mode
@@ -96,3 +99,8 @@ subscriptions:
 
   - topic: /fmu/in/thrust_vectoring_setpoint
     type: px4_msgs::msg::ThrustVectoringCommand
+
+  - topic: /fmu/in/planar_thrust_setpoint
+    type: px4_msgs::msg::PlanarThrustSetpoint
+
+

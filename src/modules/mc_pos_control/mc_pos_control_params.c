@@ -1439,6 +1439,23 @@ PARAM_DEFINE_FLOAT(VECT_ANG_6, 0.0f);
  */
 PARAM_DEFINE_FLOAT(VECT_ANG_7, 0.0f);
 
+
+/**
+ * Force Controller Enable/Disabled
+ *
+ * Set false to disable the force controller during contact
+ * Set true to use the semi-autonomous force controller.
+ *
+ * @boolean
+ * @group Multicopter Position Control
+ */
+PARAM_DEFINE_INT32(MPC_FORCE_CTRL, 0);
+
+
+
 //// CUSTOM PARAMETERS FOR PLANAR FLIGHT MODE END ////
 ///////////////////////////////////////////////////////////////////////////////////////
+
+
+
 

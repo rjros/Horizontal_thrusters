@@ -85,8 +85,11 @@
 
 //CUSTOM
 // Separate based on the type of vehicles
+#include <uORB/topics/planar_thrust_setpoint.h>
 #include <uORB/topics/thrust_vectoring_command.h>
 #include <uORB/topics/control_allocator_flag.h>
+#include <uORB/topics/force_control_mode.h>//read values from switches
+
 
 
 class ControlAllocator : public ModuleBase<ControlAllocator>, public ModuleParams, public px4::ScheduledWorkItem
@@ -210,12 +213,19 @@ private:
 
 	///// CUSTOM /////
 	uORB::SubscriptionCallbackWorkItem _thrust_vectoring_status_sub{this, ORB_ID(thrust_vectoring_status)};	 /**< vehicle planar thrust setpoint subscription */
+	uORB::SubscriptionCallbackWorkItem _planar_thrust_setpoint_sub{this, ORB_ID(planar_thrust_setpoint)};	 /**< vehicle planar thrust setpoint subscription */
+	uORB::SubscriptionCallbackWorkItem _force_ctrl_mode_sub{this, ORB_ID(force_control_mode)};	 /**< vehicle planar thrust setpoint subscription */
+
 	///// CUSTOM END /////
 
 	matrix::Vector3f _torque_sp;
 	matrix::Vector3f _thrust_sp;
 
 	///// CUSTOM /////
+	matrix::Vector3f _planar_thrust_sp;
+	matrix::Vector3f _planar_torque_sp;
+
+
 	matrix::Vector3f _thrust_vector;
 
 	matrix::Vector3f _vectoring_thrust_sp;
@@ -230,6 +240,7 @@ private:
 	///// CUSTOM END /////
 
 	bool _planar_control_mode {false};
+	uint8_t force_ctrl{0};
 
 	// Reflects motor failures that are currently handled, not motor failures that are reported.
 	// For example, the system might report two motor failures, but only the first one is handled by CA
@@ -258,7 +269,9 @@ private:
 		(ParamInt<px4::params::CA_INDEX>) _param_ca_index,
 		(ParamInt<px4::params::CA_ROTOR_COUNT>) _param_ca_count,
 
-		(ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode
+		(ParamInt<px4::params::VECT_ATT_MODE>) _param_vectoring_att_mode,
+		(ParamInt<px4::params::MPC_FORCE_CTRL>) _param_force_ctrl
+
 		//*** END ***
 	)
 
